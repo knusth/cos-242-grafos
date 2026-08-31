@@ -1,0 +1,46 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 20,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "csr",
+      "displayName": "CSR otimizada",
+      "binaryDir": "${sourceDir}/build/csr",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "BUILD_TESTING": "ON",
+        "COS_MATRIX": "OFF"
+      }
+    },
+    {
+      "name": "matrix",
+      "displayName": "Matriz otimizada",
+      "binaryDir": "${sourceDir}/build/matrix",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "BUILD_TESTING": "ON",
+        "COS_MATRIX": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    { "name": "csr", "configurePreset": "csr" },
+    { "name": "matrix", "configurePreset": "matrix" }
+  ],
+  "testPresets": [
+    {
+      "name": "csr",
+      "configurePreset": "csr",
+      "output": { "outputOnFailure": true }
+    },
+    {
+      "name": "matrix",
+      "configurePreset": "matrix",
+      "output": { "outputOnFailure": true }
+    }
+  ]
+}
