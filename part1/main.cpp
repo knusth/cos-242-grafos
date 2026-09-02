@@ -16,30 +16,34 @@
 
 namespace {
 
-cos_graph::Vertex parse_source(std::string_view text)
+using cos_graph::Graph;
+using cos_graph::Vertex;
+
+Vertex parse_source(std::string_view text)
 {
-    auto source = cos_graph::Vertex{0};
+    auto source = Vertex{0};
     const auto [end, error] = std::from_chars(text.begin(), text.end(), source);
+
     if (error != std::errc{} || end != text.end() || source == 0) {
-        throw std::invalid_argument{"ORIGEM inválida"};
+        throw std::invalid_argument{"a origem deve ser um inteiro positivo"};
     }
     return source - 1;
 }
 
-cos_graph::Graph read_graph(const std::string & path)
+Graph read_graph(const std::string & path)
 {
-    auto vertex_count = cos_graph::Vertex{0};
+    auto vertex_count = Vertex{0};
     auto edges = cos_file::read_pairs(path, vertex_count);
 
-    // O arquivo usa índices a partir de 1; o grafo usa índices a partir de 0.
+    // O arquivo começa em 1; os índices da biblioteca começam em 0.
     for (auto & [first, second] : edges) {
         --first;
         --second;
     }
-    return cos_graph::Graph{vertex_count, edges};
+    return Graph{vertex_count, edges};
 }
 
-void write_graph_info(std::ostream & output, const cos_graph::Graph & graph)
+void write_summary(std::ostream & output, const Graph & graph)
 {
     output << "[grafo]\n"
            << "representacao=" << (COS_MATRIX ? "matriz" : "csr") << '\n'
@@ -52,8 +56,8 @@ void write_graph_info(std::ostream & output, const cos_graph::Graph & graph)
            << "memoria_bytes=" << graph.memory_bytes << '\n';
 }
 
-void write_traversal(std::ostream & output, std::string_view name, cos_graph::Vertex source,
-                     std::span<const std::pair<cos_graph::Vertex, cos_graph::Vertex>> traversal)
+void write_traversal(std::ostream & output, std::string_view name, Vertex source,
+                     std::span<const std::pair<Vertex, Vertex>> traversal)
 {
     output << '\n'
            << '[' << name << "]\n"
@@ -79,19 +83,19 @@ void write_traversal(std::ostream & output, std::string_view name, cos_graph::Ve
     }
 }
 
-void write_distances(std::ostream & output, const cos_graph::Graph & graph)
+void write_distances(std::ostream & output, const Graph & graph)
 {
     constexpr auto queries = std::array{
-        std::pair{cos_graph::Vertex{10}, cos_graph::Vertex{20}},
-        std::pair{cos_graph::Vertex{10}, cos_graph::Vertex{30}},
-        std::pair{cos_graph::Vertex{20}, cos_graph::Vertex{30}},
+        std::pair{Vertex{10}, Vertex{20}},
+        std::pair{Vertex{10}, Vertex{30}},
+        std::pair{Vertex{20}, Vertex{30}},
     };
 
     output << "\n[consultas_distancia]\n"
            << "primeiro_vertice,segundo_vertice,distancia\n";
 
     auto previous_source = cos_graph::no_vertex;
-    auto distances = std::vector<cos_graph::Vertex>{};
+    auto distances = std::vector<Vertex>{};
 
     for (const auto [first, second] : queries) {
         output << first << ',' << second << ',';
@@ -103,7 +107,7 @@ void write_distances(std::ostream & output, const cos_graph::Graph & graph)
 
         const auto source = first - 1;
         if (source != previous_source) {
-            // Consultas consecutivas com a mesma origem reutilizam uma BFS.
+            // Consultas consecutivas com a mesma origem compartilham uma BFS.
             distances = graph.distances(source);
             previous_source = source;
         }
@@ -117,21 +121,19 @@ void write_distances(std::ostream & output, const cos_graph::Graph & graph)
     }
 }
 
-void write_components(std::ostream & output,
-                      std::span<const std::vector<cos_graph::Vertex>> components)
+void write_components(std::ostream & output, std::span<const std::vector<Vertex>> components)
 {
-    const auto count = components.size();
     output << "\n[componentes]\n"
-           << "quantidade=" << count << '\n'
+           << "quantidade=" << components.size() << '\n'
            << "maior_tamanho=" << components.front().size() << '\n'
            << "menor_tamanho=" << components.back().size() << '\n'
            << "componente,tamanho,vertices\n";
 
-    for (auto component = std::size_t{0}; component < count; ++component) {
-        output << component + 1 << ',' << components[component].size() << ',';
+    for (auto index = std::size_t{0}; index < components.size(); ++index) {
+        output << index + 1 << ',' << components[index].size() << ',';
 
         auto separator = std::string_view{};
-        for (const auto vertex : components[component]) {
+        for (const auto vertex : components[index]) {
             output << separator << vertex + 1;
             separator = " ";
         }
@@ -139,14 +141,15 @@ void write_components(std::ostream & output,
     }
 }
 
-void write_report(std::ostream & output, const cos_graph::Graph & graph, cos_graph::Vertex source)
+void write_report(std::ostream & output, const Graph & graph, Vertex source)
 {
-    write_graph_info(output, graph);
+    write_summary(output, graph);
 
-    auto tree = std::vector<std::pair<cos_graph::Vertex, cos_graph::Vertex>>(
+    auto tree = std::vector<std::pair<Vertex, Vertex>>(
         graph.vertex_count, {cos_graph::no_vertex, cos_graph::no_vertex});
-    const auto save = [&](cos_graph::Vertex vertex, cos_graph::Vertex parent,
-                          cos_graph::Vertex level) { tree[vertex] = {parent, level}; };
+    const auto save = [&](Vertex vertex, Vertex parent, Vertex level) {
+        tree[vertex] = {parent, level};
+    };
 
     graph.bfs(source, save);
     write_traversal(output, "bfs", source, tree);
@@ -155,7 +158,9 @@ void write_report(std::ostream & output, const cos_graph::Graph & graph, cos_gra
     write_traversal(output, "dfs", source, tree);
 
     write_distances(output, graph);
-    write_components(output, graph.components());
+
+    const auto components = graph.components();
+    write_components(output, components);
 
     output << "\n[diametro]\n"
            << "tipo=exato\n"
@@ -164,31 +169,31 @@ void write_report(std::ostream & output, const cos_graph::Graph & graph, cos_gra
 
 } // namespace
 
-int main(int argument_count, char ** arguments)
+int main(int argc, char * argv[])
 {
     try {
-        if (argument_count < 3 || argument_count > 4) {
+        if (argc < 3 || argc > 4) {
             throw std::invalid_argument{
-                "uso: cos_part1 GRAFO.txt SAIDA.txt [ORIGEM]\n"
-                "ORIGEM é um número de vértice iniciado em 1; o padrão é 1."};
+                "uso: cos_part1 GRAFO.txt RELATORIO.txt [ORIGEM]\n"
+                "ORIGEM deve ser um inteiro positivo; quando omitida, vale 1."};
         }
 
-        const auto source = argument_count == 4 ? parse_source(arguments[3]) : cos_graph::Vertex{0};
-        const auto graph = read_graph(arguments[1]);
+        const auto source = argc == 4 ? parse_source(argv[3]) : Vertex{0};
+        const auto graph = read_graph(argv[1]);
 
         if (source >= graph.vertex_count) {
-            throw std::out_of_range{"ORIGEM está fora do grafo"};
+            throw std::out_of_range{"o vértice de origem não pertence ao grafo"};
         }
 
-        auto output = std::ofstream{arguments[2]};
+        auto output = std::ofstream{argv[2]};
         if (!output) {
-            throw std::runtime_error{"não foi possível abrir o arquivo de saída"};
+            throw std::runtime_error{"não foi possível criar o arquivo de relatório"};
         }
 
         write_report(output, graph, source);
         return EXIT_SUCCESS;
     } catch (const std::exception & error) {
-        std::cerr << error.what() << '\n';
+        std::cerr << "erro: " << error.what() << '\n';
         return EXIT_FAILURE;
     }
 }
