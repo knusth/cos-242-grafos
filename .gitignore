@@ -1,5 +1,5 @@
 /build/
 /compile_commands.json
 /CMakeUserPresets.json
+/data/
 .DS_Store
-
