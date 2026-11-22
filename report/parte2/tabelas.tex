@@ -1,0 +1,371 @@
+% Gerado por report/parte2/tabelas.py a partir de data.json; não edite à mão.
+\pgfplotsset{contadores/.style={yticklabels={{heap, \W{5}},{heap, \W{4}},{heap, \W{3}},{heap, embaralhado},{heap, local},{vetor, \W{5}}}}}
+\newcommand{\contadoresEspera}{(77.5,0) (66.4,1) (46.1,2) (66.9,3) (4.2,4) (0.9,5)}
+\newcommand{\contadoresResto}{(22.5,0) (33.6,1) (53.9,2) (33.1,3) (95.8,4) (99.1,5)}
+\newcommand{\contadoresIPC}{\node[font=\scriptsize, right] at (axis cs:100,0) {0,4};
+\node[font=\scriptsize, right] at (axis cs:100,1) {0,7};
+\node[font=\scriptsize, right] at (axis cs:100,2) {1,3};
+\node[font=\scriptsize, right] at (axis cs:100,3) {0,4};
+\node[font=\scriptsize, right] at (axis cs:100,4) {1,3};
+\node[font=\scriptsize, right] at (axis cs:100,5) {3,5};}
+\newcommand{\contadoresMarcas}{\coordinate (espera0) at (axis cs:77.5,0);
+\coordinate (espera1) at (axis cs:66.4,1);
+\coordinate (espera2) at (axis cs:46.1,2);
+\coordinate (espera3) at (axis cs:66.9,3);
+\coordinate (espera4) at (axis cs:4.2,4);
+\coordinate (espera5) at (axis cs:0.9,5);}
+\newcommand{\contadoresRotulos}{\node[font=\scriptsize, right, inner sep=1.5pt] at (espera0) {77\%};
+\node[font=\scriptsize, right, inner sep=1.5pt] at (espera1) {66\%};
+\node[font=\scriptsize, right, inner sep=1.5pt] at (espera2) {46\%};
+\node[font=\scriptsize, right, inner sep=1.5pt] at (espera3) {67\%};
+\node[font=\scriptsize, right, inner sep=1.5pt] at (espera4) {4,2\%};
+\node[font=\scriptsize, right, inner sep=1.5pt] at (espera5) {0,9\%};}
+\newcommand{\tabelaCaminhos}{\W{3} & 20 & 0,80 & 18 & 10 2858 35293 3905 24445 39345 61279 41321 70540 26049 84450 68904 87862 86778 27694 16608 86355 15760 20\\
+ & 30 & 0,89 & 14 & 10 2858 35293 96094 85187 53177 64898 87087 77935 42304 78071 93985 27642 26151 30\\
+ & 40 & 0,84 & 10 & 10 2858 35293 3905 24445 86286 14327 19697 15930 46307 40\\
+ & 50 & 0,87 & 9 & 10 56663 84437 19040 82510 17622 94992 70948 19878 50\\
+ & 60 & 0,97 & 16 & 10 2858 35293 3905 24445 89584 2874 99253 66532 33719 96654 75728 79865 74717 59399 8718 60\\
+\midrule
+\W{4} & 20 & 2,66 & 13 & 10 532245 877016 554617 430107 437166 805646 841402 663364 655748 634947 318070 807260 20\\
+ & 30 & 2,02 & 17 & 10 873980 182382 261305 81769 694525 219466 207765 44636 183747 920911 35338 239369 417194 132461 740528 707581 30\\
+ & 40 & 2,52 & 15 & 10 873980 182382 674971 557022 188455 418550 275098 277633 801708 730863 274827 386086 188007 477496 40\\
+ & 50 & 2,69 & 18 & 10 873980 182382 261305 81769 694525 382144 748624 663332 149827 349584 735867 9905 716970 472621 407659 994210 630598 50\\
+ & 60 & 2,41 & 19 & 10 873980 182382 674971 106317 27985 280367 227336 364950 883474 283156 161217 224210 188021 614364 358029 855615 822462 774634 60\\
+\midrule
+\W{5} & 20 & 17,34 & 13 & 10 7622850 4615833 6528266 1295458 7103730 8790605 7788327 6766415 7155379 2031914 3908338 8885874 20\\
+ & 30 & 17,24 & 18 & 10 2846336 5413988 202621 9270546 6836812 2983314 8775277 5549785 3485759 4341576 8868678 3166991 5117196 7291082 1816279 5664093 8947758 30\\
+ & 40 & 17,37 & 14 & 10 1299954 1419794 9885733 5641294 409605 4105715 660832 5850281 3215052 7676193 9008138 4846487 9798152 40\\
+ & 50 & 15,43 & 12 & 10 1299954 9927727 8451042 5368621 4276332 3716282 3724752 700154 9271362 6416250 396789 50\\
+ & 60 & 17,99 & 22 & 10 1299954 1419794 1899178 7524819 757290 9445351 9611705 9104671 8941517 264365 3945175 3090234 2071841 8424191 2860740 1175531 1925405 7718765 3193827 7824884 1454010 60\\
+\midrule
+\W{6} & 20 & 11,26 & 20 & 10 7194590 1623776 6004729 5713792 8358296 2533780 5227148 8652974 6001519 3007875 2659882 1975860 7178227 4239765 4333977 5135142 7805172 6937097 2042733 20\\
+ & 30 & 10,67 & 22 & 10 6473892 2441538 1548272 787618 5728075 8108429 6007822 5550988 2523255 782814 7306955 153130 9107012 8930108 2199545 9604404 5436447 8094054 8301086 7882916 7776260 30\\
+ & 40 & 11,31 & 11 & 10 7194590 1308444 2430454 9006783 9339181 6729573 6733497 5619464 9959710 9649921 40\\
+ & 50 & 9,60 & 12 & 10 6473892 2441538 3496708 8719217 3608871 1734087 8196874 3353190 4171489 6448393 8854015 50\\
+ & 60 & 10,72 & 20 & 10 6473892 2441538 1548272 787618 9566932 345742 218396 8462300 2279724 9337595 9606830 9928328 8701739 8354591 8135590 4215828 8346899 3411658 6447603 60\\
+\midrule
+\W{7} & 20 & 93,47 & 33 & 10 44348966 895015 41433396 36342079 15296633 26159915 16943639 38743389 10078159 21570419 11797967 14033688 15395825 37638078 10256175 47812933 16114395 3709139 16167977 42063355 25051663 11357393 1237413 44073100 46623569 16564439 33972685 44128375 38865462 44580311 49167593 34107790 20\\
+ & 30 & 95,08 & 32 & 10 44348966 895015 41433396 49215936 31738577 6483504 6934370 37879154 8001897 22183730 7265763 1661582 11612335 1574885 30723220 39141968 27645810 37795681 33920812 34023581 12510615 18298407 31754868 14520632 7334968 721843 7608283 44662249 46198809 161794 37094018 30\\
+ & 40 & 100,69 & 46 & 10 44348966 895015 41433396 49215936 31738577 6483504 35576121 13084740 8200352 334647 21020208 33240812 43511183 39829015 31993368 35257514 1449696 2909571 35131499 46634817 8774626 26615224 12496865 25597904 17624904 28515031 9039078 42335617 44883250 25945871 4357404 43686238 2293704 18096524 17747192 14433007 4134285 11543624 49518359 34048991 36125121 20450161 31315434 44798389 37766241 40\\
+ & 50 & 95,77 & 34 & 10 44348966 895015 41433396 30012782 5306752 45425007 45928549 3090492 35262022 25302788 39964857 25438408 42769429 18259600 14013095 21407931 29028767 13632589 26269428 19841425 16775149 408668 33679805 18032133 15314852 41061763 21731902 43132195 43482012 248139 24050455 39437117 4560936 50\\
+ & 60 & 82,25 & 36 & 10 44348966 895015 41433396 36342079 15296633 26159915 27614435 30636628 46606379 39970228 44691860 28472827 14457897 49527742 23832529 33803765 40354942 41967334 30441838 2384620 9629521 15597152 8376037 19638652 35026345 21270637 16840822 36015359 4125149 20825658 31193177 35236066 37175171 16297527 34154631 60\\}
+\newcommand{\tabelaTempos}{\W{3} & 100\,mil & 6,1\,mi & 122,0 & 53,6 $\pm$ 18,3\,ms & 6,55\,s & 122$\times$ & 0,5\\
+\W{4} & 1,0\,mi & 31,0\,mi & 62,0 & 888,3 $\pm$ 265,3\,ms & 10,9\,min & 736$\times$ & 1,4\\
+\W{5} & 10,0\,mi & 40,0\,mi & 8,0 & 5,48 $\pm$ 1,31\,s & \textit{16,3\,h} & $\sim$11.000$\times$ & 4,7\\
+\W{6} & 10,0\,mi & 73,4\,mi & 14,7 & 7,19 $\pm$ 0,40\,s & \textit{16,2\,h} & $\sim$8.100$\times$ & 3,7\\
+\W{7} & 50,0\,mi & 60,0\,mi & 2,4 & 31,19 $\pm$ 7,65\,s & \textit{16,0\,dias} & $\sim$44.000$\times$ & 11,1\\}
+\newcommand{\latencia}{(16384,1.109) (24576,1.115) (32768,1.117) (49152,1.105) (65536,1.114) (98304,1.104) (131072,1.346) (196608,4.166) (262144,4.929) (393216,5.761) (524288,6.096) (786432,6.507) (1048576,6.512) (1572864,6.935) (2097152,6.801) (3145728,7.336) (4194304,8.504) (6291456,10.315) (8388608,12.54) (12582912,50.962) (16777216,49.437) (25165824,75.719) (33554432,87.815) (50331648,99.354) (67108864,104.201) (100663296,108.778) (134217728,114.129) (201326592,115.031) (268435456,115.753) (402653184,115.727) (536870912,118.824) (805306368,121.134) (1073741824,121.188) (1610612736,121.897) (2147483648,137.135)}
+\newcommand{\marcasW}{\draw (axis cs:800000,0.7) -- (axis cs:800000,0.85) node[above, font=\tiny, inner sep=1pt] {\W{3}};
+\draw (axis cs:8000000,0.7) -- (axis cs:8000000,0.85) node[above, font=\tiny, inner sep=1pt] {\W{4}};
+\draw (axis cs:80000000,0.7) -- (axis cs:80000000,0.85) node[above, font=\tiny, inner sep=1pt] {\W{5}, \W{6}};
+\draw (axis cs:400000000,0.7) -- (axis cs:400000000,0.85) node[above, font=\tiny, inner sep=1pt] {\W{7}};}
+\pgfplotsset{grafosW/.style={symbolic x coords={W_3,W_4,W_5,W_6,W_7}, xticklabels={\W{3},\W{4},\W{5},\W{6},\W{7}}}}
+\newcommand{\barrasHeap}{(W_3,0.0535502) (W_4,0.888338) (W_5,5.47735) (W_6,7.1858) (W_7,31.1917)}
+\newcommand{\barrasVetor}{(W_3,6.54866) (W_4,653.446)}
+\newcommand{\barrasVetorProj}{(W_5,58744) (W_6,58398) (W_7,1.38635e+06)}
+\newcommand{\razoesW}{\node[font=\scriptsize, above, inner sep=2pt] at (axis cs:W_3,6.54866) [xshift=5pt] {122$\times$};
+\node[font=\scriptsize, above, inner sep=2pt] at (axis cs:W_4,653.446) [xshift=5pt] {736$\times$};
+\node[font=\scriptsize, above, inner sep=2pt] at (axis cs:W_5,58744) [xshift=5pt] {$\sim$11.000$\times$};
+\node[font=\scriptsize, above, inner sep=2pt] at (axis cs:W_6,58398) [xshift=5pt] {$\sim$8.100$\times$};
+\node[font=\scriptsize, above, inner sep=2pt] at (axis cs:W_7,1.38635e+06) [xshift=5pt] {$\sim$44.000$\times$};}
+\newcommand{\pontosEscala}{(102978790.97272025,0.0535502) (637809755.723865,0.888338) (1162674716.9430935,5.47735) (1939420032.5859938,7.1858) (2813296697.925454,31.1917)}
+\newcommand{\retaEscala}{(51489395.486360125,0.0267751) (5626593395.850908,2.92589)}
+\newcommand{\rotulosEscala}{\node[font=\scriptsize, anchor=north west, inner sep=2pt] at (axis cs:1.02979e+08,0.0535502) {\W{3}};
+\node[font=\scriptsize, anchor=north west, inner sep=2pt] at (axis cs:6.3781e+08,0.888338) {\W{4}};
+\node[font=\scriptsize, anchor=north west, inner sep=2pt] at (axis cs:1.16267e+09,5.47735) {\W{5}};
+\node[font=\scriptsize, anchor=north west, inner sep=2pt] at (axis cs:1.93942e+09,7.1858) {\W{6}};
+\node[font=\scriptsize, anchor=north west, inner sep=2pt] at (axis cs:2.8133e+09,31.1917) {\W{7}};}
+\newcommand{\pontosVetorPos}{(100000,0.58068) (1000000,0.58948) (10000000,0.58744) (10000000,0.58398) (50000000,0.55454)}
+\newcommand{\pontosAtualizacoes}{(121.99882,4.37223) (61.999956,3.71408) (7.999999,1.83981) (14.6806744,2.33595) (2.39999996,1.07483)}
+\newcommand{\rotulosAtualizacoes}{\node[font=\scriptsize, anchor=north west, inner sep=2pt] at (axis cs:121.999,4.37223) {\W{3}};
+\node[font=\scriptsize, anchor=north west, inner sep=2pt] at (axis cs:62,3.71408) {\W{4}};
+\node[font=\scriptsize, anchor=north west, inner sep=2pt] at (axis cs:8,1.83981) {\W{5}};
+\node[font=\scriptsize, anchor=north west, inner sep=2pt] at (axis cs:14.6807,2.33595) {\W{6}};
+\node[font=\scriptsize, anchor=north west, inner sep=2pt] at (axis cs:2.4,1.07483) {\W{7}};}
+\expandafter\def\csname heapTam@W_3\endcsname{(1e-05,0) (0.01001,0.69481) (0.02001,0.89377) (0.03001,0.94442) (0.04001,0.95252) (0.05001,0.94774) (0.06001,0.93929) (0.07001,0.92973) (0.08001,0.91986) (0.09001,0.90996) (0.10001,0.89999) (0.11001,0.88999) (0.12001,0.87999) (0.13001,0.86999) (0.14001,0.85999) (0.15001,0.84999) (0.16001,0.83999) (0.17001,0.82999) (0.18001,0.81999) (0.19001,0.80999) (0.20001,0.79999) (0.21001,0.78999) (0.22001,0.77999) (0.23001,0.76999) (0.24001,0.75999) (0.25001,0.74999) (0.26001,0.73999) (0.27001,0.72999) (0.28001,0.71999) (0.29001,0.70999) (0.30001,0.69999) (0.31001,0.68999) (0.32001,0.67999) (0.33001,0.66999) (0.34001,0.65999) (0.35001,0.64999) (0.36001,0.63999) (0.37001,0.62999) (0.38001,0.61999) (0.39001,0.60999) (0.40001,0.59999) (0.41001,0.58999) (0.42001,0.57999) (0.43001,0.56999) (0.44001,0.55999) (0.45001,0.54999) (0.46001,0.53999) (0.47001,0.52999) (0.48001,0.51999) (0.49001,0.50999) (0.50001,0.49999) (0.51001,0.48999) (0.52001,0.47999) (0.53001,0.46999) (0.54001,0.45999) (0.55001,0.44999) (0.56001,0.43999) (0.57001,0.42999) (0.58001,0.41999) (0.59001,0.40999) (0.60001,0.39999) (0.61001,0.38999) (0.62001,0.37999) (0.63001,0.36999) (0.64001,0.35999) (0.65001,0.34999) (0.66001,0.33999) (0.67001,0.32999) (0.68001,0.31999) (0.69001,0.30999) (0.70001,0.29999) (0.71001,0.28999) (0.72001,0.27999) (0.73001,0.26999) (0.74001,0.25999) (0.75001,0.24999) (0.76001,0.23999) (0.77001,0.22999) (0.78001,0.21999) (0.79001,0.20999) (0.80001,0.19999) (0.81001,0.18999) (0.82001,0.17999) (0.83001,0.16999) (0.84001,0.15999) (0.85001,0.14999) (0.86001,0.13999) (0.87001,0.12999) (0.88001,0.11999) (0.89001,0.10999) (0.90001,0.09999) (0.91001,0.08999) (0.92001,0.07999) (0.93001,0.06999) (0.94001,0.05999) (0.95001,0.04999) (0.96001,0.03999) (0.97001,0.02999) (0.98001,0.01999) (0.99001,0.00999) (0.99801,0.00199)}
+\expandafter\def\csname heapTam@W_4\endcsname{(1e-06,0) (0.010001,0.451817) (0.020001,0.690943) (0.030001,0.814723) (0.040001,0.876355) (0.050001,0.905086) (0.060001,0.915918) (0.070001,0.917145) (0.080001,0.913084) (0.090001,0.906248) (0.100001,0.898047) (0.110001,0.888964) (0.120001,0.879414) (0.130001,0.869687) (0.140001,0.859822) (0.150001,0.849903) (0.160001,0.839948) (0.170001,0.829967) (0.180001,0.819982) (0.190001,0.809994) (0.200001,0.799997) (0.210001,0.789997) (0.220001,0.779999) (0.230001,0.769999) (0.240001,0.759999) (0.250001,0.749999) (0.260001,0.739999) (0.270001,0.729999) (0.280001,0.719999) (0.290001,0.709999) (0.300001,0.699999) (0.310001,0.689999) (0.320001,0.679999) (0.330001,0.669999) (0.340001,0.659999) (0.350001,0.649999) (0.360001,0.639999) (0.370001,0.629999) (0.380001,0.619999) (0.390001,0.609999) (0.400001,0.599999) (0.410001,0.589999) (0.420001,0.579999) (0.430001,0.569999) (0.440001,0.559999) (0.450001,0.549999) (0.460001,0.539999) (0.470001,0.529999) (0.480001,0.519999) (0.490001,0.509999) (0.500001,0.499999) (0.510001,0.489999) (0.520001,0.479999) (0.530001,0.469999) (0.540001,0.459999) (0.550001,0.449999) (0.560001,0.439999) (0.570001,0.429999) (0.580001,0.419999) (0.590001,0.409999) (0.600001,0.399999) (0.610001,0.389999) (0.620001,0.379999) (0.630001,0.369999) (0.640001,0.359999) (0.650001,0.349999) (0.660001,0.339999) (0.670001,0.329999) (0.680001,0.319999) (0.690001,0.309999) (0.700001,0.299999) (0.710001,0.289999) (0.720001,0.279999) (0.730001,0.269999) (0.740001,0.259999) (0.750001,0.249999) (0.760001,0.239999) (0.770001,0.229999) (0.780001,0.219999) (0.790001,0.209999) (0.800001,0.199999) (0.810001,0.189999) (0.820001,0.179999) (0.830001,0.169999) (0.840001,0.159999) (0.850001,0.149999) (0.860001,0.139999) (0.870001,0.129999) (0.880001,0.119999) (0.890001,0.109999) (0.900001,0.099999) (0.910001,0.089999) (0.920001,0.079999) (0.930001,0.069999) (0.940001,0.059999) (0.950001,0.049999) (0.960001,0.039999) (0.970001,0.029999) (0.980001,0.019999) (0.990001,0.009999) (0.998001,0.001999)}
+\expandafter\def\csname heapTam@W_5\endcsname{(1e-07,0) (0.0100001,0.06377) (0.0200001,0.122124) (0.0300001,0.175612) (0.0400001,0.224508) (0.0500001,0.269163) (0.0600001,0.309786) (0.0700001,0.346737) (0.0800001,0.380318) (0.0900001,0.410812) (0.1000001,0.43828) (0.1100001,0.463069) (0.1200001,0.485303) (0.1300001,0.505135) (0.1400001,0.522836) (0.1500001,0.538503) (0.1600001,0.552299) (0.1700001,0.564278) (0.1800001,0.574667) (0.1900001,0.583585) (0.2000001,0.591073) (0.2100001,0.597218) (0.2200001,0.602236) (0.2300001,0.606055) (0.2400001,0.608912) (0.2500001,0.610741) (0.2600001,0.611645) (0.2700001,0.611822) (0.2800001,0.611138) (0.2900001,0.609764) (0.3000001,0.607797) (0.3100001,0.60516) (0.3200001,0.601993) (0.3300001,0.598266) (0.3400001,0.594084) (0.3500001,0.589451) (0.3600001,0.584437) (0.3700001,0.578987) (0.3800001,0.573159) (0.3900001,0.567037) (0.4000001,0.560634) (0.4100001,0.553901) (0.4200001,0.546961) (0.4300001,0.539728) (0.4400001,0.532309) (0.4500001,0.524669) (0.4600001,0.516849) (0.4700001,0.50885) (0.4800001,0.500694) (0.4900001,0.492365) (0.5000001,0.483893) (0.5100001,0.475304) (0.5200001,0.46661) (0.5300001,0.457799) (0.5400001,0.448915) (0.5500001,0.439913) (0.5600001,0.430836) (0.5700001,0.421682) (0.5800001,0.412473) (0.5900001,0.403169) (0.6000001,0.393813) (0.6100001,0.384416) (0.6200001,0.374958) (0.6300001,0.365446) (0.6400001,0.355905) (0.6500001,0.346311) (0.6600001,0.33668) (0.6700001,0.327017) (0.6800001,0.317329) (0.6900001,0.30761) (0.7000001,0.297865) (0.7100001,0.2881) (0.7200001,0.2783) (0.7300001,0.268485) (0.7400001,0.258662) (0.7500001,0.248819) (0.7600001,0.238954) (0.7700001,0.229076) (0.7800001,0.219185) (0.7900001,0.209283) (0.8000001,0.199371) (0.8100001,0.189449) (0.8200001,0.179521) (0.8300001,0.169588) (0.8400001,0.159648) (0.8500001,0.149698) (0.8600001,0.139741) (0.8700001,0.129782) (0.8800001,0.119817) (0.8900001,0.109849) (0.9000001,0.0998736) (0.9100001,0.0898962) (0.9200001,0.0799175) (0.9300001,0.0699362) (0.9400001,0.059953) (0.9500001,0.049966) (0.9600001,0.0399762) (0.9700001,0.0299855) (0.9800001,0.0199923) (0.9900001,0.0099974) (0.9980001,0.0019997)}
+\expandafter\def\csname heapTam@W_6\endcsname{(1e-07,0) (0.0099996,0.126414) (0.0199991,0.234309) (0.0299986,0.326354) (0.0399981,0.404102) (0.0499976,0.469964) (0.0599971,0.525361) (0.0699966,0.572058) (0.0799961,0.610837) (0.0899956,0.643045) (0.0999951,0.669398) (0.1099946,0.69094) (0.1199941,0.708174) (0.1299936,0.721609) (0.1399931,0.731886) (0.1499926,0.739352) (0.1599921,0.744467) (0.1699916,0.74746) (0.1799911,0.748749) (0.1899906,0.748463) (0.1999901,0.746868) (0.2099896,0.744116) (0.2199891,0.740393) (0.2299886,0.735825) (0.2399881,0.730519) (0.2499876,0.724515) (0.2599871,0.717986) (0.2699866,0.710982) (0.2799861,0.703593) (0.2899856,0.69585) (0.2999851,0.687762) (0.3099846,0.679436) (0.3199841,0.670867) (0.3299836,0.662106) (0.3399831,0.653186) (0.3499826,0.644115) (0.3599821,0.634913) (0.3699816,0.625606) (0.3799811,0.616207) (0.3899806,0.606733) (0.3999801,0.59718) (0.4099796,0.587566) (0.4199791,0.577895) (0.4299786,0.568191) (0.4399781,0.558438) (0.4499776,0.548652) (0.4599771,0.538831) (0.4699766,0.528992) (0.4799761,0.519136) (0.4899756,0.50925) (0.4999751,0.499357) (0.5099746,0.489448) (0.5199741,0.479524) (0.5299736,0.469594) (0.5399731,0.459653) (0.5499726,0.449707) (0.5599721,0.439749) (0.5699716,0.429785) (0.5799711,0.419816) (0.5899706,0.409843) (0.5999701,0.399868) (0.6099696,0.389892) (0.6199691,0.379912) (0.6299686,0.369929) (0.6399681,0.359944) (0.6499676,0.349957) (0.6599671,0.339966) (0.6699666,0.329975) (0.6799661,0.319984) (0.6899656,0.309992) (0.6999651,0.299998) (0.7099646,0.290003) (0.7199641,0.280008) (0.7299636,0.270012) (0.7399631,0.260016) (0.7499626,0.250018) (0.7599621,0.240021) (0.7699616,0.230023) (0.7799611,0.220026) (0.7899606,0.210028) (0.7999601,0.200029) (0.8099596,0.190031) (0.8199591,0.180033) (0.8299586,0.170035) (0.8399581,0.160036) (0.8499576,0.150037) (0.8599571,0.140039) (0.8699566,0.13004) (0.8799561,0.120041) (0.8899556,0.110042) (0.8999551,0.100043) (0.9099546,0.0900435) (0.9199541,0.0800443) (0.9299536,0.070045) (0.9399531,0.0600457) (0.9499526,0.0500463) (0.9599521,0.0400472) (0.9699516,0.0300479) (0.9799511,0.0200484) (0.9899506,0.010049) (0.9999501,4.96e-05)}
+\expandafter\def\csname heapTam@W_7\endcsname{(2e-08,0) (0.01000002,0.00585598) (0.02000002,0.0115759) (0.03000002,0.0171522) (0.04000002,0.0225846) (0.05000002,0.0278843) (0.06000002,0.0330363) (0.07000002,0.0380474) (0.08000002,0.0429391) (0.09000002,0.0476966) (0.10000002,0.0523114) (0.11000002,0.0568061) (0.12000002,0.0611738) (0.13000002,0.0654037) (0.14000002,0.0695033) (0.15000002,0.0734617) (0.16000002,0.077289) (0.17000002,0.0810176) (0.18000002,0.0845888) (0.19000002,0.088048) (0.20000002,0.0913775) (0.21000002,0.0945787) (0.22000002,0.0976607) (0.23000002,0.10063) (0.24000002,0.103479) (0.25000002,0.106202) (0.26000002,0.10878) (0.27000002,0.111243) (0.28000002,0.113581) (0.29000002,0.11579) (0.30000002,0.117893) (0.31000002,0.119876) (0.32000002,0.121753) (0.33000002,0.123509) (0.34000002,0.125133) (0.35000002,0.126651) (0.36000002,0.128049) (0.37000002,0.129349) (0.38000002,0.13053) (0.39000002,0.131608) (0.40000002,0.132574) (0.41000002,0.133405) (0.42000002,0.134109) (0.43000002,0.13471) (0.44000002,0.135237) (0.45000002,0.135652) (0.46000002,0.135944) (0.47000002,0.136119) (0.48000002,0.136201) (0.49000002,0.136156) (0.50000002,0.136018) (0.51000002,0.135774) (0.52000002,0.135437) (0.53000002,0.135004) (0.54000002,0.13444) (0.55000002,0.133784) (0.56000002,0.133044) (0.57000002,0.132186) (0.58000002,0.131224) (0.59000002,0.130168) (0.60000002,0.129005) (0.61000002,0.127721) (0.62000002,0.126349) (0.63000002,0.124888) (0.64000002,0.123308) (0.65000002,0.121617) (0.66000002,0.119843) (0.67000002,0.117968) (0.68000002,0.116001) (0.69000002,0.113914) (0.70000002,0.111746) (0.71000002,0.109499) (0.72000002,0.107114) (0.73000002,0.104632) (0.74000002,0.10208) (0.75000002,0.099415) (0.76000002,0.096649) (0.77000002,0.093795) (0.78000002,0.0908606) (0.79000002,0.0878032) (0.80000002,0.0846696) (0.81000002,0.0814164) (0.82000002,0.0780781) (0.83000002,0.0746326) (0.84000002,0.0710893) (0.85000002,0.0674542) (0.86000002,0.063719) (0.87000002,0.0598868) (0.88000002,0.0559458) (0.89000002,0.0518974) (0.90000002,0.0477343) (0.91000002,0.0434833) (0.92000002,0.0391398) (0.93000002,0.0346714) (0.94000002,0.0300867) (0.95000002,0.0254017) (0.96000002,0.0205933) (0.97000002,0.0156657) (0.98000002,0.0105971) (0.99000002,0.00539128) (0.99800002,0.00109756)}
+\newcommand{\arvoreColab}{\node[raiz] (n31) at (6.30,0.00) {Edsger W. Dijkstra};
+\node[pessoa] (n18) at (2.10,-0.92) {A. J. M. van Gasteren};
+\node[pessoa] (n30) at (10.50,-0.92) {John R. Rice};
+\node[pessoa] (n17) at (2.10,-1.84) {Gerard Tel};
+\node[pessoa] (n29) at (10.50,-1.84) {Dan C. Marinescu};
+\node[pessoa] (n16) at (2.10,-2.76) {Hans L. Bodlaender};
+\node[pessoa] (n23) at (8.40,-2.76) {Chuang Lin};
+\node[pessoa] (n28) at (12.60,-2.76) {Howard Jay Siegel};
+\node[pessoa] (n8) at (0.00,-3.68) {Dimitrios M. Thilikos};
+\node[pessoa] (n15) at (4.20,-3.68) {Jan van Leeuwen};
+\node[pessoa] (n22) at (8.40,-3.68) {Bo Li};
+\node[pessoa] (n27) at (12.60,-3.68) {Edwin K. P. Chong};
+\node[pessoa] (n7) at (0.00,-4.60) {Prabhakar Ragde};
+\node[pessoa] (n14) at (4.20,-4.60) {Mark H. Overmars};
+\node[pessoa] (n21) at (8.40,-4.60) {Y. Thomas Hou};
+\node[pessoa] (n26) at (12.60,-4.60) {Ness B. Shroff};
+\node[pessoa] (n6) at (0.00,-5.52) {Avi Wigderson};
+\node[pessoa] (n13) at (4.20,-5.52) {Micha Sharir};
+\node[pessoa] (n20) at (8.40,-5.52) {Zhi-Li Zhang};
+\node[pessoa] (n25) at (12.60,-5.52) {R. Srikant};
+\node[pessoa] (n5) at (0.00,-6.44) {Eli Upfal};
+\node[pessoa] (n12) at (4.20,-6.44) {Haim Kaplan};
+\node[pessoa] (n19) at (8.40,-6.44) {Donald F. Towsley};
+\node[pessoa] (n24) at (12.60,-6.44) {Albert G. Greenberg};
+\node[folha] (n2) at (8.40,-7.58) {Daniel R. Figueiredo\\\textbf{2,94}};
+\node[folha] (n3) at (12.60,-7.58) {J. B. Kruskal\\\textbf{3,48}};
+\node[pessoa] (n4) at (0.00,-7.36) {Prabhakar Raghavan};
+\node[pessoa] (n11) at (4.20,-7.36) {Robert Endre Tarjan};
+\node[folha] (n0) at (0.00,-8.50) {Jon M. Kleinberg\\\textbf{2,71}};
+\node[pessoa] (n10) at (4.20,-8.28) {Andrew V. Goldberg};
+\node[pessoa] (n9) at (4.20,-9.20) {Serge A. Plotkin};
+\node[folha] (n1) at (4.20,-10.34) {Éva Tardos\\\textbf{2,75}};
+\draw[barato] (n31) -- node[peso] {0,40} (n18);
+\draw[caro] (n31) -- node[peso] {1,00} (n30);
+\draw[caro] (n18) -- node[peso] {1,00} (n17);
+\draw[barato] (n17) -- node[peso] {0,31} (n16);
+\draw[barato] (n16) -- node[peso] {0,10} (n8);
+\draw[barato] (n16) -- node[peso] {0,17} (n15);
+\draw[barato] (n8) -- node[peso] {0,21} (n7);
+\draw[barato] (n7) -- node[peso] {0,27} (n6);
+\draw[barato] (n6) -- node[peso] {0,18} (n5);
+\draw[barato] (n5) -- node[peso] {0,10} (n4);
+\draw[barato] (n4) -- node[peso] {0,14} (n0);
+\draw[barato] (n15) -- node[peso] {0,11} (n14);
+\draw[barato] (n14) -- node[peso] {0,11} (n13);
+\draw[barato] (n13) -- node[peso] {0,14} (n12);
+\draw[barato] (n12) -- node[peso] {0,10} (n11);
+\draw[barato] (n11) -- node[peso] {0,13} (n10);
+\draw[barato] (n10) -- node[peso] {0,17} (n9);
+\draw[barato] (n9) -- node[peso] {0,13} (n1);
+\draw[barato] (n30) -- node[peso] {0,13} (n29);
+\draw[barato] (n29) -- node[peso] {0,30} (n23);
+\draw[barato] (n29) -- node[peso] {0,30} (n28);
+\draw[barato] (n23) -- node[peso] {0,39} (n22);
+\draw[barato] (n22) -- node[peso] {0,26} (n21);
+\draw[barato] (n21) -- node[peso] {0,22} (n20);
+\draw[barato] (n20) -- node[peso] {0,17} (n19);
+\draw[barato] (n19) -- node[peso] {0,47} (n2);
+\draw[barato] (n28) -- node[peso] {0,26} (n27);
+\draw[barato] (n27) -- node[peso] {0,10} (n26);
+\draw[barato] (n26) -- node[peso] {0,29} (n25);
+\draw[barato] (n25) -- node[peso] {0,40} (n24);
+\draw[caro] (n24) -- node[peso] {1,00} (n3);}
+\newcommand{\tabelaDistancias}{20 & 0,80 & 18 & 2,66 & 13 & 17,34 & 13 & 11,26 & 20 & 93,47 & 33\\
+30 & 0,89 & 14 & 2,02 & 17 & 17,24 & 18 & 10,67 & 22 & 95,08 & 32\\
+40 & 0,84 & 10 & 2,52 & 15 & 17,37 & 14 & 11,31 & 11 & 100,69 & 46\\
+50 & 0,87 & 9 & 2,69 & 18 & 15,43 & 12 & 9,60 & 12 & 95,77 & 34\\
+60 & 0,97 & 16 & 2,41 & 19 & 17,99 & 22 & 10,72 & 20 & 82,25 & 36\\}
+\expandafter\def\csname dado@k\endcsname{100}
+\expandafter\def\csname dado@seed\endcsname{2026}
+\expandafter\def\csname dado@cpu\endcsname{Apple M3 Pro}
+\expandafter\def\csname dado@ram\endcsname{36\,GiB}
+\expandafter\def\csname dado@compiler\endcsname{Apple clang version 21.0.0}
+\expandafter\def\csname dado@ghz\endcsname{3,58}
+\expandafter\def\csname dado@scan.lib\endcsname{0,58}
+\expandafter\def\csname dado@scan.lib.min\endcsname{0,55}
+\expandafter\def\csname dado@scan.lib.max\endcsname{0,63}
+\expandafter\def\csname dado@scan.lib.cycles\endcsname{2,1}
+\expandafter\def\csname dado@scan.chains\endcsname{0,26}
+\expandafter\def\csname dado@scan.chains.x\endcsname{2,3$\times$}
+\expandafter\def\csname dado@scan.simd\endcsname{0,09}
+\expandafter\def\csname dado@scan.simd.x\endcsname{6,8$\times$}
+\expandafter\def\csname dado@scan.simd.big\endcsname{0,14}
+\expandafter\def\csname dado@scan.big.n\endcsname{50,0\,mi}
+\expandafter\def\csname dado@scan.simd.gbs\endcsname{56}
+\expandafter\def\csname dado@pops.min\endcsname{0,55}
+\expandafter\def\csname dado@pops.max\endcsname{0,59}
+\expandafter\def\csname dado@pops.cycles\endcsname{2,1}
+\expandafter\def\csname dado@val.W_3.err\endcsname{1,1\%}
+\expandafter\def\csname dado@val.W_3.runs\endcsname{100}
+\expandafter\def\csname dado@val.W_3.slowest\endcsname{3,5$\times$}
+\expandafter\def\csname dado@val.W_3.spread\endcsname{268\%}
+\expandafter\def\csname dado@val.W_4.err\endcsname{$-$10,6\%}
+\expandafter\def\csname dado@val.W_4.runs\endcsname{5}
+\expandafter\def\csname dado@val.W_4.slowest\endcsname{1,1$\times$}
+\expandafter\def\csname dado@val.W_4.spread\endcsname{23\%}
+\expandafter\def\csname dado@pops.limit.W_7\endcsname{300}
+\expandafter\def\csname dado@pops.limit.W_5\endcsname{1.500}
+\expandafter\def\csname dado@lat.l1\endcsname{1,1}
+\expandafter\def\csname dado@lat.l2\endcsname{8,5}
+\expandafter\def\csname dado@lat.dram\endcsname{121}
+\expandafter\def\csname dado@layout.5.local\endcsname{0,82}
+\expandafter\def\csname dado@layout.5.random\endcsname{0,97}
+\expandafter\def\csname dado@layout.5.x\endcsname{1,2$\times$}
+\expandafter\def\csname dado@layout.6.local\endcsname{0,71}
+\expandafter\def\csname dado@layout.6.random\endcsname{1,72}
+\expandafter\def\csname dado@layout.6.x\endcsname{2,4$\times$}
+\expandafter\def\csname dado@layout.7.local\endcsname{0,60}
+\expandafter\def\csname dado@layout.7.random\endcsname{1,85}
+\expandafter\def\csname dado@layout.7.x\endcsname{3,1$\times$}
+\expandafter\def\csname dado@layout.max.local\endcsname{0,55}
+\expandafter\def\csname dado@layout.max.random\endcsname{1,79}
+\expandafter\def\csname dado@layout.max.x\endcsname{3,3$\times$}
+\expandafter\def\csname dado@layout.maxn\endcsname{50,0\,mi}
+\expandafter\def\csname dado@order.W_3.gap\endcsname{0,333}
+\expandafter\def\csname dado@order.W_3.random\endcsname{0,333}
+\expandafter\def\csname dado@order.W_3.bfs\endcsname{0,329}
+\expandafter\def\csname dado@order.W_3.bfs.change\endcsname{$-$15\%}
+\expandafter\def\csname dado@order.W_3.random.change\endcsname{$-$2\%}
+\expandafter\def\csname dado@order.W_3.pushes\endcsname{4,4}
+\expandafter\def\csname dado@order.W_3.peak\endcsname{95\,mil}
+\expandafter\def\csname dado@order.W_3.peak.pct\endcsname{95\%}
+\expandafter\def\csname dado@order.W_5.gap\endcsname{0,333}
+\expandafter\def\csname dado@order.W_5.random\endcsname{0,333}
+\expandafter\def\csname dado@order.W_5.bfs\endcsname{0,272}
+\expandafter\def\csname dado@order.W_5.bfs.change\endcsname{$-$3\%}
+\expandafter\def\csname dado@order.W_5.random.change\endcsname{$-$3\%}
+\expandafter\def\csname dado@order.W_5.pushes\endcsname{1,8}
+\expandafter\def\csname dado@order.W_5.peak\endcsname{6,1\,mi}
+\expandafter\def\csname dado@order.W_5.peak.pct\endcsname{61\%}
+\expandafter\def\csname dado@layout.peak.max\endcsname{425}
+\expandafter\def\csname dado@layout.peak.kb\endcsname{7\,kB}
+\expandafter\def\csname dado@ctr.layout.n\endcsname{10,0\,mi}
+\expandafter\def\csname dado@ctr.layout.instr\endcsname{1\%}
+\expandafter\def\csname dado@ctr.layout.cycles.x\endcsname{2,9$\times$}
+\expandafter\def\csname dado@ctr.layout.l1.x\endcsname{12$\times$}
+\expandafter\def\csname dado@ctr.layout.tlb.x\endcsname{48$\times$}
+\expandafter\def\csname dado@ctr.local.wait\endcsname{4,2\%}
+\expandafter\def\csname dado@ctr.random.wait\endcsname{67\%}
+\expandafter\def\csname dado@ctr.vec.wait\endcsname{0,9\%}
+\expandafter\def\csname dado@ctr.vec.ipc\endcsname{3,5}
+\expandafter\def\csname dado@ctr.vec.cpe\endcsname{2,0}
+\expandafter\def\csname dado@ctr.W_3.wait\endcsname{46\%}
+\expandafter\def\csname dado@ctr.W_3.ipc\endcsname{1,3}
+\expandafter\def\csname dado@ctr.W_3.tlb\endcsname{2}
+\expandafter\def\csname dado@ctr.W_4.wait\endcsname{66\%}
+\expandafter\def\csname dado@ctr.W_4.ipc\endcsname{0,7}
+\expandafter\def\csname dado@ctr.W_4.tlb\endcsname{4}
+\expandafter\def\csname dado@ctr.W_5.wait\endcsname{77\%}
+\expandafter\def\csname dado@ctr.W_5.ipc\endcsname{0,4}
+\expandafter\def\csname dado@ctr.W_5.tlb\endcsname{29}
+\expandafter\def\csname dado@W_3.heap\endcsname{53,6\,ms}
+\expandafter\def\csname dado@W_3.n\endcsname{100\,mil}
+\expandafter\def\csname dado@W_3.heapk\endcsname{5,36\,s}
+\expandafter\def\csname dado@W_3.vec\endcsname{6,55\,s}
+\expandafter\def\csname dado@W_3.vecest\endcsname{5,81\,s}
+\expandafter\def\csname dado@W_3.veck\endcsname{9,7\,min}
+\expandafter\def\csname dado@W_3.ratio\endcsname{122$\times$}
+\expandafter\def\csname dado@W_3.heapns\endcsname{0,5}
+\expandafter\def\csname dado@W_3.degree\endcsname{122,0}
+\expandafter\def\csname dado@W_3.csr\endcsname{147\,MB}
+\expandafter\def\csname dado@W_3.pico\endcsname{249\,MB}
+\expandafter\def\csname dado@W_3.matriz\endcsname{90,0\,GB}
+\expandafter\def\csname dado@W_3.chainsest\endcsname{2,59\,s}
+\expandafter\def\csname dado@W_3.chainsratio\endcsname{48$\times$}
+\expandafter\def\csname dado@W_4.heap\endcsname{888,3\,ms}
+\expandafter\def\csname dado@W_4.n\endcsname{1,0\,mi}
+\expandafter\def\csname dado@W_4.heapk\endcsname{88,83\,s}
+\expandafter\def\csname dado@W_4.vec\endcsname{10,9\,min}
+\expandafter\def\csname dado@W_4.vecest\endcsname{9,8\,min}
+\expandafter\def\csname dado@W_4.veck\endcsname{16,4\,h}
+\expandafter\def\csname dado@W_4.ratio\endcsname{736$\times$}
+\expandafter\def\csname dado@W_4.heapns\endcsname{1,4}
+\expandafter\def\csname dado@W_4.degree\endcsname{62,0}
+\expandafter\def\csname dado@W_4.csr\endcsname{748\,MB}
+\expandafter\def\csname dado@W_4.pico\endcsname{1,3\,GB}
+\expandafter\def\csname dado@W_4.matriz\endcsname{9,0\,TB}
+\expandafter\def\csname dado@W_4.chainsest\endcsname{4,4\,min}
+\expandafter\def\csname dado@W_4.chainsratio\endcsname{296$\times$}
+\expandafter\def\csname dado@W_5.heap\endcsname{5,48\,s}
+\expandafter\def\csname dado@W_5.n\endcsname{10,0\,mi}
+\expandafter\def\csname dado@W_5.heapk\endcsname{9,1\,min}
+\expandafter\def\csname dado@W_5.vecest\endcsname{16,3\,h}
+\expandafter\def\csname dado@W_5.veck\endcsname{68,0\,dias}
+\expandafter\def\csname dado@W_5.ratio\endcsname{$\sim$11.000$\times$}
+\expandafter\def\csname dado@W_5.heapns\endcsname{4,7}
+\expandafter\def\csname dado@W_5.degree\endcsname{8,0}
+\expandafter\def\csname dado@W_5.csr\endcsname{1,0\,GB}
+\expandafter\def\csname dado@W_5.pico\endcsname{1,9\,GB}
+\expandafter\def\csname dado@W_5.matriz\endcsname{900,0\,TB}
+\expandafter\def\csname dado@W_5.chainsest\endcsname{7,4\,h}
+\expandafter\def\csname dado@W_5.chainsratio\endcsname{$\sim$4.900$\times$}
+\expandafter\def\csname dado@W_6.heap\endcsname{7,19\,s}
+\expandafter\def\csname dado@W_6.n\endcsname{10,0\,mi}
+\expandafter\def\csname dado@W_6.heapk\endcsname{12,0\,min}
+\expandafter\def\csname dado@W_6.vecest\endcsname{16,2\,h}
+\expandafter\def\csname dado@W_6.veck\endcsname{67,6\,dias}
+\expandafter\def\csname dado@W_6.ratio\endcsname{$\sim$8.100$\times$}
+\expandafter\def\csname dado@W_6.heapns\endcsname{3,7}
+\expandafter\def\csname dado@W_6.degree\endcsname{14,7}
+\expandafter\def\csname dado@W_6.csr\endcsname{1,8\,GB}
+\expandafter\def\csname dado@W_6.pico\endcsname{3,3\,GB}
+\expandafter\def\csname dado@W_6.matriz\endcsname{900,0\,TB}
+\expandafter\def\csname dado@W_6.chainsest\endcsname{7,0\,h}
+\expandafter\def\csname dado@W_6.chainsratio\endcsname{$\sim$3.500$\times$}
+\expandafter\def\csname dado@W_7.heap\endcsname{31,19\,s}
+\expandafter\def\csname dado@W_7.n\endcsname{50,0\,mi}
+\expandafter\def\csname dado@W_7.heapk\endcsname{52,0\,min}
+\expandafter\def\csname dado@W_7.vecest\endcsname{16,0\,dias}
+\expandafter\def\csname dado@W_7.veck\endcsname{4,4\,anos}
+\expandafter\def\csname dado@W_7.ratio\endcsname{$\sim$44.000$\times$}
+\expandafter\def\csname dado@W_7.heapns\endcsname{11,1}
+\expandafter\def\csname dado@W_7.degree\endcsname{2,4}
+\expandafter\def\csname dado@W_7.csr\endcsname{1,6\,GB}
+\expandafter\def\csname dado@W_7.pico\endcsname{3,4\,GB}
+\expandafter\def\csname dado@W_7.matriz\endcsname{22,5\,PB}
+\expandafter\def\csname dado@W_7.chainsest\endcsname{7,3\,dias}
+\expandafter\def\csname dado@W_7.chainsratio\endcsname{$\sim$20.000$\times$}
+\expandafter\def\csname dado@bench.total\endcsname{2,3\,h}
+\expandafter\def\csname dado@bench.W7heap\endcsname{52,0\,min}
+\expandafter\def\csname dado@bench.vec\endcsname{65,4\,min}
+\expandafter\def\csname dado@heapns.growth\endcsname{21$\times$}
+\expandafter\def\csname dado@degree.min\endcsname{2,4}
+\expandafter\def\csname dado@degree.max\endcsname{122,0}
+\expandafter\def\csname dado@matrix.limit\endcsname{66\,mil}
+\expandafter\def\csname dado@colab.n\endcsname{722\,mil}
+\expandafter\def\csname dado@colab.m\endcsname{2,3\,mi}
+\expandafter\def\csname dado@colab.source\endcsname{2722}
+\expandafter\def\csname dado@colab.heap\endcsname{112,5\,ms}
+\expandafter\def\csname dado@colab.reached\endcsname{65\%}
+\expandafter\def\csname dado@cont.origins\endcsname{100}
+\expandafter\def\csname dado@W_3.upd\endcsname{4,4}
+\expandafter\def\csname dado@W_3.updpct\endcsname{7\%}
+\expandafter\def\csname dado@W_3.peakpct\endcsname{95\%}
+\expandafter\def\csname dado@W_4.upd\endcsname{3,7}
+\expandafter\def\csname dado@W_4.updpct\endcsname{12\%}
+\expandafter\def\csname dado@W_4.peakpct\endcsname{92\%}
+\expandafter\def\csname dado@W_5.upd\endcsname{1,8}
+\expandafter\def\csname dado@W_5.updpct\endcsname{46\%}
+\expandafter\def\csname dado@W_5.peakpct\endcsname{61\%}
+\expandafter\def\csname dado@W_6.upd\endcsname{2,3}
+\expandafter\def\csname dado@W_6.updpct\endcsname{32\%}
+\expandafter\def\csname dado@W_6.peakpct\endcsname{75\%}
+\expandafter\def\csname dado@W_7.upd\endcsname{1,1}
+\expandafter\def\csname dado@W_7.updpct\endcsname{90\%}
+\expandafter\def\csname dado@W_7.peakpct\endcsname{14\%}
+\expandafter\def\csname dado@colab.giant\endcsname{576.309}
+\expandafter\def\csname dado@colab.giant.pct\endcsname{80\%}
+\expandafter\def\csname dado@colab.giant.runs\endcsname{81}
+\expandafter\def\csname dado@colab.small.runs\endcsname{19}
+\expandafter\def\csname dado@colab.small.max\endcsname{8}
+\expandafter\def\csname dado@colab.giant.heap\endcsname{138,9\,ms}
+\expandafter\def\csname dado@colab.amdahl\endcsname{1,25$\times$}
+\expandafter\def\csname dado@colab.kleinberg.d\endcsname{2,71}
+\expandafter\def\csname dado@colab.kleinberg.hops\endcsname{9}
+\expandafter\def\csname dado@colab.kruskal.d\endcsname{3,48}
+\expandafter\def\csname dado@colab.kruskal.hops\endcsname{8}
+\expandafter\def\csname dado@colab.tardos.d\endcsname{2,75}
+\expandafter\def\csname dado@colab.tardos.hops\endcsname{11}
+\expandafter\def\csname dado@colab.figueiredo.d\endcsname{2,94}
+\expandafter\def\csname dado@colab.figueiredo.hops\endcsname{8}
+\expandafter\def\csname dado@colab.firsttwo.kleinberg\endcsname{52\%}
+\expandafter\def\csname dado@W_3.dmin\endcsname{0,80}
+\expandafter\def\csname dado@W_3.dmax\endcsname{0,97}
+\expandafter\def\csname dado@W_3.hmin\endcsname{9}
+\expandafter\def\csname dado@W_3.hmax\endcsname{18}
+\expandafter\def\csname dado@W_4.dmin\endcsname{2,02}
+\expandafter\def\csname dado@W_4.dmax\endcsname{2,69}
+\expandafter\def\csname dado@W_4.hmin\endcsname{13}
+\expandafter\def\csname dado@W_4.hmax\endcsname{19}
+\expandafter\def\csname dado@W_5.dmin\endcsname{15,43}
+\expandafter\def\csname dado@W_5.dmax\endcsname{17,99}
+\expandafter\def\csname dado@W_5.hmin\endcsname{12}
+\expandafter\def\csname dado@W_5.hmax\endcsname{22}
+\expandafter\def\csname dado@W_6.dmin\endcsname{9,60}
+\expandafter\def\csname dado@W_6.dmax\endcsname{11,31}
+\expandafter\def\csname dado@W_6.hmin\endcsname{11}
+\expandafter\def\csname dado@W_6.hmax\endcsname{22}
+\expandafter\def\csname dado@W_7.dmin\endcsname{82,25}
+\expandafter\def\csname dado@W_7.dmax\endcsname{100,69}
+\expandafter\def\csname dado@W_7.hmin\endcsname{32}
+\expandafter\def\csname dado@W_7.hmax\endcsname{46}

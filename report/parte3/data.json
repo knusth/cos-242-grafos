@@ -1,0 +1,700 @@
+{
+ "generated_at": "2026-11-22T17:10:17Z",
+ "source_dir": "bench/results/parte3",
+ "machine": {
+  "cpu": "Apple M3 Pro",
+  "memory_bytes": 38654705664,
+  "threads": 11,
+  "compiler": "Apple clang version 21.0.0 (clang-2100.0.123.102)",
+  "date": "2026-11-22T16:46:51Z"
+ },
+ "graphs": [
+  {
+   "name": "W_1",
+   "file": "p3_W_1.txt",
+   "complete": true,
+   "vertices": 25000,
+   "edges": 549953,
+   "negative_weights": true,
+   "mean_degree": 43.99624,
+   "load_s": 0.045650916,
+   "graph_memory_bytes": 13399024,
+   "peak_rss_bytes": 7525679104,
+   "bellman_ford": {
+    "status": "ciclo_negativo",
+    "target": 100,
+    "runs": 10,
+    "mean_s": 0.000102238,
+    "std_s": 5.0758e-05,
+    "min_s": 7.6208e-05,
+    "rounds": 4,
+    "negative_cycle": true,
+    "neg_cycle_reaches_target": true,
+    "neg_cycle_in_graph": true,
+    "distances": {
+     "10": null,
+     "20": null,
+     "30": null
+    },
+    "paths": {}
+   },
+   "floyd_warshall": {
+    "status": "ciclo_negativo",
+    "memory_needed_bytes": 7500000000,
+    "memory_needed_gib": 6.984919309616089,
+    "limit_gib": 16.0,
+    "threads": 11,
+    "runs": 10,
+    "mean_s": 0.602866725,
+    "std_s": 0.079365952,
+    "min_s": 0.5567055,
+    "negative_cycle": true
+   },
+   "matrix": {
+    "source": null,
+    "vertices": [
+     10,
+     20,
+     30,
+     40,
+     50
+    ],
+    "rows": null
+   },
+   "all_pairs_bf": {
+    "status": "ciclo_negativo",
+    "threads": 11,
+    "runs": 10,
+    "mean_s": 0.000266538,
+    "std_s": 0.000173096,
+    "estimated": false,
+    "sample": 25000,
+    "vertices": 25000,
+    "negative_cycle": true
+   },
+   "ops": {
+    "fw_relaxations": 15625000000000,
+    "bf_ops_upper_bound": 54995300000
+   }
+  },
+  {
+   "name": "W_2",
+   "file": "p3_W_2.txt",
+   "complete": true,
+   "vertices": 25000,
+   "edges": 824964,
+   "negative_weights": false,
+   "mean_degree": 65.99712,
+   "load_s": 0.065663542,
+   "graph_memory_bytes": 19999288,
+   "peak_rss_bytes": 7538262016,
+   "bellman_ford": {
+    "status": "ok",
+    "target": 100,
+    "runs": 10,
+    "mean_s": 0.012278388,
+    "std_s": 0.001077447,
+    "min_s": 0.01054325,
+    "rounds": 24,
+    "negative_cycle": false,
+    "neg_cycle_reaches_target": false,
+    "neg_cycle_in_graph": false,
+    "distances": {
+     "10": 10.47,
+     "20": 8.48,
+     "30": 8.71
+    },
+    "paths": {
+     "10": [
+      10,
+      22754,
+      23713,
+      20821,
+      23161,
+      3591,
+      7214,
+      4808,
+      7704,
+      10831,
+      14144,
+      100
+     ],
+     "20": [
+      20,
+      6795,
+      7737,
+      11988,
+      7094,
+      14144,
+      100
+     ],
+     "30": [
+      30,
+      23783,
+      439,
+      502,
+      7344,
+      7842,
+      10419,
+      12598,
+      13685,
+      17695,
+      14144,
+      100
+     ]
+    }
+   },
+   "floyd_warshall": {
+    "status": "ok",
+    "memory_needed_bytes": 7500000000,
+    "memory_needed_gib": 6.984919309616089,
+    "limit_gib": 16.0,
+    "threads": 11,
+    "runs": 10,
+    "mean_s": 498.743067058,
+    "std_s": 43.614995102,
+    "min_s": 461.657800166,
+    "negative_cycle": false
+   },
+   "matrix": {
+    "source": "floyd_warshall",
+    "vertices": [
+     10,
+     20,
+     30,
+     40,
+     50
+    ],
+    "rows": [
+     [
+      0.0,
+      11.73,
+      8.14,
+      9.49,
+      7.08
+     ],
+     [
+      3.84,
+      0.0,
+      7.03,
+      8.3,
+      4.7
+     ],
+     [
+      5.79,
+      12.55,
+      0.0,
+      8.3,
+      6.33
+     ],
+     [
+      5.05,
+      12.32,
+      5.36,
+      0.0,
+      5.71
+     ],
+     [
+      4.48,
+      12.23,
+      7.79,
+      8.26,
+      0.0
+     ]
+    ]
+   },
+   "all_pairs_bf": {
+    "status": "ok",
+    "threads": 11,
+    "runs": 10,
+    "mean_s": 38.139152087,
+    "std_s": 1.78555828,
+    "estimated": false,
+    "sample": 25000,
+    "vertices": 25000,
+    "negative_cycle": false
+   },
+   "ops": {
+    "fw_relaxations": 15625000000000,
+    "bf_ops_upper_bound": 494978400000
+   }
+  },
+  {
+   "name": "W_3",
+   "file": "p3_W_3.txt",
+   "complete": true,
+   "vertices": 100000,
+   "edges": 6099941,
+   "negative_weights": false,
+   "mean_degree": 121.99882,
+   "load_s": 0.399025208,
+   "graph_memory_bytes": 147198736,
+   "peak_rss_bytes": 251445248,
+   "bellman_ford": {
+    "status": "ok",
+    "target": 100,
+    "runs": 10,
+    "mean_s": 0.102719471,
+    "std_s": 0.004093591,
+    "min_s": 0.0987005,
+    "rounds": 25,
+    "negative_cycle": false,
+    "neg_cycle_reaches_target": false,
+    "neg_cycle_in_graph": false,
+    "distances": {
+     "10": 4.63,
+     "20": 5.42,
+     "30": 4.67
+    },
+    "paths": {
+     "10": [
+      10,
+      2858,
+      9370,
+      31488,
+      43785,
+      48833,
+      70398,
+      74552,
+      100
+     ],
+     "20": [
+      20,
+      2526,
+      8495,
+      13021,
+      15939,
+      20244,
+      36899,
+      74552,
+      100
+     ],
+     "30": [
+      30,
+      29698,
+      43059,
+      43482,
+      35741,
+      74494,
+      74552,
+      100
+     ]
+    }
+   },
+   "floyd_warshall": {
+    "status": "memoria_insuficiente",
+    "memory_needed_bytes": 120000000000,
+    "memory_needed_gib": 111.75870895385742,
+    "limit_gib": 16.0,
+    "threads": null,
+    "runs": null,
+    "mean_s": null,
+    "std_s": null,
+    "min_s": null,
+    "negative_cycle": null
+   },
+   "matrix": {
+    "source": "bellman_ford",
+    "vertices": [
+     10,
+     20,
+     30,
+     40,
+     50
+    ],
+    "rows": [
+     [
+      0.0,
+      4.99,
+      5.71,
+      7.49,
+      4.31
+     ],
+     [
+      3.48,
+      0.0,
+      6.19,
+      8.27,
+      4.32
+     ],
+     [
+      3.96,
+      5.8,
+      0.0,
+      8.3,
+      3.17
+     ],
+     [
+      3.58,
+      5.59,
+      6.1,
+      0.0,
+      3.84
+     ],
+     [
+      3.25,
+      5.41,
+      6.12,
+      8.1,
+      0.0
+     ]
+    ]
+   },
+   "all_pairs_bf": {
+    "status": "ok",
+    "threads": 1,
+    "runs": 10,
+    "mean_s": 10421.2992548,
+    "std_s": 413.283351908,
+    "estimated": true,
+    "sample": 200,
+    "vertices": 100000,
+    "negative_cycle": false
+   },
+   "ops": {
+    "fw_relaxations": 1000000000000000,
+    "bf_ops_upper_bound": 15249852500000
+   }
+  },
+  {
+   "name": "W_4",
+   "file": "p3_W_4.txt",
+   "complete": true,
+   "vertices": 1000000,
+   "edges": 30999978,
+   "negative_weights": false,
+   "mean_degree": 61.999956,
+   "load_s": 2.384636292,
+   "graph_memory_bytes": 751999624,
+   "peak_rss_bytes": 1279787008,
+   "bellman_ford": {
+    "status": "ok",
+    "target": 100,
+    "runs": 10,
+    "mean_s": 1.466050792,
+    "std_s": 0.053364953,
+    "min_s": 1.421427834,
+    "rounds": 36,
+    "negative_cycle": false,
+    "neg_cycle_reaches_target": false,
+    "neg_cycle_in_graph": false,
+    "distances": {
+     "10": 9.04,
+     "20": 8.83,
+     "30": 9.23
+    },
+    "paths": {
+     "10": [
+      10,
+      91829,
+      417272,
+      775161,
+      842600,
+      906821,
+      930962,
+      994427,
+      321645,
+      620573,
+      21519,
+      43375,
+      351045,
+      100
+     ],
+     "20": [
+      20,
+      775000,
+      859374,
+      148050,
+      161821,
+      274264,
+      315038,
+      749181,
+      51701,
+      83053,
+      351045,
+      100
+     ],
+     "30": [
+      30,
+      124400,
+      225008,
+      352692,
+      424754,
+      485462,
+      502763,
+      926624,
+      80691,
+      571210,
+      620573,
+      21519,
+      43375,
+      351045,
+      100
+     ]
+    }
+   },
+   "floyd_warshall": {
+    "status": "memoria_insuficiente",
+    "memory_needed_bytes": 12000000000000,
+    "memory_needed_gib": 11175.870895385742,
+    "limit_gib": 16.0,
+    "threads": null,
+    "runs": null,
+    "mean_s": null,
+    "std_s": null,
+    "min_s": null,
+    "negative_cycle": null
+   },
+   "matrix": {
+    "source": "bellman_ford",
+    "vertices": [
+     10,
+     20,
+     30,
+     40,
+     50
+    ],
+    "rows": [
+     [
+      0.0,
+      10.52,
+      10.15,
+      10.69,
+      8.24
+     ],
+     [
+      7.79,
+      0.0,
+      9.19,
+      9.67,
+      7.58
+     ],
+     [
+      7.61,
+      10.25,
+      0.0,
+      8.77,
+      6.55
+     ],
+     [
+      7.94,
+      8.65,
+      9.22,
+      0.0,
+      7.75
+     ],
+     [
+      7.99,
+      11.41,
+      8.8,
+      8.55,
+      0.0
+     ]
+    ]
+   },
+   "all_pairs_bf": {
+    "status": "ok",
+    "threads": 1,
+    "runs": 10,
+    "mean_s": 1243156.13252,
+    "std_s": 55698.39499818,
+    "estimated": true,
+    "sample": 30,
+    "vertices": 1000000,
+    "negative_cycle": false
+   },
+   "ops": {
+    "fw_relaxations": 1000000000000000000,
+    "bf_ops_upper_bound": 1115999208000000
+   }
+  },
+  {
+   "name": "W_5",
+   "file": "p3_W_5.txt",
+   "complete": true,
+   "vertices": 10000000,
+   "edges": 39999995,
+   "negative_weights": false,
+   "mean_degree": 7.999999,
+   "load_s": 4.1124085,
+   "graph_memory_bytes": 1040000032,
+   "peak_rss_bytes": 1939554304,
+   "bellman_ford": {
+    "status": "ok",
+    "target": 100,
+    "runs": 10,
+    "mean_s": 6.108812871,
+    "std_s": 0.060566243,
+    "min_s": 6.03383925,
+    "rounds": 42,
+    "negative_cycle": false,
+    "neg_cycle_reaches_target": false,
+    "neg_cycle_in_graph": false,
+    "distances": {
+     "10": 37.85,
+     "20": 42.63,
+     "30": 37.86
+    },
+    "paths": {
+     "10": [
+      10,
+      8226464,
+      8398644,
+      9402245,
+      9739987,
+      937849,
+      597353,
+      2241769,
+      3118871,
+      5374339,
+      319782,
+      1409550,
+      8063679,
+      4187984,
+      8322144,
+      7915275,
+      1116679,
+      8592040,
+      9168609,
+      1011134,
+      617312,
+      4484876,
+      100
+     ],
+     "20": [
+      20,
+      8885874,
+      9172974,
+      190993,
+      901806,
+      2122291,
+      7949832,
+      4297068,
+      9799215,
+      4313,
+      6690018,
+      2041796,
+      8483311,
+      4418352,
+      4580063,
+      8048493,
+      5653904,
+      8592040,
+      9168609,
+      1011134,
+      617312,
+      4484876,
+      100
+     ],
+     "30": [
+      30,
+      792746,
+      8357921,
+      3360862,
+      7413679,
+      787170,
+      3097792,
+      4607918,
+      7198627,
+      9170278,
+      9726068,
+      2117603,
+      4473017,
+      7399377,
+      1303598,
+      5096941,
+      9492473,
+      2243408,
+      3162255,
+      9430472,
+      706910,
+      7918231,
+      9767508,
+      600132,
+      2212225,
+      6106658,
+      9336327,
+      69858,
+      617312,
+      4484876,
+      100
+     ]
+    }
+   },
+   "floyd_warshall": {
+    "status": "memoria_insuficiente",
+    "memory_needed_bytes": 1200000000000000,
+    "memory_needed_gib": 1117587.0895385742,
+    "limit_gib": 16.0,
+    "threads": null,
+    "runs": null,
+    "mean_s": null,
+    "std_s": null,
+    "min_s": null,
+    "negative_cycle": null
+   },
+   "matrix": {
+    "source": "bellman_ford",
+    "vertices": [
+     10,
+     20,
+     30,
+     40,
+     50
+    ],
+    "rows": [
+     [
+      0.0,
+      40.2,
+      39.56,
+      41.55,
+      44.91
+     ],
+     [
+      39.17,
+      0.0,
+      39.98,
+      49.82,
+      45.16
+     ],
+     [
+      34.46,
+      42.64,
+      0.0,
+      47.04,
+      43.85
+     ],
+     [
+      38.73,
+      43.91,
+      47.3,
+      0.0,
+      45.24
+     ],
+     [
+      44.06,
+      40.62,
+      45.25,
+      49.11,
+      0.0
+     ]
+    ]
+   },
+   "all_pairs_bf": {
+    "status": "ok",
+    "threads": 1,
+    "runs": 10,
+    "mean_s": 64502695.017,
+    "std_s": 2091011.294250765,
+    "estimated": true,
+    "sample": 10,
+    "vertices": 10000000,
+    "negative_cycle": false
+   },
+   "ops": {
+    "fw_relaxations": 1000000000000000000000,
+    "bf_ops_upper_bound": 16799997900000000
+   }
+  }
+ ]
+}

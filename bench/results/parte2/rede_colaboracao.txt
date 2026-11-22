@@ -1,0 +1,21 @@
+[grafo]
+representacao=csr
+vertices=722385
+arestas=2272543
+grau_minimo=0
+grau_maximo=643
+grau_medio=6.291778
+grau_mediano=3.000000
+memoria_bytes=57430656
+pesos_negativos=nao
+
+[caminhos_minimos]
+algoritmo=dijkstra_heap
+origem=2722
+origem_nome=Edsger W. Dijkstra
+destino,nome,distancia,caminho,caminho_nomes
+11365,Alan M. Turing,inalcancavel
+471365,J. B. Kruskal,3.48036845488905,2722 9490 7200 10343 646765 490368 10746 3655 471365,Edsger W. Dijkstra -> John R. Rice -> Dan C. Marinescu -> Howard Jay Siegel -> Edwin K. P. Chong -> Ness B. Shroff -> R. Srikant -> Albert G. Greenberg -> J. B. Kruskal
+5709,Jon M. Kleinberg,2.70699361755646,2722 217250 11456 768 11448 101826 12242 11834 9608 5709,Edsger W. Dijkstra -> A. J. M. van Gasteren -> Gerard Tel -> Hans L. Bodlaender -> Dimitrios M. Thilikos -> Prabhakar Ragde -> Avi Wigderson -> Eli Upfal -> Prabhakar Raghavan -> Jon M. Kleinberg
+11386,Éva Tardos,2.75351417935734,2722 217250 11456 768 6479 8528 10572 357587 11649 3694 318911 11386,Edsger W. Dijkstra -> A. J. M. van Gasteren -> Gerard Tel -> Hans L. Bodlaender -> Jan van Leeuwen -> Mark H. Overmars -> Micha Sharir -> Haim Kaplan -> Robert Endre Tarjan -> Andrew V. Goldberg -> Serge A. Plotkin -> Éva Tardos
+343930,Daniel R. Figueiredo,2.94283086953679,2722 9490 7200 391667 371226 4379 68773 11466 343930,Edsger W. Dijkstra -> John R. Rice -> Dan C. Marinescu -> Chuang Lin -> Bo Li -> Y. Thomas Hou -> Zhi-Li Zhang -> Donald F. Towsley -> Daniel R. Figueiredo

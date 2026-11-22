@@ -1,0 +1,5 @@
+data=2026-11-22T16:46:51Z
+cpu=Apple M3 Pro
+memoria_bytes=38654705664
+threads=11
+compilador=Apple clang version 21.0.0 (clang-2100.0.123.102)

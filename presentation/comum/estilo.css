@@ -1,0 +1,148 @@
+/* Layout de seminário (no estilo do tema Metropolis do Beamer): fundo branco, barra de título escura,
+   rodapé discreto, legendas numeradas e tabelas com três filetes.
+   Cada slide tem 1280 × 720 px; na tela é escalado por --k, no PDF vira uma página do mesmo tamanho. */
+
+@font-face { font-family: 'Fira Sans'; src: url('../comum/fonts/FiraSans-Regular.otf'); font-weight: 400; }
+@font-face { font-family: 'Fira Sans'; src: url('../comum/fonts/FiraSans-Italic.otf'); font-weight: 400; font-style: italic; }
+@font-face { font-family: 'Fira Sans'; src: url('../comum/fonts/FiraSans-Medium.otf'); font-weight: 500; }
+@font-face { font-family: 'Fira Sans'; src: url('../comum/fonts/FiraSans-SemiBold.otf'); font-weight: 600; }
+@font-face { font-family: 'Fira Sans'; src: url('../comum/fonts/FiraSans-Bold.otf'); font-weight: 700; }
+@font-face { font-family: 'Inconsolata'; src: url('../comum/fonts/Inconsolatazi4-Regular.otf'); font-weight: 400 600; }
+@font-face { font-family: 'Inconsolata'; src: url('../comum/fonts/Inconsolatazi4-Bold.otf'); font-weight: 700; }
+
+:root {
+  --tinta: #23373b; --tinta2: #5b6b70; --tinta3: #9aa5a8; --linha: #dde3e4; --fundo: #f3f5f6;
+  --azul: #1f4e9c; --azul-bg: #e3eaf6;
+  --heap: #1b7f79; --heap-bg: #d9ecea; --vet: #c0392b; --vet-bg: #f6dcd8;
+  --k: 1;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #3a3f44; }
+body { font-family: 'Fira Sans', sans-serif; color: var(--tinta); font-size: 24px; line-height: 1.4;
+       -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+.slide {
+  position: absolute; left: 50%; top: 50%; width: 1280px; height: 720px; overflow: hidden;
+  transform: translate(-50%, -50%) scale(var(--k)); display: none; background: #fff;
+}
+.slide.on { display: block; }
+
+/* Título do slide. */
+.slide > header { height: 76px; background: var(--tinta); color: #fff; display: flex; align-items: center;
+                  padding: 0 48px; font-size: 27px; font-weight: 500; line-height: 1.15; letter-spacing: 0.1px; }
+.slide > header sub { font-size: 65%; vertical-align: -0.3em; line-height: 0; }
+
+.corpo { position: absolute; top: 76px; bottom: 38px; left: 0; right: 0; padding: 22px 56px 0; }
+
+.slide > footer { position: absolute; left: 0; right: 0; bottom: 0; height: 38px; padding: 0 48px;
+                  display: flex; align-items: center; justify-content: space-between;
+                  font-size: 14px; color: var(--tinta2); }
+.slide > footer b { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Capa. */
+.capa { padding: 110px 96px 0; }
+.capa img { height: 120px; display: block; margin-bottom: 30px; }
+.capa h1 { font-size: 46px; font-weight: 600; line-height: 1.15; }
+.capa h2 { font-size: 27px; font-weight: 400; color: var(--tinta2); margin-top: 10px; }
+.capa hr { border: 0; border-top: 2px solid var(--azul); margin: 28px 0 24px; }
+.capa .aut { font-size: 24px; font-weight: 500; }
+.capa .inst { font-size: 18px; color: var(--tinta2); margin-top: 8px; line-height: 1.5; }
+
+/* Texto. */
+p { margin-bottom: 12px; }
+em, .m { font-style: italic; }
+code { font-family: Inconsolata, monospace; font-size: 0.95em; }
+h3 { font-size: 23px; font-weight: 600; color: var(--azul); margin-bottom: 6px; }
+ul.l { list-style: none; }
+ul.l li { position: relative; padding-left: 24px; margin-bottom: 10px; }
+ul.l li::before { content: ''; position: absolute; left: 4px; top: 0.55em; width: 8px; height: 8px;
+                  background: var(--azul); }
+ul.l li ul.l { margin-top: 6px; }
+ul.l li ul.l li { font-size: 0.9em; margin-bottom: 4px; }
+ul.l li ul.l li::before { width: 6px; height: 6px; background: var(--tinta3); top: 0.6em; }
+.pq { font-size: 20px; }
+
+/* Bloco (como o block do Beamer). */
+.bloco { background: var(--fundo); border-left: 4px solid var(--azul); padding: 12px 18px 10px;
+         margin-bottom: 14px; }
+.bloco h3 { margin-bottom: 4px; }
+.bloco p:last-child, .bloco ul:last-child { margin-bottom: 0; }
+
+/* Colunas. */
+.g2 { display: grid; gap: 40px; align-items: start; }
+
+/* Legendas de figura e tabela. */
+.leg { font-size: 16.5px; color: var(--tinta2); line-height: 1.35; margin-top: 6px; }
+.leg b { color: var(--tinta); font-weight: 600; }
+.leg.cima { margin: 0 0 8px; }
+.nota { font-size: 16px; color: var(--tinta2); line-height: 1.35; margin-top: 8px; }
+figure { margin: 0; }
+svg.fig { display: block; }
+
+/* Tabelas com três filetes. */
+table.bt { border-collapse: collapse; font-size: 0.92em; font-variant-numeric: tabular-nums; }
+table.bt th, table.bt td { padding: 5px 14px; text-align: right; white-space: nowrap; }
+table.bt th { font-weight: 600; border-bottom: 1px solid var(--tinta); }
+table.bt tr:first-child th { border-top: 2px solid var(--tinta); }
+table.bt tr:last-child td { border-bottom: 2px solid var(--tinta); }
+table.bt .e { text-align: left; }
+table.bt td.e { font-weight: 600; }
+table.bt td small { color: var(--tinta2); font-size: 0.8em; margin-left: 4px; }
+table.bt .h { color: var(--heap); }
+table.bt .v { color: var(--vet); }
+table.bt td.cam { text-align: left; white-space: normal; font-family: Inconsolata, monospace; font-size: 15px;
+                  line-height: 1.25; }
+table.bt.p { font-size: 0.76em; }
+table.bt.p th, table.bt.p td { padding: 4px 10px; }
+table.bt sub { font-size: 70%; }
+
+/* Pseudocódigo. */
+.algo { border-top: 2px solid var(--tinta); border-bottom: 2px solid var(--tinta); font-size: 21px; }
+.algo .cab { border-bottom: 1px solid var(--tinta); padding: 6px 4px; }
+.algo .cab b { font-weight: 600; }
+.algo ol { list-style: none; padding: 6px 0; }
+.algo li { display: flex; padding: 2px 4px; line-height: 1.45; }
+.algo li i.n { font-style: normal; width: 34px; flex: none; text-align: right; padding-right: 14px;
+               color: var(--tinta3); font-size: 16px; padding-top: 3px; }
+.algo li.hi { background: var(--azul-bg); }
+.algo li.hi i.n { color: var(--azul); font-weight: 600; }
+.algo .kw { font-weight: 600; }
+.algo .op { color: var(--azul); font-weight: 600; }
+
+/* Código C++ conferido contra graph.hpp. */
+.cod { background: var(--fundo); border-left: 3px solid var(--tinta3); margin: 4px 0 12px; }
+.cod .arq { font-size: 13px; color: var(--tinta2); padding: 5px 12px 0; font-family: Inconsolata, monospace; }
+.cod pre { font-family: Inconsolata, monospace; font-size: 17px; line-height: 1.3; padding: 4px 12px 7px;
+           white-space: pre; }
+.cod .l { display: block; }
+.cod .l i { font-style: normal; color: var(--tinta3); display: inline-block; width: 32px; text-align: right;
+            margin-right: 12px; font-size: 13px; }
+.cod .l.hi { background: var(--azul-bg); }
+.cod .gap i { width: auto; }
+.cod .k { color: #1f4e9c; font-weight: 700; }
+.cod .t { color: #1b7f79; font-weight: 700; }
+.cod .c { color: #7a7a7a; }
+.cod .n { color: #9c2f1f; }
+.cod .s { color: #9c2f1f; }
+
+/* O Dijkstra inteiro precisa caber na altura do slide. */
+.cod-dij .cod pre { font-size: 16px; line-height: 1.12; padding-bottom: 4px; }
+.cod-dij .cod .arq { padding-top: 3px; }
+.cod-dij .cod { margin: 0; }
+
+/* Barras dentro de tabela. */
+.barra { display: inline-block; height: 12px; vertical-align: middle; }
+
+/* Apêndice. */
+.slide.apendice > header { background: #4a5a5e; }
+
+@page { size: 1280px 720px; margin: 0; }
+@media print {
+  html, body { background: #fff; }
+  .slide { display: block; position: relative; left: 0; top: 0; transform: none;
+           page-break-after: always; break-after: page; }
+}
+
+.cod15 .cod pre { font-size: 15px; }
+.cod15 .cod .l i { width: 28px; }

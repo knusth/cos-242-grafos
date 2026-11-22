@@ -1,0 +1,6 @@
+data=2026-10-30T12:58:34Z
+cpu=Apple M3 Pro
+memoria_bytes=38654705664
+compilador=Apple clang version 21.0.0 (clang-2100.0.123.102)
+semente=2026
+k=100

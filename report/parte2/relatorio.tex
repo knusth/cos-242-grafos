@@ -1,0 +1,594 @@
+% Relatório da Parte 2 de COS242. Os números e as figuras vêm de tabelas.tex, gerado por
+% tabelas.py a partir de data.json (bench/summarize.py).
+% Compilar: python3 -I report/parte2/tabelas.py && (cd report/parte2 && tectonic relatorio.tex)
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[brazil]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{libertinus}
+\setmonofont{Inconsolatazi4}[Extension=.otf, UprightFont=*-Regular, BoldFont=*-Bold, Scale=0.92]
+\usepackage[a4paper,hmargin=2.4cm,top=2.2cm,bottom=2.4cm]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage[table]{xcolor}
+\usepackage{listings}
+\usepackage{pgfplots}
+\usepackage{caption}
+\usepackage{flafter}
+\usepackage{placeins}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{arrows.meta,positioning,calc,decorations.pathreplacing}
+
+% ── tipografia e espaçamento ──
+\linespread{1.25}
+\setlength{\parindent}{1.2em}
+\setlength{\parskip}{2pt plus 1pt}
+\setlist{nosep,leftmargin=1.5em,topsep=3pt}
+\captionsetup{font=small,labelfont=bf,labelsep=period,skip=5pt}
+\captionsetup[table]{position=top}
+\setlength{\textfloatsep}{12pt plus 2pt minus 3pt}
+\setlength{\floatsep}{10pt plus 2pt minus 2pt}
+\setlength{\intextsep}{10pt plus 2pt minus 2pt}
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.6}
+\renewcommand{\textfraction}{0.12}
+\renewcommand{\floatpagefraction}{0.75}
+\renewcommand{\arraystretch}{1.12}
+
+\definecolor{heapc}{HTML}{1B7F79}
+\definecolor{ruim}{HTML}{C0392B}
+\definecolor{codkw}{HTML}{1F4E9C}
+\definecolor{codtipo}{HTML}{1B7F79}
+\definecolor{codcom}{HTML}{7A7A7A}
+\lstset{language=C++, basicstyle=\ttfamily\small, columns=fullflexible, keepspaces=true,
+  keywordstyle=\color{codkw}\bfseries, commentstyle=\color{codcom},
+  morekeywords={uint8,uint32}, keywordstyle=[2]\color{codtipo}\bfseries,
+  morekeywords=[2]{Entry}, numbers=none, xleftmargin=1.2em,
+  escapeinside={(*}{*)}, frame=none, aboveskip=4pt, belowskip=4pt}
+\renewcommand{\lstlistingname}{Listagem}
+\newcommand{\cod}[1]{\texttt{#1}}
+\newcommand{\W}[1]{W\textsubscript{#1}}
+\newcommand{\dist}{\mathit{dist}}
+\newcommand{\pai}{\mathit{pai}}
+\newcommand{\pos}{\mathit{pos}}
+\newcommand{\ini}{\mathit{início}}
+
+\makeatletter
+\newcommand{\dado}[1]{\@ifundefined{dado@#1}{\textbf{??#1??}}{\csname dado@#1\endcsname}}
+\renewcommand\section{\@startsection{section}{1}{\z@}{-2.2ex plus -.6ex minus -.2ex}%
+  {1.0ex plus .2ex}{\normalfont\large\bfseries}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}{-1.8ex plus -.5ex minus -.2ex}%
+  {0.6ex plus .2ex}{\normalfont\normalsize\bfseries}}
+\makeatother
+\input{tabelas.tex}
+
+\pgfplotsset{every axis/.append style={tick label style={font=\footnotesize},
+  label style={font=\small}, legend style={font=\footnotesize}}}
+\tikzset{
+  vert/.style={circle, draw, thick, minimum size=16pt, inner sep=0pt, font=\small},
+  explorado/.style={vert, fill=gray!30},
+  peso/.style={font=\scriptsize, fill=white, inner sep=1pt},
+  cel/.style={draw, minimum width=0.66cm, minimum height=0.5cm, inner sep=0pt,
+    font=\scriptsize, anchor=west},
+  rot/.style={font=\scriptsize, anchor=east, inner sep=2pt}}
+
+\begin{document}
+
+% ── capa (sem número; a numeração começa na página seguinte) ──
+\begin{titlepage}
+\linespread{1.0}\selectfont
+\centering
+\includegraphics[width=3.2cm]{../comum/minerva.png}\par\vspace{1.2em}
+{\large Universidade Federal do Rio de Janeiro}\par\vspace{0.3em}
+Escola Politécnica\par\vspace{0.3em}
+COS242 Teoria dos Grafos, 2026/2\par
+\vfill
+{\Large Trabalho de Disciplina, Parte 2}\par\vspace{1.2em}
+{\huge\bfseries Caminhos mínimos em grafos com pesos:\par\vspace{0.3em}
+ Dijkstra com vetor e com heap\par}
+\vfill
+{\large Felipe Marroni\par\vspace{0.3em} Hygor Knust\par}
+\vspace{2.5em}
+Professor: Daniel Ratton Figueiredo\par
+\vfill
+{\small\url{https://github.com/knusth/cos-242-grafos}}\par\vspace{0.8em}
+Rio de Janeiro, \today
+\end{titlepage}
+\setcounter{page}{1}
+
+\begin{quote}\small
+\textbf{Resumo.} Estendemos a biblioteca de grafos para grafos com pesos e implementamos o
+algoritmo de Dijkstra uma única vez, de modo que ele pode guardar as distâncias em duas estruturas,
+um vetor ou um heap. Nos grafos \W{3} a \W{7} do site
+da disciplina, o heap foi de \dado{W_3.ratio} a \dado{W_7.ratio} mais rápido que o vetor: no
+\W{7}, uma execução levou \dado{W_7.heap} com o heap e levaria \dado{W_7.vecest} com o vetor.
+O número de atualizações no heap foi de \dado{W_3.updpct} a \dado{W_7.updpct} de $m$: o termo
+$m\log n$ da análise é pessimista nos grafos mais densos.
+\end{quote}
+
+\section{Introdução}
+
+A biblioteca agora aceita grafos com pesos e calcula a distância e o caminho mínimo de um
+vértice a todos os outros com o algoritmo de Dijkstra, numa única implementação que pode usar
+um vetor ou um heap para guardar as distâncias.
+
+\section{Decisões de projeto e implementação}
+\label{sec:projeto}
+
+\subsection{Representação do grafo com pesos}
+
+A biblioteca guarda o grafo em vetores de adjacência (aula~3) concatenados num vetor de
+\emph{vizinhos}, com um vetor de \emph{início} que indica onde começa a lista de cada vértice
+(Figura~\ref{fig:repr}); cada aresta aparece nas listas das duas extremidades. Para os pesos,
+acrescentamos um terceiro vetor, alinhado ao de vizinhos: ao percorrer os vizinhos de $u$,
+Dijkstra lê o peso de cada aresta na mesma posição, sem nenhuma busca.
+
+\begin{figure}[!htb]
+\centering
+\begin{tikzpicture}
+% grafo de exemplo do enunciado
+\node[vert] (1) at (0,1.5) {1};
+\node[vert] (2) at (1.3,2.5) {2};
+\node[vert] (5) at (1.6,0.9) {5};
+\node[vert] (3) at (3.1,1.9) {3};
+\node[vert] (4) at (2.9,0.0) {4};
+\draw (1) -- node[peso] {0,1} (2);
+\draw (2) -- node[peso] {0,2} (5);
+\draw (5) -- node[peso] {5} (3);
+\draw[ruim, very thick] (3) -- node[peso, text=ruim] {$-9{,}5$} (4);
+\draw (4) -- node[peso] {2,3} (5);
+\draw (1) -- node[peso] {1} (5);
+% vetores
+\def\xa{5.6}
+\node[rot] at (\xa,2.4) {início};
+\node[rot] at (\xa,1.0) {vizinhos};
+\node[rot] at (\xa,0.5) {pesos};
+\foreach \v [count=\i from 0] in {0,2,4,6,8,12} {
+  \node[cel] (o\i) at (\xa+0.66*\i,2.4) {\v};
+}
+\foreach \i in {1,...,5} {
+  \node[font=\scriptsize, gray] at ($(o\the\numexpr\i-1\relax.north)+(0,0.18)$) {\i};
+}
+\node[font=\scriptsize, gray] at ($(o5.north)+(0,0.18)$) {fim};
+\foreach \v [count=\i from 0] in {2,5,1,5,5,4,3,5,2,3,4,1} {
+  \node[cel] (n\i) at (\xa+0.66*\i,1.0) {\v};
+  \node[font=\tiny, gray] at ($(n\i.south)+(0,-0.68)$) {\i};
+}
+\foreach \p [count=\i from 0] in {{0,1},1,{0,1},{0,2},5,{$-9{,}5$},{$-9{,}5$},{2,3},{0,2},5,{2,3},1} {
+  \node[cel] (p\i) at (\xa+0.66*\i,0.5) {\p};
+}
+% blocos de cada vértice
+\foreach \a/\b/\u in {0/1/1,2/3/2,4/5/3,6/7/4,8/11/5} {
+  \draw[decorate, decoration={brace, amplitude=3pt}, gray]
+    ($(n\a.north west)+(0.04,0.05)$) -- node[above=1pt, font=\tiny, gray] {de \u}
+    ($(n\b.north east)+(-0.04,0.05)$);
+}
+\draw[-{Stealth[length=4pt]}, heapc, thick] (o4.south) to[out=-90, in=90] ($(n8.north)+(0,0.42)$);
+\end{tikzpicture}
+\caption{Grafo de exemplo do enunciado e sua representação. Os vizinhos de $u$ ocupam as
+posições de $\ini[u]$ a $\ini[u+1]-1$ (numeradas a partir de 0, abaixo); a seta mostra que os
+vizinhos de 5 começam na posição 8. Por causa da
+aresta $(3,4)$, de peso negativo, a biblioteca não executa Dijkstra neste grafo.}
+\label{fig:repr}
+\end{figure}
+
+Essa representação ocupa 4 bytes por vértice e 24 bytes por aresta (4 do vizinho e 8 do peso,
+em cada sentido): \dado{W_3.csr} no \W{3} e \dado{W_7.csr} no \W{7}. A matriz de adjacência,
+que a biblioteca oferece como opção de compilação, guarda para cada par de vértices um byte que
+indica a aresta e um peso de 8 bytes, ou seja, $9n^2$ bytes: \dado{W_3.matriz} no \W{3} e
+\dado{W_7.matriz} no \W{7}. Com os \dado{ram} de memória da máquina usada, a matriz só caberia
+até cerca de \dado{matrix.limit} vértices, menos que o menor grafo do trabalho.
+
+\textbf{Pesos negativos.} Ao ler o arquivo, a biblioteca registra se algum peso é negativo.
+Nesse caso, ela não executa Dijkstra e informa que ``ainda não implementa caminhos
+mínimos com pesos negativos''. É o que acontece com o grafo da Figura~\ref{fig:repr}. Arestas repetidas
+no arquivo são mantidas; como Dijkstra só atualiza $\dist[v]$ quando encontra um valor menor,
+prevalece a de menor peso.
+
+\subsection{Dijkstra com vetor e com heap}
+
+A cada passo, o algoritmo da aula~8 extrai, dentre os vértices não explorados ($V-S$), o de
+menor $\dist[u]$, o adiciona ao conjunto $S$ dos explorados e, para cada vizinho $v$, atualiza
+$\dist[v]$ se $\dist[v] > \dist[u] + w(u,v)$. As duas versões só diferem nessas duas operações,
+\emph{extrair} e \emph{atualizar}; por isso, escrevemos o laço uma única vez, como um
+\emph{template} parametrizado pela fila de prioridades. A Figura~\ref{fig:passo} mostra as duas
+estruturas no mesmo passo do algoritmo.
+
+\textbf{Vetor.} A estrutura guarda a distância de $v$ na posição $v$. Atualizar é escrever
+nessa posição, em $O(1)$; extrair o mínimo exige percorrer as $n$ posições, em $O(n)$. Como cada
+vértice alcançado é extraído uma vez, o total num grafo conexo é $O(n^2)$, mais $O(m)$ para as
+atualizações.
+
+\textbf{Heap.} A estrutura é um heap binário de mínimo, como na aula~9, em que a chave de cada
+vértice é sua distância. Extrair o mínimo custa $O(\log n)$.
+Atualizar a distância de um vértice que já está no heap exige saber onde ele está; para isso,
+mantemos um vetor de posições, em que $\pos[v]$ é a posição de $v$ no heap, corrigida a cada
+troca de elementos. Com ele, a atualização vai direto ao elemento de $v$, reduz sua chave e o
+faz subir até a posição correta, também em $O(\log n)$. São no máximo $n$ extrações e $m$
+atualizações, e o total é $O((n+m)\log n)$. Sem o vetor de posições, a alternativa seria inserir
+uma nova cópia do vértice a cada atualização e descartar as cópias antigas ao extraí-las; o heap
+poderia então chegar a $m$ elementos.
+
+A Listagem~\ref{lst:estruturas} mostra como essas estruturas estão representadas no código,
+com $n$ vértices e $m$ arestas.
+
+\begin{lstlisting}[float=!htb, caption={Estruturas de dados do grafo e das duas filas de
+prioridades (campos simplificados da biblioteca).}, label=lst:estruturas]
+// Grafo: vizinhos de u em neighbors_[offsets_[u] .. offsets_[u+1]-1]
+uint32 offsets_[n+1];      // início de cada lista              4(n+1) bytes
+uint32 neighbors_[2m];     // cada aresta nas duas listas           8m bytes
+double weights_[2m];       // peso do vizinho na mesma posição     16m bytes
+
+// Dijkstra
+double distance[n];        // dist[]: (*$\infty$*) até ser alcançado
+uint32 parent[n];          // pai[]: árvore geradora induzida pela busca
+
+// Fila com vetor
+double estimate_[n];       // (*$\infty$*) = fora da fila; pop() percorre as n posições
+
+// Fila com heap
+struct Entry { double key; uint32 vertex; };
+Entry  heap_[n];           // filhos de i em 2i+1 e 2i+2 (na aula 9, 2i e 2i+1)
+uint32 position_[n];       // pos[v]: índice de v em heap_, ou nenhum
+uint32 size_;
+\end{lstlisting}
+
+\begin{figure}[!htb]
+\centering
+\begin{minipage}[b]{0.34\linewidth}\centering
+\begin{tikzpicture}[scale=0.92]
+\node[explorado] (1) at (0,0) {1};
+\node[explorado] (2) at (1.3,0.9) {2};
+\node[vert] (3) at (1.3,-0.9) {3};
+\node[vert] (4) at (2.8,0.9) {4};
+\node[vert] (5) at (2.8,-0.9) {5};
+\node[vert] (6) at (4.1,0) {6};
+\begin{scope}[gray!60]
+\draw (1) -- node[peso] {5} (3);
+\draw (3) -- node[peso] {3} (5);
+\draw (4) -- node[peso] {1} (5);
+\draw (4) -- node[peso] {1} (6);
+\draw (5) -- node[peso] {2} (6);
+\end{scope}
+\draw[very thick] (1) -- node[peso] {2} (2);
+\draw[very thick] (2) -- node[peso] {1} (3);
+\draw[very thick] (2) -- node[peso] {4} (4);
+\draw[very thick] (2) -- node[peso, pos=0.35] {7} (5);
+\begin{scope}[font=\scriptsize\bfseries, heapc]
+\node[above=1pt of 1] {0};
+\node[above=1pt of 2] {2};
+\node[below=1pt of 3] {3};
+\node[above=1pt of 4] {6};
+\node[below=1pt of 5] {9};
+\node[above=1pt of 6] {$\infty$};
+\end{scope}
+\end{tikzpicture}\\[2pt]
+{\small (a) grafo, $S=\{1,2\}$}
+\end{minipage}%
+\begin{minipage}[b]{0.3\linewidth}\centering
+\begin{tikzpicture}
+\foreach \v/\d [count=\i from 0] in {1/0,2/2,3/3,4/6,5/9,6/$\infty$} {
+  \ifnum\i<2
+    \node[cel, minimum width=0.55cm, fill=gray!30] (c\i) at (0.55*\i,0) {\d};
+  \else
+    \node[cel, minimum width=0.55cm] (c\i) at (0.55*\i,0) {\d};
+  \fi
+  \node[font=\scriptsize, gray] at ($(c\i.north)+(0,0.18)$) {\v};
+}
+\draw[heapc, very thick] (c2.north west) rectangle (c2.south east);
+\draw[-{Stealth[length=4pt]}, gray] ($(c0.south west)+(0,-0.25)$) -- node[below, font=\scriptsize,
+  text=black] {percorre as $n$ posições} ($(c5.south east)+(0,-0.25)$);
+\node at (0,1.0) {};
+\end{tikzpicture}\\[2pt]
+{\small (b) vetor de distâncias}
+\end{minipage}%
+\begin{minipage}[b]{0.34\linewidth}\centering
+\begin{tikzpicture}
+\node[draw, rounded corners=2pt, font=\scriptsize, fill=heapc!12] (h1) at (0,1.5) {3: 3};
+\node[draw, rounded corners=2pt, font=\scriptsize] (h2) at (-0.8,0.8) {4: 6};
+\node[draw, rounded corners=2pt, font=\scriptsize] (h3) at (0.8,0.8) {5: 9};
+\draw (h1) -- (h2); \draw (h1) -- (h3);
+\node[font=\tiny, gray, left=1pt of h1] {1};
+\node[font=\tiny, gray, left=1pt of h2] {2};
+\node[font=\tiny, gray, right=1pt of h3] {3};
+\node[rot] at (-1.0,-0.1) {$\pos$};
+\foreach \p [count=\i from 1] in {---,---,1,2,3,---} {
+  \node[cel, minimum width=0.45cm] (q\i) at (-1.0+0.45*\i-0.45,-0.1) {\p};
+  \node[font=\tiny, gray] at ($(q\i.south)+(0,-0.15)$) {\i};
+}
+\end{tikzpicture}\\[2pt]
+{\small (c) heap e vetor de posições}
+\end{minipage}
+\caption{Estado de Dijkstra a partir do vértice 1, depois de explorar 1 e 2 (em cinza). (a) Em
+verde, $\dist$ de cada vértice; as arestas em preto ligam cada vértice ao seu pai. (b) Com o
+vetor, extrair o mínimo percorre todas as posições, ignorando as de $S$, e encontra o vértice 3.
+(c) Com o heap, o mínimo está na raiz (cada elemento é ``vértice: chave''; posições a partir de
+1, como na aula~9), e $\pos$ indica onde está cada vértice (--- se não está no heap). No passo
+seguinte, 3 é explorado e $\dist[5]$ cai de 9 para $3+3=6$: no vetor, basta escrever na posição
+5; no heap, $\pos[5]$ leva ao elemento do vértice 5, que sobe se for preciso.}
+\label{fig:passo}
+\end{figure}
+
+Dois detalhes diferem do pseudocódigo da aula. O laço termina quando a fila de prioridades fica
+vazia, e não quando $S=V$: num grafo desconexo, os vértices fora da componente da origem nunca
+entram na fila e ficam com $\dist=\infty$. E, sempre que $\dist[v]$ é atualizada a partir de
+$u$, guardamos $\pai[v]=u$ (aula~5), de onde reconstruímos os caminhos.
+
+\section{Metodologia}
+\label{sec:metodo}
+
+Rodamos todos os experimentos num \dado{cpu} com \dado{ram} de memória, compilando com
+\dado{compiler} e \cod{-O3}. Em cada grafo, sorteamos $k=\dado{k}$ vértices de origem (semente
+\dado{seed}) e usamos os mesmos nas duas versões. Medimos apenas a execução de Dijkstra, sem a
+leitura do arquivo. Para cada origem executada
+com as duas versões, conferimos que elas alcançaram os mesmos vértices com a mesma soma de
+distâncias. Para contar as operações do heap, repetimos as mesmas origens, fora das medições de
+tempo, com um contador de atualizações e do tamanho do heap. Outros processos rodavam na máquina durante parte das medições, o que explica parte
+do desvio-padrão da Tabela~\ref{tab:tempos}.
+
+Com o vetor, as \dado{k} origens levariam \dado{W_4.veck} no \W{4} e \dado{W_7.veck} no \W{7}.
+Por isso, no \W{4} executamos o vetor a partir de apenas \dado{val.W_4.runs} das origens, e do
+\W{5} ao \W{7} projetamos o tempo. Como cada extração percorre as mesmas $n$ posições, todas
+custam aproximadamente o mesmo. Executamos o vetor a partir de 5 origens, interrompemos cada
+execução depois de algumas extrações (\dado{pops.limit.W_5} no \W{5}, \dado{pops.limit.W_7} no \W{7}),
+medimos o tempo médio de uma extração e o multiplicamos pelo número de vértices alcançados, que
+já conhecíamos das execuções com heap. No \W{3} e no \W{4}, onde executamos o vetor até o fim, a projeção
+diferiu da mediana medida em \dado{val.W_3.err} e \dado{val.W_4.err}, respectivamente.
+
+\section{Estudos de caso}
+\label{sec:casos}
+
+\subsection{Distância e caminho mínimo a partir do vértice 10}
+
+A Tabela~\ref{tab:dist} traz a distância do vértice 10 aos vértices 20, 30, 40, 50 e 60 em cada
+grafo, com o número de arestas do caminho mínimo; os caminhos completos estão no
+Apêndice~\ref{ap:caminhos}. As distâncias crescem à medida que o grau médio diminui: ficam entre
+\dado{W_3.dmin} e \dado{W_3.dmax} no \W{3}, de grau médio \dado{W_3.degree}, e entre
+\dado{W_7.dmin} e \dado{W_7.dmax} no \W{7}, de grau médio \dado{W_7.degree}. O caminho mínimo também
+usa mais arestas: de
+\dado{W_7.hmin} a \dado{W_7.hmax} no \W{7}. A comparação entre \W{5} e \W{6}, que têm o mesmo
+número de vértices, mostra o mesmo efeito: no \W{6}, com quase o dobro de arestas, todas as
+distâncias são menores.
+
+\begin{table}[!htb]
+\centering\small
+\caption{Distância $d$ do vértice 10 ao vértice $t$ e número de arestas do caminho mínimo.
+Todos os destinos são alcançáveis.}
+\label{tab:dist}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{@{}r*{5}{rr}@{}}
+\toprule
+ & \multicolumn{2}{c}{\W{3}} & \multicolumn{2}{c}{\W{4}} & \multicolumn{2}{c}{\W{5}} &
+   \multicolumn{2}{c}{\W{6}} & \multicolumn{2}{c}{\W{7}} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}\cmidrule(l){10-11}
+$t$ & $d$ & arestas & $d$ & arestas & $d$ & arestas & $d$ & arestas & $d$ & arestas \\
+\midrule
+\tabelaDistancias
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Tempo médio das duas versões}
+
+\begin{table}[!htb]
+\centering\small
+\caption{Tempo médio de uma execução de Dijkstra, de uma origem a todos os vértices; grau médio
+$=2m/n$. Heap: média $\pm$ desvio-padrão nas \dado{k} origens. Vetor: média de
+\dado{val.W_3.runs} execuções no \W{3} e de \dado{val.W_4.runs} no \W{4}; nos demais grafos, em
+itálico, projeção (Seção~\ref{sec:metodo}). As razões marcadas com $\sim$ vêm da projeção e têm
+dois algarismos significativos. Última coluna: tempo do heap, em ns, dividido por
+$(n+m)\log_2 n$; seria constante se toda operação custasse o mesmo.}
+\label{tab:tempos}
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{@{}lrrrrrrr@{}}
+\toprule
+grafo & $n$ & $m$ & grau médio & heap & vetor & vetor/heap & ns/op.\ heap \\
+\midrule
+\tabelaTempos
+\bottomrule
+\end{tabular}
+\end{table}
+
+A Tabela~\ref{tab:tempos} e a Figura~\ref{fig:tempos} comparam o tempo médio das duas versões.
+O heap foi mais rápido em todos os grafos, por um fator que foi de \dado{W_3.ratio} no \W{3} a
+\dado{W_7.ratio} no \W{7}, como prevê a análise de complexidade: nesses grafos esparsos, o grau
+médio não passa de \dado{degree.max}, e $(n+m)\log n$ fica muito abaixo de $n^2$. A razão
+cresceu com $n$ porque o tempo do vetor cresce com $n^2$, enquanto o do heap cresce pouco mais
+que linearmente. Com o vetor, as \dado{k} origens do estudo de caso levariam \dado{W_7.veck} no
+\W{7}; com o heap, levaram \dado{W_7.heapk}. Só a versão com heap tornou o estudo viável em todos
+os grafos.
+
+\begin{figure}[!htb]
+\centering
+\begin{tikzpicture}
+\begin{axis}[grafosW, ybar, bar width=9pt, ymode=log, log origin=infty,
+  width=0.78\linewidth, height=6.2cm, ymin=0.01, ymax=4e7,
+  ytick={0.01,1,60,3600,86400,2592000},
+  yticklabels={10\,ms,1\,s,1\,min,1\,h,1\,dia,30\,dias},
+  ymajorgrids, grid style={gray!18}, enlarge x limits=0.14, xtick=data,
+  ylabel={tempo por origem},
+  legend style={at={(0.02,0.98)}, anchor=north west, draw=none, fill=white,
+    legend cell align=left}]
+\addplot[fill=heapc, draw=none, bar shift=-5pt] coordinates {\barrasHeap};
+\addplot[fill=ruim, draw=none, bar shift=5pt] coordinates {\barrasVetor};
+\addplot[fill=ruim!18, draw=ruim, densely dashed, bar shift=5pt] coordinates {\barrasVetorProj};
+\legend{heap, vetor (medido), vetor (projeção)}
+\razoesW
+\end{axis}
+\end{tikzpicture}
+\caption{Tempo de uma execução de Dijkstra por origem, em escala logarítmica. As barras
+tracejadas são projeções; o número sobre cada par é a razão vetor/heap.}
+\label{fig:tempos}
+\end{figure}
+
+\textbf{Quantas operações o heap faz.} A análise conta até $m$ atualizações, uma por aresta, cada
+uma em $O(\log n)$. Contamos as operações nas \dado{cont.origins} origens
+(Figura~\ref{fig:operacoes}). As atualizações de $\dist$ ficaram muito abaixo de $m$: foram
+\dado{W_3.upd} por vértice no \W{3}, onde o limite é $m/n=61$, e \dado{W_7.upd} no \W{7}; em
+proporção a $m$, foram de \dado{W_3.updpct} no \W{3} a \dado{W_7.updpct} no \W{7}. O número de
+atualizações por vértice quase não cresceu com o grau, porque a maioria dos testes
+$\dist[v] > \dist[u] + w(u,v)$ falha: $v$ já foi alcançado por um caminho mais curto. Já o termo
+$\log n$ não é folgado: nos grafos densos, o heap passou a conter quase todos os vértices não
+explorados logo no início (pico de \dado{W_3.peakpct} de $n$ no \W{3}); no \W{7}, o mais
+esparso, o pico foi \dado{W_7.peakpct} de $n$, o que reduziu a altura do heap em apenas três
+níveis. Assim, o custo do heap nestes grafos fica mais perto de $O(m + n\log n)$ que de
+$O((n+m)\log n)$: as $m$ arestas são examinadas, mas, nos grafos mais densos, só uma pequena
+fração delas gera operação no heap. Isso também explica o \W{5} e o \W{6}, que têm o mesmo $n$: o vetor levaria o mesmo tempo
+nos dois (\dado{W_5.vecest} e \dado{W_6.vecest}), mas o heap fez \dado{W_6.upd} atualizações
+por vértice no \W{6}, contra \dado{W_5.upd} no \W{5}, e a razão caiu de \dado{W_5.ratio} para
+\dado{W_6.ratio}.
+
+\begin{figure}[!htb]
+\centering
+\begin{minipage}[b]{0.49\linewidth}\centering
+\begin{tikzpicture}
+\begin{axis}[width=\linewidth, height=5.4cm, xmode=log, ymode=log,
+  xlabel={grau médio}, ylabel={atualizações por vértice},
+  xmin=1.5, xmax=250, ymin=0.55, ymax=130, ymajorgrids, grid style={gray!18},
+  xtick={2,10,100}, xticklabels={2,10,100}, ytick={1,10,100}, yticklabels={1,10,100}]
+\addplot[gray, dashed, domain=1.5:250, samples=2] {x/2};
+\node[font=\scriptsize, gray, rotate=33, anchor=south] at (axis cs:30,15) {limite $m/n$};
+\addplot[only marks, mark=*, heapc] coordinates {\pontosAtualizacoes};
+\rotulosAtualizacoes
+\end{axis}
+\end{tikzpicture}\\[2pt]
+{\small (a) atualizações de $\dist$}
+\end{minipage}\hfill
+\begin{minipage}[b]{0.49\linewidth}\centering
+\begin{tikzpicture}
+\begin{axis}[width=\linewidth, height=5.4cm, xmin=0, xmax=1, ymin=0, ymax=1,
+  xlabel={vértices extraídos / $n$}, ylabel={tamanho do heap / $n$},
+  ymajorgrids, grid style={gray!18}, legend style={draw=none, fill=white, font=\scriptsize,
+  at={(0.98,0.98)}, anchor=north east, legend cell align=left}]
+\addplot[gray, dashed, domain=0:1, samples=2, forget plot] {1-x};
+\addplot[black, thick] coordinates {\csname heapTam@W_3\endcsname}; \addlegendentry{\W{3}}
+\addplot[gray, thick] coordinates {\csname heapTam@W_4\endcsname}; \addlegendentry{\W{4}}
+\addplot[heapc, thick] coordinates {\csname heapTam@W_5\endcsname}; \addlegendentry{\W{5}}
+\addplot[heapc!50, thick] coordinates {\csname heapTam@W_6\endcsname}; \addlegendentry{\W{6}}
+\addplot[ruim, thick] coordinates {\csname heapTam@W_7\endcsname}; \addlegendentry{\W{7}}
+\end{axis}
+\end{tikzpicture}\\[2pt]
+{\small (b) tamanho do heap durante uma execução}
+\end{minipage}
+\caption{Operações do heap. (a) Média de atualizações de $\dist$ por vértice nas
+\dado{cont.origins} origens, contra o grau médio; a reta tracejada é o limite da análise, $m$
+atualizações. (b) Tamanho do heap ao longo de uma execução a partir de uma das origens; a reta
+tracejada, $n$ menos os extraídos, é o máximo possível.}
+\label{fig:operacoes}
+\end{figure}
+
+\textbf{Por que o heap fica mais lento por operação.} O tempo do heap cresceu mais rápido que
+$(n+m)\log n$: dividido por essa quantidade (última coluna da Tabela~\ref{tab:tempos}), ele subiu
+de \dado{W_3.heapns}\,ns no \W{3} para \dado{W_7.heapns}\,ns no \W{7}, \dado{heapns.growth}
+mais. A análise de complexidade supõe que toda leitura custa o mesmo, mas o custo depende do nível
+da hierarquia de memória em que o dado está:
+
+\begin{center}\small\setlength{\tabcolsep}{6pt}
+\begin{tabular}{@{}lrrl@{}}
+\toprule
+memória & tamanho & tempo de leitura & o vetor de distâncias ($8n$ bytes) cabe \\
+\midrule
+cache L1 (por núcleo) & 128\,KiB & \dado{lat.l1}\,ns & se $n\le16$ mil: nenhum grafo \\
+cache L2 (compartilhada) & 16\,MiB & \dado{lat.l2}\,ns & se $n\le2$ milhões: \W{3} e \W{4} \\
+RAM & \dado{ram} & \dado{lat.dram}\,ns & sempre; \W{5} a \W{7} só aqui \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent A cada aresta examinada, Dijkstra lê $\dist[v]$ de um vizinho $v$, que pode estar em
+qualquer posição do vetor de distâncias. A Figura~\ref{fig:latencia} mostra o custo dessa leitura conforme o tamanho
+dos dados. O vetor de distâncias do \W{3} e do \W{4} cabe na L2, e o do \W{5} em diante não, o que é
+compatível com o salto da última coluna da Tabela~\ref{tab:tempos} entre o \W{4}
+(\dado{W_4.heapns}\,ns) e o \W{5} (\dado{W_5.heapns}\,ns). A versão com vetor não sofre esse
+efeito, pois percorre o vetor de distâncias sequencialmente.
+
+\begin{figure}[!htb]
+\centering
+\begin{tikzpicture}
+\begin{axis}[width=0.72\linewidth, height=5.4cm, xmode=log, ymode=log,
+  xlabel={tamanho dos dados percorridos}, ylabel={ns por leitura},
+  ymajorgrids, grid style={gray!18}, xmin=1e4, xmax=4e9, ymin=0.7, ymax=200,
+  xtick={16384,1048576,67108864,1073741824}, xticklabels={16\,KiB,1\,MiB,64\,MiB,1\,GiB},
+  ytick={1,10,100}, yticklabels={1,10,100}]
+\draw[gray, dashed] (axis cs:131072,0.7) -- (axis cs:131072,200);
+\draw[gray, dashed] (axis cs:16777216,0.7) -- (axis cs:16777216,200);
+\node[font=\scriptsize, gray, anchor=north east] at (axis cs:131072,180) {L1};
+\node[font=\scriptsize, gray, anchor=north east] at (axis cs:16777216,180) {L2};
+\addplot[black, thick, mark=*, mark size=1.2pt] coordinates {\latencia};
+\marcasW
+\end{axis}
+\end{tikzpicture}
+\caption{Tempo de uma leitura numa posição imprevisível da memória, conforme o tamanho dos
+dados percorridos; eixos em escala logarítmica. As linhas tracejadas marcam o tamanho das caches L1 e
+L2, e as marcas no eixo horizontal, o tamanho do vetor de distâncias de cada grafo.}
+\label{fig:latencia}
+\end{figure}
+
+\subsection{Rede de colaboração}
+
+A Figura~\ref{fig:arvore} mostra a distância e o caminho mínimo de Edsger W.~Dijkstra até Jon M.~Kleinberg,
+J.\,B.~Kruskal, Éva Tardos e Daniel R.~Figueiredo. Alan M.~Turing não aparece: está em outra componente conexa, e a distância
+até ele é infinita.
+
+\begin{figure}[!htb]
+\centering
+\begin{tikzpicture}[
+  pessoa/.style={font=\footnotesize,fill=white,inner sep=1.5pt},
+  raiz/.style={font=\small\bfseries,fill=white,inner sep=2pt},
+  folha/.style={font=\footnotesize,fill=gray!10,draw=gray!60!black,rounded corners,align=center,inner sep=2pt},
+  peso/.style={font=\scriptsize,inner sep=1pt,anchor=west,text=gray!70!black,fill=white},
+  barato/.style={gray!60},
+  caro/.style={ruim,very thick}]
+\arvoreColab
+\end{tikzpicture}
+\caption{Caminhos mínimos a partir de Edsger W.~Dijkstra. Cada nível desce uma aresta; as
+folhas trazem a distância. Os pesos estão arredondados para duas casas; por isso, a soma pode
+diferir da distância na última casa. Em vermelho, as arestas de peso 1,00, as mais altas destes
+caminhos.}
+\label{fig:arvore}
+\end{figure}
+
+O caminho mínimo nem sempre é o de menos arestas: Kleinberg está a \dado{colab.kleinberg.d}, por um
+caminho de \dado{colab.kleinberg.hops} arestas, e Kruskal, a \dado{colab.kruskal.d}, por
+\dado{colab.kruskal.hops} arestas. O caminho até Kruskal passa por duas arestas de peso 1,00, em
+vermelho na figura, e o até Kleinberg, por uma.
+
+\section{Conclusão}
+
+Nos estudos de caso, o heap foi mais
+rápido que o vetor em todos os grafos, de \dado{W_3.ratio} a \dado{W_7.ratio}, e foi a única
+versão viável a partir do \W{4}. A diferença cresce com $n$ e diminui quando $m$ cresce com $n$
+fixo, como prevê a análise de complexidade. As contagens mostram que, nos grafos mais densos, só uma fração
+das arestas gera atualização no heap, de modo que o termo $m\log n$ da análise é pessimista. Na
+rede de colaboração, o caminho mínimo nem sempre é o de menos arestas. Como trabalho futuro,
+falta calcular caminhos mínimos com pesos negativos, que a biblioteca hoje recusa.
+
+
+\appendix
+\section{Caminhos mínimos a partir do vértice 10}
+\label{ap:caminhos}
+
+{\small\linespread{1.0}\selectfont\setlength{\tabcolsep}{5pt}
+\begin{longtable}{@{}l r r r >{\ttfamily\scriptsize\raggedright\arraybackslash}p{0.66\linewidth}@{}}
+\caption{Caminhos mínimos do vértice 10 a cada destino $t$ da Tabela~\ref{tab:dist}, com os
+vértices numerados como nos arquivos.}\label{tab:caminhos}\\
+\toprule
+grafo & $t$ & $d$ & arestas & \multicolumn{1}{l}{caminho} \\
+\midrule
+\endfirsthead
+\toprule
+grafo & $t$ & $d$ & arestas & \multicolumn{1}{l}{caminho} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+\tabelaCaminhos
+\end{longtable}}
+
+\end{document}
