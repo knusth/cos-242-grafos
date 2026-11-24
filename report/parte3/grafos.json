@@ -1,0 +1,104 @@
+{
+ "grafos": [
+  {
+   "nome": "W_1",
+   "V": 25000,
+   "E": 549953,
+   "grau_saida": {
+    "media": 22.0,
+    "min": 2,
+    "max": 60
+   },
+   "pesos": {
+    "min": -5.0,
+    "max": 10.0,
+    "negativos": 4998
+   },
+   "reciprocidade": 0.0909,
+   "gap_medio_sobre_V": 0.3327,
+   "corte_11_faixas": 0.9081,
+   "fortemente_conexo": true,
+   "saltos_ate_100": 7
+  },
+  {
+   "nome": "W_2",
+   "V": 25000,
+   "E": 824964,
+   "grau_saida": {
+    "media": 33.0,
+    "min": 1,
+    "max": 89
+   },
+   "pesos": {
+    "min": 0.0,
+    "max": 10.0,
+    "negativos": 0
+   },
+   "reciprocidade": 0.0001,
+   "gap_medio_sobre_V": 0.3334,
+   "corte_11_faixas": 0.9088,
+   "fortemente_conexo": true,
+   "saltos_ate_100": 8
+  },
+  {
+   "nome": "W_3",
+   "V": 100000,
+   "E": 6099941,
+   "grau_saida": {
+    "media": 61.0,
+    "min": 1,
+    "max": 161
+   },
+   "pesos": {
+    "min": 0.0,
+    "max": 10.0,
+    "negativos": 0
+   },
+   "reciprocidade": 0.0,
+   "gap_medio_sobre_V": 0.333,
+   "corte_11_faixas": 0.9089,
+   "fortemente_conexo": true,
+   "saltos_ate_100": 8
+  },
+  {
+   "nome": "W_4",
+   "V": 1000000,
+   "E": 30999978,
+   "grau_saida": {
+    "media": 31.0,
+    "min": 1,
+    "max": 93
+   },
+   "pesos": {
+    "min": 0.0,
+    "max": 10.0,
+    "negativos": 0
+   },
+   "reciprocidade": 0.0,
+   "gap_medio_sobre_V": 0.3333,
+   "corte_11_faixas": 0.9091,
+   "fortemente_conexo": true,
+   "saltos_ate_100": 10
+  },
+  {
+   "nome": "W_5",
+   "V": 10000000,
+   "E": 39999995,
+   "grau_saida": {
+    "media": 4.0,
+    "min": 1,
+    "max": 21
+   },
+   "pesos": {
+    "min": 0.0,
+    "max": 10.0,
+    "negativos": 0
+   },
+   "reciprocidade": 0.0,
+   "gap_medio_sobre_V": 0.3333,
+   "corte_11_faixas": 0.9091,
+   "fortemente_conexo": true,
+   "saltos_ate_100": 26
+  }
+ ]
+}

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 390" width="1040" height="390">
+<style>
+  text { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+  .mono { font-family: Menlo, monospace; }
+</style>
+<defs>
+  <marker id="arr-ink" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#475569"/></marker>
+  <marker id="arr-navy" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#1b365d"/></marker>
+  <marker id="arr-teal" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#0f6260"/></marker>
+  <marker id="arr-crim" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#9f1239"/></marker>
+  <marker id="arr-ochre" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#b45309"/></marker>
+  <marker id="arr-rule" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#64748b"/></marker>
+  <pattern id="hatch-teal" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#e6f2f1"/><line x1="0" y1="0" x2="0" y2="7" stroke="#0f6260" stroke-width="1.4" stroke-opacity="0.35"/></pattern>
+  <pattern id="hatch-navy" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#eaf0f7"/><line x1="0" y1="0" x2="0" y2="7" stroke="#1b365d" stroke-width="1.4" stroke-opacity="0.35"/></pattern>
+  <pattern id="hatch-gray" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#f8fafc"/><line x1="0" y1="0" x2="0" y2="6" stroke="#cbd5e1" stroke-width="1.4"/></pattern>
+</defs>
+<rect x="0.0" y="0.0" width="1040.0" height="390.0" fill="#ffffff" stroke="none" stroke-width="1.0"/>
+<rect x="0.0" y="0.0" width="560.0" height="390.0" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.0" rx="4"/>
+<rect x="0.0" y="0.0" width="560.0" height="4.0" fill="#1b365d" stroke="none" stroke-width="1.0"/>
+<rect x="584.0" y="0.0" width="456.0" height="390.0" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.0" rx="4"/>
+<rect x="584.0" y="0.0" width="456.0" height="4.0" fill="#b45309" stroke="none" stroke-width="1.0"/>
+<text x="18.0" y="28.0" font-size="13.5" fill="#1b365d" text-anchor="start" font-weight="700">A. Detecção O(V) via selos (stamps) em next_ · W₁</text>
+<text x="18.0" y="47.0" font-size="11" fill="#475569" text-anchor="start" font-weight="400">Para na rodada 4 em 100 µs (16.884 arestas vs. 24.999 rodadas)</text>
+<line x1="116.0" y1="165.0" x2="214.0" y2="165.0" stroke="#1b365d" stroke-width="2.0" marker-end="url(#arr-navy)"/>
+<text x="165.0" y="155.0" font-size="10.5" fill="#1b365d" text-anchor="middle" font-weight="600" class="mono">next_</text>
+<path d="M 276.0 147.0 C 335.0 77.0, 370.0 77.0, 427.0 147.0" fill="none" stroke="#9f1239" stroke-width="2.6" marker-end="url(#arr-crim)"/>
+<path d="M 429.0 183.0 C 370.0 253.0, 335.0 253.0, 278.0 183.0" fill="none" stroke="#9f1239" stroke-width="2.6" marker-end="url(#arr-crim)"/>
+<rect x="320.5" y="89.0" width="64.0" height="22.0" fill="#ffffff" stroke="#9f1239" stroke-width="1.2" rx="4"/>
+<text x="352.5" y="104.0" font-size="11.5" fill="#9f1239" text-anchor="middle" font-weight="700">+3,03</text>
+<rect x="320.5" y="221.0" width="64.0" height="22.0" fill="#ffffff" stroke="#9f1239" stroke-width="1.2" rx="4"/>
+<text x="352.5" y="236.0" font-size="11.5" fill="#9f1239" text-anchor="middle" font-weight="700">−4,37</text>
+<circle cx="88.0" cy="165.0" r="26.0" fill="#ffffff" stroke="#1b365d" stroke-width="2.0"/>
+<text x="88.0" y="169.0" font-size="11" fill="#1b365d" text-anchor="middle" font-weight="700">início</text>
+<rect x="50.0" y="199.0" width="76.0" height="20.0" fill="#eaf0f7" stroke="#1b365d" stroke-width="0.9" rx="3"/>
+<text x="88.0" y="213.0" font-size="10" fill="#1b365d" text-anchor="middle" font-weight="600" class="mono">stamp = w</text>
+<circle cx="250.0" cy="165.0" r="31.0" fill="#fbeaf0" stroke="#9f1239" stroke-width="2.4"/>
+<text x="250.0" y="170.0" font-size="13" fill="#0f172a" text-anchor="middle" font-weight="700">5438</text>
+<rect x="202.0" y="204.0" width="96.0" height="20.0" fill="#ffffff" stroke="#9f1239" stroke-width="1.0" rx="3"/>
+<text x="250.0" y="218.0" font-size="10" fill="#9f1239" text-anchor="middle" font-weight="700" class="mono">stamp == w!</text>
+<circle cx="455.0" cy="165.0" r="31.0" fill="#fbeaf0" stroke="#9f1239" stroke-width="2.4"/>
+<text x="455.0" y="170.0" font-size="13" fill="#0f172a" text-anchor="middle" font-weight="700">1268</text>
+<rect x="417.0" y="204.0" width="76.0" height="20.0" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.0" rx="3"/>
+<text x="455.0" y="218.0" font-size="10" fill="#475569" text-anchor="middle" font-weight="600" class="mono">stamp = w</text>
+<rect x="288.5" y="152.0" width="128.0" height="26.0" fill="#9f1239" stroke="none" stroke-width="1.0" rx="4"/>
+<text x="352.5" y="169.0" font-size="11.5" fill="#ffffff" text-anchor="middle" font-weight="700">soma = −1,34 &lt; 0</text>
+<rect x="18.0" y="266.0" width="524.0" height="106.0" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.0" rx="4"/>
+<text x="32.0" y="290.0" font-size="11.5" fill="#0f172a" text-anchor="start" font-weight="700">Estrutura do grafo W₁ (25.000 vértices · 549.953 arestas)</text>
+<text x="32.0" y="312.0" font-size="11" fill="#475569" text-anchor="start" font-weight="400">• 9,1% das arestas têm inversa; 2.446 ciclos negativos de 2 arestas.</text>
+<text x="32.0" y="332.0" font-size="11" fill="#475569" text-anchor="start" font-weight="400">• has_cycle visita apenas 2.466 nós até fechar na rodada 4.</text>
+<text x="32.0" y="354.0" font-size="11" fill="#9f1239" text-anchor="start" font-weight="700">• W₁ é fortemente conexo: todo par possui distância −∞ até o destino 100.</text>
+<text x="602.0" y="28.0" font-size="13.5" fill="#b45309" text-anchor="start" font-weight="700">B. Armadilha IEEE-754 em ponto flutuante</text>
+<text x="602.0" y="47.0" font-size="11" fill="#475569" text-anchor="start" font-weight="400">Ciclo de soma exata 0 pode parecer negativo por 1 ulp em double</text>
+<rect x="602.0" y="68.0" width="420.0" height="118.0" fill="#ffffff" stroke="#9f1239" stroke-width="1.2" rx="4"/>
+<rect x="602.0" y="68.0" width="125.0" height="22.0" fill="#fbeaf0" stroke="none" stroke-width="1.0"/>
+<text x="612.0" y="83.0" font-size="10" fill="#9f1239" text-anchor="start" font-weight="700">SEM TOLERÂNCIA</text>
+<text x="737.0" y="83.0" font-size="10.5" fill="#475569" text-anchor="start" font-weight="400" class="mono">d[u] &gt; d[v] + w  (comparação exata)</text>
+<text x="616.0" y="112.0" font-size="11.5" fill="#0f172a" text-anchor="start" font-weight="600">Ciclo decimal de soma 0:  +0,1  +0,2  −0,3</text>
+<text x="616.0" y="134.0" font-size="10.5" fill="#9f1239" text-anchor="start" font-weight="600" class="mono">Em IEEE-754 binary64:  (0.1 + 0.2) − 0.3 = +5,55×10⁻¹⁷ ≠ 0</text>
+<text x="616.0" y="156.0" font-size="11" fill="#475569" text-anchor="start" font-weight="400">→ melhora espúria de 1 ulp cria laço em next_ / parent</text>
+<text x="616.0" y="174.0" font-size="11" fill="#9f1239" text-anchor="start" font-weight="700">→ falso ciclo negativo ou loop infinito ao reconstruir caminho!</text>
+<rect x="602.0" y="204.0" width="420.0" height="168.0" fill="#ffffff" stroke="#0f6260" stroke-width="1.3" rx="4"/>
+<rect x="602.0" y="204.0" width="135.0" height="22.0" fill="#e6f2f1" stroke="none" stroke-width="1.0"/>
+<text x="612.0" y="219.0" font-size="10" fill="#0f6260" text-anchor="start" font-weight="700">SOLUÇÃO NO CÓDIGO</text>
+<text x="747.0" y="219.0" font-size="10.5" fill="#0f6260" text-anchor="start" font-weight="700" class="mono">candidate &lt; dist[u] − tolerance</text>
+<rect x="616.0" y="238.0" width="392.0" height="34.0" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.0" rx="3"/>
+<text x="812.0" y="260.0" font-size="13" fill="#1b365d" text-anchor="middle" font-weight="700" class="mono">tolerance = 8 · ε · V · max|w|</text>
+<text x="616.0" y="294.0" font-size="11" fill="#0f172a" text-anchor="start" font-weight="400">• Garante por lema que todo ciclo em next_ tem soma &lt; 0 real.</text>
+<text x="616.0" y="315.0" font-size="11" fill="#475569" text-anchor="start" font-weight="400">• Limite no W₅ (V = 10⁷, max|w| = 10): tol ≈ 1,8×10⁻⁷ &lt;&lt; 10⁻².</text>
+<text x="616.0" y="336.0" font-size="11" fill="#0f6260" text-anchor="start" font-weight="700">• Elimina laços falsos na árvore next_ sem perder precisão</text>
+<text x="626.0" y="354.0" font-size="11" fill="#475569" text-anchor="start" font-weight="400">nas distâncias finais dos caminhos mínimos.</text>
+</svg>

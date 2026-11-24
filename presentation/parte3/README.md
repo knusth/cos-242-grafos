@@ -1,46 +1,33 @@
 # Apresentação da Parte 3
 
-```sh
-python3 -I presentation/parte3/build.py            # gera index.html e apresentacao.pdf
-python3 -I presentation/parte3/build.py --sem-pdf  # só index.html
-python3 -I presentation/parte3/build.py --dados OUTRO.json   # outro data.json (teste)
-```
+Apresentação em 12 slides principais (8 minutos) + 2 slides de apêndice para Q&A (14 páginas em 16:9), produzida em **Typst** com figuras vetoriais (SVG) geradas a partir dos mesmos dados medidos do relatório.
 
-O PDF é impresso pelo Google Chrome em modo headless. Todo número de resultado vem de
-`report/parte3/data.json` (gerado por `bench/summarize_p3.py` a partir de `bench/results/parte3/`).
-Rode o resumo e o build de novo quando o benchmark terminar:
+## Reconstruir o PDF
+
+Requer Python 3 e [Typst](https://typst.app/). A partir da raiz do repositório:
 
 ```sh
-python3 -I bench/summarize_p3.py
-python3 -I presentation/parte3/build.py
+(cd presentation/parte3 && python3 generate_assets.py && typst compile slides.typ apresentacao.pdf)
 ```
 
-Valor ainda ausente aparece como "—", e a linha do grafo leva a marca "em execução". O build imprime a lista
-de campos pendentes. O trecho de código do slide 4 é conferido contra `include/cos/graph.hpp` (com o número
-real das linhas); se o código mudar, o build para com erro.
+`generate_assets.py` lê os resultados em `report/parte3/*.json`, `bench/results/parte3/*.txt` e constantes em `include/cos/graph.hpp` para gerar os 11 SVGs em `assets/`. Em seguida, `typst compile` compila `slides.typ` em `apresentacao.pdf`.
 
-## Apresentar
-
-- **PDF**: `apresentacao.pdf` em tela cheia, uma página por slide (16:9).
-- **Navegador**: abra `index.html`. Setas, espaço ou clique avançam; Home e End vão ao primeiro e ao último;
-  `index.html#10` abre direto no slide 10.
-
-Tela e PDF mostram o mesmo conteúdo: sem animação, gráficos em SVG estático.
-São 11 slides, cerca de 7min20. Veja `ROTEIRO.md` (gerado de `ROTEIRO.modelo.md`).
+Se os dados de benchmark mudarem, rode primeiro `python3 -I bench/parte3/summarize_p3.py` (e, se aplicável, `report/parte3/tabelas.py`) antes de regerar os SVGs e recompilar os slides.
 
 ## Arquivos
 
-| Arquivo | Conteúdo |
+| Arquivo | Função |
 |---|---|
-| `build.py` | slides, figuras e verificação do código |
-| `ROTEIRO.modelo.md` | fala por slide, tempos, perguntas prováveis; os números são marcadores `{{...}}`, e o build gera `ROTEIRO.md` (não edite) com os mesmos valores dos slides |
-| `../comum/estilo.css`, `../comum/fonts/` | estilo (1280 × 720 px) e fontes Fira Sans e Inconsolata |
-| `index.html`, `apresentacao.pdf` | gerados |
+| `slides.typ` | Fonte Typst dos 12 slides principais + 2 apêndices (Q&A) |
+| `generate_assets.py` | Gera os 11 diagramas e gráficos vetoriais em `assets/fig_*.svg` |
+| `assets/fig_*.svg` | Figuras vetoriais incorporadas por `slides.typ` |
+| `apresentacao.pdf` | PDF compilado pronto para apresentação em tela cheia (16:9) |
+| `ROTEIRO.md` | Roteiro cronometrado por slide (8 min · ~120 palavras/min) e notas para Q&A |
 
-## Como ler os valores estimados
+## Estrutura dos slides
 
-- Floyd-Warshall do W₃ em diante: média medida no W₂ × (V/V₂)³ (a matriz não cabe na RAM).
-- Todos-pares por Bellman-Ford do W₃ em diante: destinos amostrados em 1 thread e extrapolados para V.
-  No gráfico do slide 10 o tempo é dividido por 11 (escala linear), para comparar com o Floyd-Warshall em 11 threads.
-- W₁: os três tempos são de detecção do ciclo negativo.
-- A tabela 5×5 do W₃ ao W₅ vem do Bellman-Ford (uma execução por destino).
+1. **Ato 1 — Problema e Bellman-Ford (Slides 1–4):** capa, escala dos grafos $W_1$–$W_5$ e limite de RAM (`12·V²`), lista de ativos + parada antecipada, detecção de ciclos negativos em $O(V)$ e tolerância IEEE-754.
+2. **Ato 2 — Todos os pares e hardware (Slides 5–7):** comparação de tempos (BF vs. FW, $13\times$), decomposição de fatores ($211\times$ menos relaxações $\div$ $16\times$ mais caro por relaxação) e efeito da cache L2 em 10M vértices.
+3. **Ato 3 — Algoritmo de Johnson (Slides 8–9):** potencial telescópico $h$, fila radix de 65 baldes (`std::bit_cast`) e benchmark $2{,}4\times$ sobre Bellman-Ford no $W_2$.
+4. **Ato 4 — Paralelismo e síntese (Slides 10–12):** destinos independentes vs. blocos $64 \times 64$ com barreiras, escala em núcleos P/E e parede da L2, síntese e matriz de decisão.
+5. **Apêndice (A1–A2):** tabela completa de distâncias até o vértice 100 e matriz $5 \times 5$ do $W_2$, além dos trechos-chave de `include/cos/graph.hpp`.

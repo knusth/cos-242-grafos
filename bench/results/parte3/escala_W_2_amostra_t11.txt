@@ -1,0 +1,41 @@
+# build/csr/cos_bench3 data/p3_W_2.txt direcionado 3 --bf-todos --bf-amostra 440 --threads 11 (2026-11-23 11:46)
+# carga antes: 2.88 3.53 6.04
+[grafo]
+arquivo=data/p3_W_2.txt
+representacao=csr
+direcionado=sim
+vertices=25000
+arestas=824964
+pesos_negativos=nao
+leitura_s=0.063099209
+memoria_bytes=19999288
+pico_rss_apos_leitura_bytes=36012032
+
+[bellman_ford]
+threads=1
+destino=100
+rodadas_medidas=3
+execucao,tempo_s,rodadas,ciclo_negativo,soma_distancias_finitas
+1,0.009661458,24,nao,253210.240000001
+2,0.009482625,24,nao,253210.240000001
+3,0.009758000,24,nao,253210.240000001
+media_s=0.009634028
+desvio_s=0.000139722
+min_s=0.009482625
+
+[bellman_ford_todos_pares]
+threads=11
+vertices=25000
+destinos_medidos=440
+estimado=sim
+rodadas_medidas=3
+execucao,tempo_s,tempo_medio_por_destino_s,ciclos_negativos,soma_distancias
+1,0.643871000,0.001463343,0,66904971.110000052
+2,0.619507917,0.001407973,0,66904971.110000052
+3,0.626493917,0.001423850,0,66904971.110000052
+media_s=0.629957611
+desvio_s=0.012545431
+
+[resumo]
+pico_rss_bytes=53002240
+# carga depois: 4.01 3.75 6.10

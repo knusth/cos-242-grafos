@@ -284,9 +284,9 @@ void write_floyd_warshall(std::ostream & output, const Graph & graph)
         return;
     }
 
-    const auto lookup = PairLookup{
-        [&](Vertex from, Vertex to) { return paths.distance(from, to); },
-        [&](Vertex from, Vertex to) { return path_by_parent(paths, from, to); }};
+    const auto lookup =
+        PairLookup{[&](Vertex from, Vertex to) { return paths.distance(from, to); },
+                   [&](Vertex from, Vertex to) { return path_by_parent(paths, from, to); }};
     write_floyd_matrix(output, graph, lookup);
     output << "\n[floyd_warshall_caminhos]\n";
     write_floyd_paths(output, graph, lookup);

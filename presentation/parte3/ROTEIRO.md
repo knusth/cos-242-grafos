@@ -1,82 +1,126 @@
-<!-- gerado por build.py a partir de ROTEIRO.modelo.md; não edite -->
-# Roteiro da Parte 3
+# Roteiro de Apresentação — Parte 3 (8 minutos · 12 slides + 2 apêndices)
 
-Tempo total: 7min20 (limite de 8). Os números abaixo vêm de `report/parte3/data.json` e são preenchidos pelo `build.py`; se o JSON for regenerado, rode o build de novo.
+**Disciplina:** COS242 — Teoria dos Grafos (Poli / UFRJ)  
+**Autores:** Felipe Marroni · Hygor Knust · **Professor:** Daniel Ratton Figueiredo  
+**Ritmo alvo:** ~120 palavras/minuto (~960 palavras no roteiro principal = **8:00**)  
+**Estrutura narrativa (DAG sem referências antecipadas):**
+1. **Ato 1 — O Problema & Bellman-Ford (Slides 1–4):** escala dos grafos → *como* BF evita trabalho (lista de ativos + parada) → ciclos negativos e precisão IEEE-754.
+2. **Ato 2 — Todos os Pares & Hardware (Slides 5–7):** BF vs. FW (`13×`) → *por quê* (`211×` menos ops ÷ `16×` mais caro/op) → efeito da cache L2 em 10M vértices.
+3. **Ato 3 — Algoritmo de Johnson (Slides 8–9):** *por que* somar constante falha vs. potencial telescópico `h` → fila radix e benchmark `2,4×` sobre BF.
+4. **Ato 4 — Paralelismo & Síntese (Slides 10–12):** destinos independentes vs. blocos `64×64` → P/E-cores e parede da L2 → matriz de decisão.
 
-| # | Slide | Tempo | Acumulado |
-|---|---|---|---|
-| 1 | Capa | 0:10 | 0:10 |
-| 2 | O pedido e os cinco grafos | 0:35 | 0:45 |
-| 3 | Grafo direcionado | 0:40 | 1:25 |
-| 4 | Bellman-Ford até o destino | 1:05 | 2:30 |
-| 5 | Ciclo negativo | 0:35 | 3:05 |
-| 6 | Floyd-Warshall | 0:55 | 4:00 |
-| 7 | Q1: distâncias até o 100 | 0:30 | 4:30 |
-| 8 | Q2: matriz 5×5 | 0:40 | 5:10 |
-| 9 | Q3: tempos médios | 0:35 | 5:45 |
-| 10 | Q4: todos os pares | 1:10 | 6:55 |
-| 11 | Conclusões | 0:25 | 7:20 |
+---
 
-## 1. Capa (0:10) — Felipe
-Título, nomes, repositório.
+## Slide 1 · Capa (0:00 – 0:25 · ~50 palavras)
 
-## 2. O pedido (0:35) — Felipe
-- Parte 3: grafos direcionados com pesos negativos, Bellman-Ford até um destino, Floyd-Warshall entre todos os pares.
-- Cinco grafos: só o W₁ tem pesos negativos, e tem ciclo negativo; W₂ a W₅ não têm.
-- Estudo de caso: 4 perguntas (Q1 a Q4), que respondemos nos slides 7 a 10.
+Bom dia a todos. Hoje apresentamos a Parte 3 do trabalho de Grafos: caminhos mínimos com pesos negativos em grafos direcionados de até dez milhões de vértices, implementados do zero em `C++20` no Apple M3 Pro.
 
-## 3. Grafo direcionado (0:40) — Felipe
-- A direção é parâmetro de execução. A CSR guarda duas listas: `forward_` (saem) e `backward_` (chegam).
-- BFS, DFS e Dijkstra usam as que saem. Bellman-Ford até o destino usa as que chegam.
-- Sem direção, as duas listas coincidem e a segunda não é alocada.
+À direita, o exemplo de seis vértices ilustra nossa convenção: calculamos distâncias até um destino fixo guardando a árvore `next_`, destacando em vermelho a aresta negativa `3 → 6` de peso `−4`.
 
-## 4. Bellman-Ford até o destino (1:05) — Hygor
-- Distância de todos *até* t: a rodada parte de t e relaxa as arestas que chegam nos ativos; `next` forma a árvore com raiz em t.
-- Exemplo: ativos {t}, {1,2}, {3,4}, {5}, vazio. Quatro rodadas, e a lista só encolhe.
-- Otimização 1: rodada sem mudança para. Otimização 2: só quem mudou fica ativo.
-- Código: a comparação com `tolerance` e o `upcoming.push_back` são os dois pontos que importam.
+---
 
-## 5. Ciclo negativo (0:35) — Hygor
-- Sem ciclo, V−1 rodadas bastam; passar disso prova o ciclo. Detectamos antes: ciclo entre os `next`, ou o destino melhora.
-- No W₁ (fortemente conexo): 4 rodadas, ~102 µs; toda distância é −∞. Floyd-Warshall leva ~603 ms (diagonal negativa).
+## Slide 2 · Cinco grafos e o limite de memória (0:25 – 1:05 · ~80 palavras)
 
-## 6. Floyd-Warshall (0:55) — Hygor
-- Uma matriz só, atualizada no lugar: 12·V² bytes. Blocos de 64×64 cabem no L1; 11 threads; sai cedo se a diagonal fica negativa.
-- Gráfico: W₃ precisa de 120 GB, W₄ de 12 TB, W₅ de 1,2 PB, contra 36 GiB de RAM.
-- Por isso, do W₃ em diante a tabela 5×5 vem do Bellman-Ford (um por destino). Dizer isso explicitamente.
+Trabalhamos com cinco grafos, de $W_1$ e $W_2$ com 25 mil vértices até $W_5$ com 10 milhões de vértices e 40 milhões de arestas. Apenas $W_1$ possui pesos negativos (`−5` a `10`).
 
-## 7. Q1 (0:30) — Felipe
-- Tabela 10/20/30 → 100. W₁: −∞. W₂: 10,47, 8,48, 8,71. W₃: 4,63, 5,42, 4,67. W₄: 9,04, 8,83, 9,23. W₅: 37,85, 42,63, 37,86.
-- Rodadas pequenas perto de V: 24 (W₂), 25 (W₃), 36 (W₄), 42 (W₅). Tempo do Bellman-Ford: 12,3 ms, 103 ms, 1,47 s, 6,11 s.
+Para rodar Bellman-Ford direcionado ao destino, armazenamos as arestas de entrada em CSR reverso (`backward_`), ocupando de `13,4 MB` no $W_1$ a `1,04 GB` no $W_5$. Já a matriz densa de Floyd-Warshall (`12·V²` bytes) exige `7,5 GB` no $W_2$, mas explode para `120 GB` no $W_3$ e `1,2 PB` no $W_5$ — esbarrando imediatamente nos `16 GiB` de limite e nos `36 GiB` de RAM da máquina.
 
-## 8. Q2 (0:40) — Felipe
-- W₂ por Floyd-Warshall; W₃ a W₅ por Bellman-Ford, marcado no slide. W₁: tudo −∞.
-- Validação: matriz do Bellman-Ford igual à do Floyd-Warshall em um grafo de 10 mil vértices; W₂ confere com um Dijkstra independente.
+---
 
-## 9. Q3 (0:35) — Felipe
-- Médias de 10 execuções, sem leitura. Itálico é estimativa. W₁ é só detecção, não se compara.
-- Floyd-Warshall no W₂: 8,31 min (499 s, 11 threads). Bellman-Ford todos-pares no W₂: 38,1 s (11 threads), medido.
-- W₃ a W₅ em itálico: FW estimado em 8,87 h, 1,01 anos e ~1.012 anos; todos-pares em 1 thread, 2,89 h, 14,4 dias e 2,05 anos.
-- Os tempos de W₃ a W₅ vêm de uma segunda passada, com a máquina ociosa.
+## Slide 3 · Como o Bellman-Ford evita trabalho inútil (1:05 – 1:50 · ~85 palavras)
 
-## 10. Q4 (1:10) — Hygor
-- Resultado no W₂ (ambos com 11 threads): Bellman-Ford 38,1 s contra Floyd-Warshall 8,31 min, ou seja, **Bellman-Ford 13× mais rápido**.
-- Por quê: FW faz V³ relaxações, esparso ou não (W₂: 1,56·10¹³). BF todos-pares faz V execuções que só examinam arestas dos ativos; V·R·E é o teto (W₂: 4,95·10¹¹, 32× menos que V³; W₃: 66×).
-- O ganho medido (13×) é menor que o das operações (32×) porque o custo por operação difere: FW acessa a matriz em blocos, de forma sequencial e vetorizada; BF faz acessos irregulares a `dist[]`.
-- E o FW ainda precisa de V² de memória: nem roda do W₃ em diante.
-- Gráfico em escala log; listrado é estimativa (W₃ a W₅).
+Antes dos benchmarks, vale entender como tornamos o Bellman-Ford rápido na prática. O algoritmo clássico faz `V − 1` rodadas fixas varrendo todas as `E` arestas — `20,6 bilhões` de relaxações por destino no $W_2$.
 
-## 11. Conclusões (0:25) — Hygor
-Três pontos: detecção antecipada de ciclo; BF com ativos vence em grafo esparso; a memória do FW decide.
+Usamos duas otimizações simples e exatas: primeiro, a **lista de ativos** (`active[]`), que guarda apenas os vértices cuja distância realmente diminuiu na rodada anterior — quem não mudou não pode melhorar seus predecessores; segundo, a **parada antecipada**, encerrando assim que `active[]` esvazia. No $W_2$ (à direita), a onda começa no destino `100`, atinge pico de `78%` na rodada 7 e zera na rodada `24` — examinando cada aresta apenas `3,6×` no total.
 
-## Perguntas prováveis
+---
 
-- **Por que Bellman-Ford até um destino usa as arestas que chegam?** A distância de v até t é min sobre arestas v→w de peso + dist(w, t). Partindo de t, quem melhora é o vértice de onde a aresta *sai* para um ativo; achá-lo exige listar as arestas que chegam no ativo.
-- **Por que o Floyd-Warshall não roda no W₃?** A matriz tem V² células de 12 bytes: 120 GB contra 36 GiB de RAM. Armazenar menos exigiria outro algoritmo.
-- **Por que o BF todos-pares ganha em grafo esparso?** FW faz V³ operações sempre. BF faz V execuções, cada uma limitada às arestas dos ativos (≤ R·E). No W₂ (E ≈ 33·V, R = 24), V·R·E = 4,95·10¹¹ contra V³ = 1,56·10¹³; medido, 13× mais rápido. Em grafo denso a vantagem encolhe.
-- **O tempo estimado é confiável?** FW: V³ exato, calibrado pela média medida do W₂ (499 s); supõe o mesmo custo por operação, e a matriz maior perde cache, então a estimativa tende a ficar abaixo do real. BF: amostra de destinos (200 no W₃, 30 no W₄, 10 no W₅), extrapolada; destinos têm custos desiguais.
-- **Por que medimos duas vezes?** A primeira passada dos grafos W₃ a W₅ rodou com a máquina ocupada (cerca de 2× mais lenta em uma thread). Refizemos com a máquina ociosa e só usamos a segunda; a primeira fica em `bench/results/parte3/primeira_execucao/` e não entra nos números.
-- **Tolerância numérica?** Pesos são `double`; relaxação só vale se melhora por mais que `tolerance` = 8·ε·V·max|w|. Evita ciclos negativos falsos por arredondamento (0,1+0,2−0,3).
-- **E se o ciclo negativo não alcança o destino?** `bellman_ford` só vê ciclos de onde t é alcançável; `has_negative_cycle` (origem virtual) vê qualquer ciclo.
-- **A comparação é justa (11 threads contra 1)?** O gráfico divide o tempo do BF de 1 thread por 11 (escala linear). O BF todos-pares em si é paralelizável por destino sem sincronização.
-- **Por que não Johnson ou Dijkstra?** Dijkstra exige pesos não negativos. Johnson está na biblioteca como extra, mas o enunciado compara só BF e FW.
+## Slide 4 · Ciclos negativos e precisão numérica (1:50 – 2:35 · ~85 palavras)
+
+E se houver ciclo negativo, como no $W_1$? Lá, `9,1%` das arestas têm inversa e existem `2.446` ciclos negativos de 2 arestas, como `5438 ↔ 1268` de soma `−1,34`. Em vez de esperar `24.999` rodadas, nosso `has_cycle` persegue os ponteiros `next_` apenas dos vértices alterados usando carimbos monotônicos (`stamps`), fechando o ciclo em `O(V)` já na rodada 4, em `0,10 ms`.
+
+Há também uma armadilha em ponto flutuante: em `double` IEEE-754, `(0,1 + 0,2) − 0,3` sobra `5,55×10⁻¹⁷`, gerando falsas melhorias de `1 ulp` e laços espúrios em `next_`. Exigir melhora acima de `tolerance = 8·ε·V·max|w|` elimina falsos ciclos sem perder precisão.
+
+---
+
+## Slide 5 · Todos os pares: Bellman-Ford vence por 13× (2:35 – 3:10 · ~70 palavras)
+
+Passando a todos os pares: no $W_2$, único grafo onde ambos cabem na memória, o Bellman-Ford com 11 threads leva `38,1 s` contra `498,7 s` do Floyd-Warshall em blocos — **13,1× mais rápido**. Mesmo em 1 thread (`327,5 s`), o BF já bate o FW paralelo.
+
+Na extrapolação à direita (mantendo 1T do BF separado de 11T do FW), igualando threads a vantagem cresce de `34×` no $W_3$ para `280×` no $W_4$ e `5.400×` no $W_5$.
+
+---
+
+## Slide 6 · Por que 211× menos operações viram 13× (3:10 – 3:55 · ~85 palavras)
+
+Este gráfico separa exatamente o que aconteceu no $W_2$ em dois painéis independentes.
+
+À esquerda, o **volume de operações** por destino: o BF clássico faria `20,6 bilhões` de relaxações (`33×` pior que os `625 milhões` de $V^2$ do FW). Com parada antecipada e lista de ativos, nosso BF cai para `2,97 milhões` — **211× menos operações** que o FW.
+
+À direita, o **custo de hardware por operação**: cada relaxação do FW lê blocos contíguos na L1 vetorizados em NEON (`0,35 ns`), enquanto o BF faz saltos aleatórios no CSR (`5,66 ns` — **16× mais caro**). Dividindo `211` por `16,1`, chegamos exatamente aos **13,1×** medidos no relógio.
+
+---
+
+## Slide 7 · O efeito do cache em 10 milhões de vértices (3:55 – 4:35 · ~75 palavras)
+
+Quando escalamos o Bellman-Ford de $W_2$ até $W_5$, a memória volta a dominar. O estado por execução (`dist + next`, `12·V` bytes) cresce de `0,3 MB` no $W_2$ para `120 MB` no $W_5$, ultrapassando os `16 MiB` da cache L2.
+
+O impacto é imediato nos dois painéis: o custo por aresta relaxada salta `14,6×` (de `2,51` para `36,71 ns`), e a perseguição de ponteiros em `has_cycle` — que custava só `3%` a `8%` em $W_2$–$W_4$ — explode para **36,4%** do tempo total no $W_5$ (`2,52 s` de `6,92 s`).
+
+---
+
+## Slide 8 · Johnson: por que somar constante falha (4:35 – 5:20 · ~90 palavras)
+
+Indo além da especificação, implementamos o **algoritmo de Johnson** para baixar aquelas `3,6` passagens do BF para **uma única passagem** com Dijkstra — mesmo havendo pesos negativos.
+
+Mas atenção a um erro clássico: **não basta somar o menor peso `+2` a todas as arestas**. No triângulo do meio, o ótimo real `A → B → C` (custo `0`, 2 arestas) paga `+4` e vira `4`, enquanto `A → C` (1 aresta) paga só `+2` e vira `3` — invertendo o caminho mínimo!
+
+A sacada de Johnson (à direita) é reponderar por um **potencial de vértice** $h$: `w'(u,v) = w(u,v) + h(v) − h(u) ≥ 0`. Ao somar ao longo de qualquer caminho `s → t`, todos os `h` intermediários cancelam telescopicamente, deslocando todos os caminhos pelo mesmo `h(t) − h(s)` — preservando 100% a ordem ótima.
+
+---
+
+## Slide 9 · Johnson na prática: fila radix acelera 2,4× (5:20 – 6:00 · ~75 palavras)
+
+Para que o Dijkstra dentro do Johnson compense contra o BF enxuto, substituímos o heap binário por uma **fila radix de 65 baldes**. Como `bit_cast<uint64_t>` preserva a ordem de `double ≥ 0`, o balde é dado em uma instrução por `bit_width(key ^ last)`. Inserções são `O(1)` e cada chave só desce de balde quando `B0` esvazia.
+
+Na mesma sessão ociosa no $W_2$ (11 threads): BF marca `30,0 s`, Johnson com heap binário cai para `19,5 s` (`1,5×`) e com fila radix chega a **`12,33 s`** (**2,4× mais rápido** que o BF, perto do teto teórico sem fila de `8,4 s`).
+
+---
+
+## Slide 10 · Paralelismo: destinos independentes vs. blocos (6:00 – 6:40 · ~75 palavras)
+
+Como paralelizar? No BF e no Johnson, particionar o grafo por vértices cortaria `91%` das arestas (já que `|u − v| ≈ V/3`). Em vez disso, mantemos o CSR somente leitura e cada thread retira blocos dinâmicos de `16` destinos via `fetch_add` atômico, usando um espaço local de `12·V` bytes — sem travas e balanceando automaticamente núcleos rápidos e lentos.
+
+Já no Floyd-Warshall, usamos blocagem `64×64` (`48 KiB` na L1) em três fases sincronizadas por `std::barrier` (`1.173` barreiras vs. `25.000`), com o laço interno `relax_segment` sem desvios para auto-vetorização NEON.
+
+---
+
+## Slide 11 · Escala nos P/E-cores e saturação da L2 (6:40 – 7:20 · ~80 palavras)
+
+O Apple M3 Pro tem 5 núcleos de desempenho (P) e 6 de eficiência (E), onde cada E-core vale `r ≈ 0,29` de um P-core — teto teórico de `5 + 6·r = 6,7×`.
+
+Quando o grafo cabe na cache (`aleatorio5000`, à esquerda), BF, FW e Johnson escalam juntos até `5,9×–6,4×`. Nos grafos do trabalho à direita, o $W_2$ (`0,3 MB/thread`) atinge `7,2×`. Já no $W_4$ (`12 MB/thread`), a partir de **2 threads** (`24 MB`) o trabalho ultrapassa a L2 de `16 MiB` e a escala cai para `4,2×`; no $W_5$ (`120 MB/thread`), o barramento DRAM satura em `2,4×`.
+
+---
+
+## Slide 12 · Qual algoritmo escolher em cada cenário (7:20 – 8:00 · ~75 palavras)
+
+Fechando com a matriz de decisão:
+1. **1 destino esparso** (com ou sem pesos negativos): BF com lista de ativos e `next_` (`0,10 ms` no $W_1$, `6,11 s` no $W_5$);
+2. **Todos os pares esparso**: Johnson + fila radix vence com folga (`12,3 s` no $W_2$, `2,4×` sobre BF e `40×` sobre FW), ou BF paralelo se a memória for estrita;
+3. **Grafos densos e pequenos**: Floyd-Warshall em blocos `64×64` com NEON (`0,35 ns/op`).
+
+A lição central: esparsidade algorítmica e engenharia de memória ditam o desempenho real muito além da notação assintótica. Obrigado — ficamos à disposição para perguntas.
+
+---
+
+## Guia de Defesa para Perguntas (Q&A · Apêndices A1 e A2)
+
+- **Apêndice A1 (Validação e distâncias exatas):**
+  - Todas as distâncias `{10, 20, 30} → 100` e a matriz `5×5` do $W_2$ (`10..50`) foram validadas com 100% de concordância contra um Dijkstra independente em Python; nos 4 algoritmos todos-pares no $W_2$, o checksum coincide exatamente em `28,02`.
+  - No $W_1$, todas as distâncias são `−∞` porque o grafo é fortemente conexo e contém `2.446` ciclos negativos de 2 arestas.
+- **Apêndice A2 (Detalhes de código em `include/cos/graph.hpp`):**
+  - *Por que `has_cycle` é `O(V)` amortizado?* Cada vértice visitado recebe o selo `walk` atual ou encontra um selo `>= first_stamp` de outra caminhada na mesma rodada e interrompe imediatamente.
+  - *Por que o potencial $h$ em Johnson tem sinal `w + h(v) − h(u)`?* Porque nosso Bellman-Ford é direcionado ao destino (grafo reverso `backward_`): definimos $h(u) = d(u \to q)$ até o vértice virtual $q$. Pela desigualdade triangular, $h(u) \le w(u,v) + h(v) \implies w'(u,v) = w(u,v) + h(v) - h(u) \ge 0$. (Na formulação clássica a partir de uma origem $q$, $h(v) = d(q \to v)$ e o sinal inverte para $w + h(u) - h(v)$ — ambos dão exatamente a mesma soma telescópica!)
+  - *Por que `RadixFrontier` funciona com `double`?* Números IEEE-754 não negativos em `double` têm a mesma ordem lexicográfica como `uint64_t` após normalizar `-0.0` para `+0.0`. `std::bit_width(key ^ last_)` retorna em 1 instrução (`clz`) o bit mais significativo divergente (`0..64`).
+  - *Por que o BF no Slide 5 marca `38,1 s` e no Slide 9 marca `30,0 s`?* O Slide 5 vem da suíte principal (rodada sob carga de fundo do sistema); no Slide 9, BF, Johnson Heap e Johnson Radix foram executados em sequência na mesma sessão ociosa para comparação justa (`2,4×`).

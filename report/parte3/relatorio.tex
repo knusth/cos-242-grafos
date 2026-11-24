@@ -1,328 +1,341 @@
-% Relatório da Parte 3 de COS242. Os números vêm de tabelas.tex, gerado por tabelas.py a partir
-% de data.json (bench/summarize_p3.py). Compilar: ver README.md.
+% Relatório da Parte 3 de COS242 (UFRJ / Poli).
+% Todos os números, tabelas e séries vêm de tabelas.tex (gerado por tabelas.py).
+% Compilar: python3 -I report/parte3/tabelas.py && (cd report/parte3 && tectonic relatorio.tex)
 \documentclass[a4paper,11pt]{article}
 
 \usepackage[brazil]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{libertinus}
-\setmonofont{Inconsolatazi4}[Extension=.otf, UprightFont=*-Regular, BoldFont=*-Bold, Scale=0.92]
-\usepackage[a4paper,hmargin=2.2cm,top=1.8cm,bottom=1.9cm]{geometry}
+\setmonofont{Inconsolatazi4}[Extension=.otf, UprightFont=*-Regular, BoldFont=*-Bold, Scale=0.91]
+\usepackage[a4paper,hmargin=2.25cm,top=2.1cm,bottom=2.2cm]{geometry}
 \usepackage{microtype}
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{array}
 \usepackage[table]{xcolor}
-\usepackage{listings}
+\usepackage{pgfplots}
 \usepackage{caption}
+\usepackage{flafter}
 \usepackage{enumitem}
 \usepackage[hidelinks]{hyperref}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{arrows.meta,positioning,calc,patterns}
 
-% ── tipografia e espaçamento (como na Parte 2, um pouco mais compacto) ──
-\linespread{1.12}
+% ── tipografia arejada e espaçamento vertical confortável ─────────────────────
+\linespread{1.20}
 \setlength{\parindent}{1.2em}
-\setlength{\parskip}{1.5pt plus 1pt}
-\setlist{nosep,leftmargin=1.5em,topsep=2pt}
-\captionsetup{font=small,labelfont=bf,labelsep=period,skip=4pt}
+\setlength{\parskip}{4.5pt plus 1.5pt minus 0.5pt}
+\raggedbottom
+\setlist{itemsep=3pt,parsep=0pt,leftmargin=1.6em,topsep=4pt}
+\captionsetup{font=small,labelfont=bf,labelsep=period,skip=6pt}
 \captionsetup[table]{position=top}
-\setlength{\textfloatsep}{9pt plus 2pt minus 3pt}
-\setlength{\floatsep}{8pt plus 2pt minus 2pt}
-\setlength{\intextsep}{8pt plus 2pt minus 2pt}
-\renewcommand{\arraystretch}{1.08}
+\setlength{\textfloatsep}{13pt plus 2.5pt minus 2pt}
+\setlength{\floatsep}{12pt plus 2pt minus 2pt}
+\setlength{\intextsep}{12pt plus 2pt minus 2pt}
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.65}
+\renewcommand{\textfraction}{0.12}
+\renewcommand{\floatpagefraction}{0.75}
+\renewcommand{\arraystretch}{1.14}
 
-\definecolor{heapc}{HTML}{1B7F79}
-\definecolor{ruim}{HTML}{C0392B}
-\definecolor{codkw}{HTML}{1F4E9C}
-\definecolor{codtipo}{HTML}{1B7F79}
-\definecolor{codcom}{HTML}{7A7A7A}
-\lstset{language=C++, basicstyle=\ttfamily\scriptsize, columns=fullflexible, keepspaces=true,
-  keywordstyle=\color{codkw}\bfseries, commentstyle=\color{codcom},
-  numbers=none, xleftmargin=1.2em, frame=none, aboveskip=3pt, belowskip=3pt}
-\renewcommand{\lstlistingname}{Listagem}
+% ── paleta sóbria unificada com a apresentação ────────────────────────────────
+\definecolor{ink}{HTML}{0F172A}
+\definecolor{navy}{HTML}{1B365D}
+\definecolor{bfc}{HTML}{0F6260}     % Bellman-Ford (teal)
+\definecolor{fwc}{HTML}{1B365D}     % Floyd-Warshall (navy)
+\definecolor{ochre}{HTML}{B45309}   % L2 / destaque
+\definecolor{ruim}{HTML}{9F1239}    % pesos negativos, ciclo negativo, -inf
+\definecolor{slate}{HTML}{475569}
+\definecolor{soft}{HTML}{F8FAFC}
+\definecolor{hair}{HTML}{CBD5E1}
+
 \newcommand{\cod}[1]{\texttt{#1}}
 \newcommand{\W}[1]{W\textsubscript{#1}}
+\newcommand{\dist}{\mathit{dist}}
+\newcommand{\nxt}{\mathit{next}}
 
 \makeatletter
 \newcommand{\dado}[1]{\@ifundefined{dado@#1}{\textbf{??\detokenize{#1}??}}{\csname dado@#1\endcsname}}
-\renewcommand\section{\@startsection{section}{1}{\z@}{-1.9ex plus -.5ex minus -.2ex}%
-  {0.8ex plus .2ex}{\normalfont\large\bfseries}}
-\renewcommand\subsection{\@startsection{subsection}{2}{\z@}{-1.5ex plus -.4ex minus -.2ex}%
-  {0.4ex plus .2ex}{\normalfont\normalsize\bfseries}}
+\renewcommand\section{\@startsection{section}{1}{\z@}{-2.7ex plus -.6ex minus -.2ex}%
+  {1.1ex plus .2ex}{\normalfont\large\bfseries\color{navy}}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}{-2.0ex plus -.5ex minus -.2ex}%
+  {0.7ex plus .2ex}{\normalfont\normalsize\bfseries\color{ink}}}
 \makeatother
 \input{tabelas.tex}
 \newcommand{\matriz}[1]{\csname matriz@#1\endcsname}
 
-\begin{document}
+\pgfplotsset{every axis/.append style={tick label style={font=\footnotesize},
+  label style={font=\small}}}
 
-% ── cabeçalho compacto ──
-\noindent\begin{minipage}[c]{2.0cm}
-\includegraphics[width=1.7cm]{../comum/minerva.png}
-\end{minipage}%
-\begin{minipage}[c]{\dimexpr\linewidth-2.0cm\relax}
-{\small UFRJ \textperiodcentered{} COS242 Teoria dos Grafos, 2026/2 \textperiodcentered{}
-Prof.\ Daniel Ratton Figueiredo}\\[2pt]
-{\Large\bfseries Trabalho de Disciplina, Parte 3: caminhos mínimos com pesos negativos}\\[2pt]
-{\small Felipe Marroni e Hygor Knust \textperiodcentered{}
-\url{https://github.com/knusth/cos-242-grafos}}
+% Caixa leve para o resumo
+\newcommand{\resumobox}[1]{%
+  \par\medskip\noindent
+  \begingroup\setlength{\fboxsep}{0pt}%
+  \colorbox{soft}{%
+    \textcolor{navy}{\vrule width 2.4pt}%
+    \hspace{0.9em}%
+    \begin{minipage}{\dimexpr\linewidth-2.4pt-1.8em\relax}
+    \vspace{7pt}\small #1\vspace{7pt}%
+    \end{minipage}\hspace{0.9em}%
+  }%
+  \endgroup\par\medskip
+}
+
+\begin{document}
+\pagestyle{plain}
+
+% ── cabeçalho editorial ───────────────────────────────────────────────────────
+\noindent\begin{minipage}[c]{2.2cm}
+\includegraphics[width=1.95cm]{../comum/minerva.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{\dimexpr\linewidth-2.5cm\relax}
+\linespread{1.08}\selectfont
+{\footnotesize\bfseries\color{navy} UFRJ \textperiodcentered{} ESCOLA POLITÉCNICA \textperiodcentered{} COS242 TEORIA DOS GRAFOS (2026/2) \textperiodcentered{} PARTE 3}\\[4pt]
+{\Large\bfseries\color{ink} Caminhos Mínimos com Pesos Negativos:\\ Bellman-Ford, Floyd-Warshall, Johnson e Paralelismo}\\[4.5pt]
+{\small\color{slate} Felipe Marroni, Hygor Knust \textperiodcentered{} Prof.\ Daniel Ratton Figueiredo\\
+Rio de Janeiro, 23 de novembro de 2026 \textperiodcentered{} \url{https://github.com/knusth/cos-242-grafos}}
 \end{minipage}
-\par\vspace{2pt}\hrule\vspace{4pt}
+\par\vspace{6pt}\noindent\textcolor{navy}{\rule{\linewidth}{0.9pt}}
+
+\resumobox{\textbf{Resumo.} Estendemos nossa biblioteca em \cod{C++20} para grafos direcionados com pesos reais, positivos ou negativos, e comparamos os algoritmos de Bellman-Ford, Floyd-Warshall e Johnson em cinco grafos aleatórios (\W{1}--\W{5}, até $10^7$ vértices). Em \W{1}, único grafo com arestas negativas, o Bellman-Ford detecta um ciclo negativo já na rodada~\dado{w1.rounds}, em \dado{W_1.bf1}. Para todos os pares em \W{2}, o Bellman-Ford paralelo leva \dado{W_2.ap}, diante de \dado{W_2.fw} do Floyd-Warshall em blocos com vetorização NEON (\textbf{\dado{W_2.ratio}} mais rápido): embora o Floyd-Warshall sustente \dado{fw.gops} bilhões de relaxações por segundo, o Bellman-Ford faz $211\times$ menos operações. A partir de \W{3}, a matriz de $12V^2$ bytes não cabe na memória RAM. Como extensão, o algoritmo de Johnson com fila radix de 65 baldes supera o Bellman-Ford em \textbf{\dado{jo.gradix}}. Com \dado{threads} threads (\dado{cpu}), o ganho cai de \dado{esc.W_2.11} em \W{2} para \dado{esc.W_5.11} em \W{5}, limitado pela cache L2 e pela banda de memória.}
 
 \section{Introdução}
 
-A biblioteca agora calcula caminhos mínimos em grafos \emph{direcionados} com pesos que podem ser
-negativos. Implementamos o algoritmo de Bellman-Ford, para um destino e para todos os destinos, e o
-de Floyd-Warshall, e os aplicamos aos cinco grafos do site da disciplina (Tabela~\ref{tab:grafos}).
-O \W{1} tem arestas de peso negativo; os demais não. A última coluna é a memória que o
-Floyd-Warshall exige (\S\ref{sec:fw}) contra os \dado{limit} que permitimos a ele.
+No cálculo de caminhos mínimos entre \emph{todos os pares} com arestas de peso negativo, a análise de pior caso favorece o Floyd-Warshall ($\Theta(V^3)$) diante de $V$ execuções de Bellman-Ford ($O(V^2 E)$) sempre que $E > V$. Em grafos esparsos de grande porte, porém, a prática inverte esse quadro: otimizações no Bellman-Ford eliminam quase todas as relaxações redundantes, enquanto a matriz quadrática do Floyd-Warshall esgota rapidamente a memória RAM. A seguir, apresentamos as decisões de engenharia da nossa biblioteca em \cod{C++20} — em particular localidade de cache, vetorização SIMD (NEON) e paralelismo — e analisamos os resultados obtidos nos cinco grafos do estudo de caso.
 
-\begin{table}[!htb]
+\section{Projeto e Engenharia de Desempenho}
+
+\subsection{Extensão do CSR para grafos direcionados}
+
+Partimos da representação em \emph{Compressed Sparse Row} (CSR) da Parte~2, agora com arestas direcionadas $u \to v$ de peso $w(u,v)$. Além das listas de saída usadas por BFS, DFS e Dijkstra, mantemos em \cod{backward\_} uma segunda estrutura CSR com as arestas de \emph{entrada} de cada vértice. Como o Bellman-Ford calcula distâncias até um destino fixo $t$, essa organização permite que o algoritmo percorra contiguamente apenas os predecessores $p \to v$ em \cod{backward\_[v]} sempre que $\dist[v]$ diminui, preservando espaço linear $O(V+E)$ e leitura sequencial.
+
+\subsection{Bellman-Ford: ativos, detecção linear de ciclos e precisão IEEE-754}
+
+Para um destino fixo $t$, o algoritmo mantém o vetor de distâncias $\dist$ (com $\dist[t]=0$) e os sucessores $\nxt$ da árvore enraizada em $t$. Incorporamos as duas otimizações de aula: uma \emph{lista de ativos} (\cod{active[]} e \cod{upcoming[]}, sem duplicatas via \emph{bitmask}) restringe cada rodada a relaxar apenas \cod{backward\_[v]} dos vértices cuja distância diminuiu na rodada anterior, e a \emph{parada antecipada} encerra a busca assim que \cod{active[]} fica vazia.
+
+\textbf{Detecção de ciclos negativos em $O(V)$ por rodada.} Como toda atualização exige melhora estrita ($\dist[p] > \dist[v] + w(p,v)$) e $\dist$ só diminui, qualquer ciclo formado nos ponteiros $\nxt$ tem soma estritamente negativa, pois as distâncias se cancelam ao longo do ciclo. Em vez de aguardar a $V$-ésima rodada ($O(VE)$), a rotina \cod{has\_cycle} percorre $\nxt$ ao fim de cada rodada a partir dos vértices modificados e marca os nós visitados com um contador crescente (\cod{stamps}), o que evita zerar o vetor e limita o custo a no máximo uma visita por vértice em cada rodada.
+
+\textbf{Margem numérica IEEE-754 e reuso de memória.} Em ponto flutuante (\cod{double}), erros de arredondamento de $1\,\text{ulp}$ em ciclos de soma exata zero podem gerar melhorias espúrias e fechar laços falsos em $\nxt$. Exigimos, por isso, que toda relaxação supere a margem $\text{tol} = 8\,\varepsilon\,V\,\max|w|$ ($\varepsilon = 2^{-52}$), da ordem de $10^{-7}$ mesmo para $V=10^7$ — bem abaixo das duas casas decimais dos pesos. No cálculo entre todos os pares (\cod{all\_pairs\_bellman\_ford}), cada thread aloca um único \cod{BellmanFordWorkspace} (\cod{active}, \cod{upcoming}, \cod{bitmask} e \cod{stamps}) e o reutiliza em todos os destinos que assume, evitando alocações dinâmicas e disputa pelo alocador; um sinalizador atômico (\cod{negative}) avisa as demais threads para encerrar imediatamente ao primeiro ciclo negativo encontrado.
+
+\subsection{Floyd-Warshall em blocos, vetorização NEON e reparo de ciclos nulos}
+
+O Floyd-Warshall atualiza diretamente duas matrizes contíguas $V\times V$ — distâncias em \cod{double} ($8V^2$ bytes) e pais em \cod{uint32\_t} ($4V^2$ bytes), somando $12V^2$ bytes — sem alocar cópias auxiliares. Três decisões em \cod{blocked\_floyd\_warshall} aproximam a implementação do limite da CPU:
+
+\begin{itemize}
+\item \textbf{Blocagem na cache L1 e ordem de laços:} agrupamos os passos $k$ em blocos de $\dado{fw.bloco}\times\dado{fw.bloco}$ ($48\,\text{KiB}$ por bloco, de modo que os dois blocos lidos na Fase~3 cabem na L1) e os processamos em \dado{fw.nbar} fases sincronizadas por \cod{std::barrier}: bloco diagonal $(k_b,k_b)$, cruz $(k_b,\cdot)$ e $(\cdot,k_b)$, e blocos restantes. Na Fase~3, invertemos os laços para $i$ externo e $k$ interno, mantendo a linha $i$ na L1 ao longo dos 64 passos de $k$, e agrupamos 4 blocos por tarefa para reaproveitar a coluna $k_b$ e distribuir melhor a carga entre os núcleos de desempenho e de eficiência.
+
+\item \textbf{Vetorização SIMD (NEON) sem desvios (\cod{relax\_segment}):} no Apple Silicon (ARM64), registradores NEON de 128 bits processam vários elementos por instrução dentro de cada núcleo. Como desvios condicionais ou leituras dentro de \cod{?:} impedem o compilador de vetorizar, \cod{relax\_segment} carrega todas as entradas das linhas corrente e pivô antes da comparação e atualiza distância e pai por seleção pura (\cod{better ? cand : cur}), gerando código sem desvios que o compilador auto-vetoriza em NEON sob \cod{-O3}, sem instruções SIMD escritas à mão.
+
+\item \textbf{Parada antecipada e \cod{repair\_zero\_cycles}:} após a Fase~1 e após cada bloco diagonal da Fase~3, a rotina verifica a diagonal ($d[i][i] < -\text{tol}$) e encerra todas as threads na próxima barreira caso encontre um ciclo negativo. Além disso, como a ordem em blocos difere do laço triplo clássico, grafos com \emph{ciclos de peso zero} podem desempatar caminhos equivalentes em sentidos opostos e gerar ciclos nos ponteiros \cod{parent}, mesmo com as distâncias corretas. Ao final, \cod{repair\_zero\_cycles} verifica cada linha em $O(V)$ e reconstrói, apenas nas linhas afetadas, uma árvore válida por busca em largura nas arestas ótimas ($d[i][a]+w=d[i][j]$) em $O(V+E)$.
+\end{itemize}
+
+\section{Metodologia e Caracterização dos Grafos}
+\label{sec:metodo}
+
+Executamos os experimentos em um \dado{cpu} (\dado{np} núcleos de desempenho, \dado{ne} de eficiência, cache L2 compartilhada de \dado{l2} e \dado{ram} de RAM), com o código compilado por \cod{\dado{compiler}} em \cod{-O3}. Os tempos correspondem à média e ao desvio-padrão de dez execuções, sem contar leitura nem escrita em disco. O Bellman-Ford até um destino usa uma thread, enquanto o Floyd-Warshall e o todos-pares utilizam todas as \dado{threads} threads; um limite preventivo de \dado{fw.limit} bloqueia o Floyd-Warshall a partir de \W{3} para evitar paginação em disco (\emph{swap}). Validamos a biblioteca com uma suíte automatizada de \dado{test.checks} de verificações e conferência independente em Python.
+
+\begin{table}[!t]
 \centering\small
-\caption{Grafos do estudo de caso. Grau médio $=2E/V$ (entrada mais saída); memória do
-Floyd-Warshall $=12V^2$ bytes.}
+\caption{Caracterização dos grafos do estudo de caso. Grau de saída: média (mín--máx). Saltos: maior distância não ponderada até o vértice 100. O espaço linear do CSR reverso (\dado{W_1.csrmem} em \W{1} até \dado{W_5.csrmem} em \W{5}) contrasta com a matriz $12V^2$ do Floyd-Warshall.}
 \label{tab:grafos}
-\begin{tabular}{@{}lrrrcr@{}}
+\setlength{\tabcolsep}{4.8pt}
+\begin{tabular}{@{}lrrrrrr@{}}
 \toprule
-grafo & $V$ & $E$ & grau médio & pesos negativos & memória do Floyd-Warshall \\
+grafo & $V$ & $E$ & grau de saída & pesos & saltos até 100 & matriz FW ($12V^2$) \\
 \midrule
 \tabelaGrafos
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Validação.} A biblioteca passa em \dado{tests} verificações automáticas
-(\cod{tests/graph\_tests.cpp}). Num grafo de 10 mil vértices, a matriz $5\times5$ obtida por
-Bellman-Ford, um por destino, é igual célula a célula à do Floyd-Warshall. Conferimos também com
-programas independentes em Python: o \W{1} e o \W{2} são fortemente conexos; o \W{1} tem ciclo
-negativo (um Bellman-Ford independente, com origem virtual, nunca convergiu); e as distâncias do
-\W{2}, calculadas com Dijkstra, \dado{w2.check} com as nossas (Bellman-Ford e matriz $5\times5$).
+Os cinco grafos (Tabela~\ref{tab:grafos}) são aleatórios, fortemente conexos e livres de laços ou arestas paralelas, com grau de saída uniforme entre 1 e cerca do dobro da média e numeração embaralhada ($|u-v| = \dado{gap}\,V \approx V/3$). Os pesos distribuem-se uniformemente em $[0,10]$ com duas casas decimais, salvo em \W{1} ($-5$ a $10$), no qual \dado{w1.recip} das arestas possuem a aresta inversa e formam \dado{w1.cic} ciclos negativos de duas arestas. Para execuções que excedem a memória RAM ou exigiriam dias, apresentamos estimativas (em \emph{itálico} nas tabelas e \emph{hachuradas} na Figura~\ref{fig:tempos}): projetamos o Floyd-Warshall a partir de \W{2} pela razão cúbica $(V/V_{\W{2}})^3$ em \dado{threads} threads e, para o Bellman-Ford entre todos os pares, multiplicamos por $V$ a média de $K$ destinos amostrados em uma thread ($K=\dado{W_3.ap.sample}$, \dado{W_4.ap.sample} e \dado{W_5.ap.sample} em \W{3}--\W{5}). Nas razões comparativas, consideramos sempre o mesmo número de threads.
 
-\section{Decisões de projeto e implementação}
+\section{Resultados e Análise}
 
-\subsection{Grafos direcionados e representação}
+\subsection{Ciclos negativos em \texorpdfstring{\W{1}}{W1} e validação das distâncias}
 
-A direção é um parâmetro de execução (\cod{direcionado} ou \cod{nao\_direcionado}), e não de
-compilação. A representação é CSR: um grafo direcionado guarda duas listas de adjacência, \cod{forward\_}
-(arestas que saem de cada vértice) e \cod{backward\_} (as que chegam), cada uma com $V+1$ deslocamentos e,
-por aresta, um vizinho de 4 bytes e um peso de 8. BFS, DFS e Dijkstra percorrem as que saem. Bellman-Ford
-calcula a distância de todos os vértices \emph{até} um destino, e por isso percorre as que chegam;
-sem direção, as duas listas coincidem e a segunda não é alocada.
-
-\subsection{Bellman-Ford até um destino}
-
-\cod{bellman\_ford(destino)} relaxa as arestas que chegam em cada vértice: se $p\to v$ melhora o caminho
-de $p$ ao destino, $\mathit{dist}[p]$ passa a $\mathit{dist}[v]+w(p,v)$ e $\mathit{next}[p]=v$. Os
-ponteiros $\mathit{next}$ formam uma árvore com raiz no destino, e o caminho de um vértice sai de seguir
-esses ponteiros. Há um só corpo, \cod{relax\_rounds}, com as duas otimizações vistas em aula
-(Listagem~\ref{lst:relax}): (1) uma rodada sem mudanças encerra o algoritmo; (2) só os vértices cuja
-distância mudou na rodada anterior (\emph{ativos}) têm suas arestas examinadas, sem repetições
-graças a um bitmap de marcas. As atualizações valem na própria rodada, então o número de rodadas
-depende da ordem das arestas.
-
-\lstinputlisting[float=!htb, caption={Núcleo de uma rodada de \cod{relax\_rounds}
-(\cod{include/cos/graph.hpp}, copiado sem alteração).}, label=lst:relax]{relax.txt}
-
-\textbf{Ciclo negativo.} Sem ciclo negativo, um caminho mínimo simples tem até $V-1$ arestas; se a rodada
-$V$ ainda muda alguma distância, há um ciclo negativo que alcança o destino. Esse critério, de custo
-$O(VE)$, é o último recurso. Três verificações antecipam a resposta: (a) \emph{ciclo entre os
-sucessores}: depois de cada rodada, uma busca pelos ponteiros $\mathit{next}$ a partir dos vértices
-alterados; como as distâncias só diminuem, todo ciclo entre eles tem peso negativo, e a busca custa $O(V)$
-por rodada, com selos que evitam repetir trechos; (b) \emph{melhora do destino}: o destino começa em $0$,
-e uma melhora estrita dele (no código, \cod{previous == target}) prova um passeio fechado negativo por ele;
-(c) o limite de $V$ rodadas. \cod{has\_negative\_cycle()} usa o mesmo núcleo com um vértice virtual ligado a todos (todos
-começam ativos com distância $0$) e por isso acha ciclos em qualquer ponto do grafo,
-enquanto \cod{bellman\_ford(destino)} só vê os que alcançam o destino.
-
-\subsection{Floyd-Warshall}
-\label{sec:fw}
-
-\textbf{Memória.} Usamos uma única matriz $V\times V$ de distâncias, atualizada no lugar, em vez de uma
-por valor de $k$. Ler valores já atualizados é seguro: na iteração $k$, a linha $k$ e a coluna $k$ não
-mudam, porque $d[i][k]+d[k][k]=d[i][k]$ quando $d[k][k]=0$. Com a matriz de pais, são $8V^2+4V^2=12V^2$
-bytes. A linha $i$ da matriz de pais é a árvore de caminhos mínimos com raiz em $i$: quando $k$ melhora
-$d[i][j]$, $\mathit{pai}(i,j)$ passa a ser $\mathit{pai}(k,j)$.
-
-\textbf{Blocos e threads.} As matrizes são divididas em blocos de $64\times64$ (48\,KiB), que ficam na cache
-durante 64 valores de $k$. Para cada bloco diagonal, três fases: (1) o bloco diagonal; (2) a linha e a
-coluna de blocos dele; (3) os demais blocos, que só leem a linha e a coluna prontas. As threads
-reivindicam tarefas por contadores atômicos, com uma barreira entre as fases; as tarefas de uma
-fase escrevem em blocos disjuntos, então o resultado não depende do número de threads. O laço
-interno (\cod{relax\_segment}) não tem desvios e é vetorizado pelo compilador. Uma diagonal
-que cai abaixo de $-$tolerância encerra todas as threads na barreira seguinte: é a saída antecipada
-para ciclo negativo.
-
-\textbf{Pais em ciclos de peso zero.} Com a ordem em blocos, empates entre caminhos de mesmo peso
-podem ser resolvidos em sentidos opostos, e os pais de uma linha formam um ciclo, em vez de uma
-árvore (as distâncias seguem corretas). Uma passagem final detecta esses ciclos e refaz a linha
-com uma busca em largura pelas arestas justas.
-
-\textbf{Tolerância numérica.} Os pesos são \cod{double}, e somas como $0{,}1+0{,}2-0{,}3$ não dão $0$
-exato: ciclos de soma decimal zero produziam ciclos negativos falsos. Uma relaxação só vale se
-melhora a distância em mais que $8\,\varepsilon\,V\max|w|$ (heurística: um caminho tem até $V-1$ somas,
-cada uma com erro de $\varepsilon/2$ vezes seu valor). Dijkstra, sem pesos negativos, não usa a margem.
-
-\subsection{Todos os pares por Bellman-Ford}
-
-\cod{all\_pairs\_bellman\_ford(threads)} executa Bellman-Ford uma vez por destino e escreve a linha
-de cada destino, contígua, direto na matriz de resultado ($12V^2$ bytes, como no Floyd-Warshall).
-Cada thread tem seu espaço de trabalho, reaproveitado entre execuções, e reivindica blocos de
-destinos por um contador atômico. Se uma execução acha ciclo negativo, um sinalizador atômico
-encerra as demais; a união dos $V$ destinos cobre todos os ciclos negativos. A saída é um tipo à
-parte, porque os sucessores (árvore com raiz no \emph{destino}) não são os pais do Floyd-Warshall
-(árvore com raiz na \emph{origem}).
-
-\section{Metodologia}
-
-Rodamos tudo num \dado{cpu} com \dado{ram} de memória e \dado{threads} núcleos, compilando em modo
-\emph{Release} com \dado{compiler}. Cada algoritmo foi executado 10 vezes por grafo; a tabela traz
-a média e o desvio-padrão. Medimos só a execução do algoritmo, sem a leitura do arquivo.
-O Bellman-Ford até um destino roda em uma thread; o Floyd-Warshall e o todos-pares completo, em
-\dado{threads} threads. O Floyd-Warshall só roda se $12V^2$ bytes couberem em \dado{limit}.
-Nos grafos em que o todos-pares por Bellman-Ford levaria horas ou dias, medimos $K$ destinos
-igualmente espaçados ($K=\dado{W_3.ap.sample}$ no \W{3}, \dado{W_4.ap.sample} no \W{4},
-\dado{W_5.ap.sample} no \W{5}), em uma thread, e multiplicamos a média por $V$; esses valores vêm em
-\emph{itálico}. Valores com \textsuperscript{$\dagger$} são do \W{1} (veja a Seção~\ref{sec:q3}).
-Medimos o \W{3}, o \W{4} e o \W{5} duas vezes: na primeira passada, as execuções de uma thread
-ficaram cerca de $2\times$ mais lentas, com pouca variação, o que é compatível com o macOS tê-las
-agendado nos núcleos de eficiência (os arquivos ficam em \cod{bench/results/parte3/primeira\_execucao}); o
-relatório usa a segunda passada, com a máquina ociosa.
-
-\section{Estudos de caso}
-
-\subsection{Distâncias por Bellman-Ford até o vértice 100}
+Em \W{1}, os \dado{w1.cic} ciclos negativos de duas arestas levam o Bellman-Ford até o vértice 100 a fechar o ciclo \dado{cyc.a}$\to$\dado{cyc.b}$\to$\dado{cyc.a} (soma \dado{cyc.sum}) já na rodada~\dado{w1.rounds}, em \dado{W_1.bf1} (Tabela~\ref{tab:tempos}). Pela forte conexidade, toda origem alcança um ciclo negativo e tem distância $d(s,100)=-\infty$. No cálculo entre todos os pares, o sinalizador compartilhado encerra o Bellman-Ford em \dado{W_1.ap}, e a verificação antecipada da diagonal interrompe o Floyd-Warshall em \dado{W_1.fw}. A Tabela~\ref{tab:dist} reúne as distâncias $\{10,20,30\}\to 100$ e as matrizes $5\times 5$ de \W{2} a \W{5}; em \W{2}, todos os algoritmos concordam até a segunda casa decimal com um Dijkstra independente escrito em Python.
 
 \begin{table}[!htb]
 \centering\small
-\caption{Distância dos vértices 10, 20 e 30 ao vértice 100 (Bellman-Ford). No \W{1}, há um ciclo
-negativo e a distância não está definida: vale $-\infty$.}
-\label{tab:dist}
-\begin{tabular}{@{}r*{5}{r}@{}}
-\toprule
-origem & \W{1} & \W{2} & \W{3} & \W{4} & \W{5} \\
-\midrule
-\tabelaDistancias
-\bottomrule
-\end{tabular}
-\end{table}
-
-No \W{1}, o Bellman-Ford detectou o ciclo negativo em \dado{W_1.bf.rounds} rodadas, e a consulta no
-grafo inteiro (\cod{has\_}\allowbreak\cod{negative\_cycle}) também o encontra. Como o \W{1} é fortemente conexo,
-o ciclo alcança o destino e é alcançado por 10, 20 e 30, então $d(s,100)=-\infty$ para toda
-origem $s$: nenhum número seria correto. Nesse grafo, a diferença entre as duas consultas não
-importa; ela existiria num grafo que não fosse fortemente conexo. Os caminhos mínimos dos demais
-grafos estão no relatório gerado por \cod{cos\_part3} (\url{bench/results/parte3}).
-
-\subsection{Distâncias por Floyd-Warshall entre 10, 20, 30, 40 e 50}
-
-No \W{1}, as 25 distâncias também valem $-\infty$ (o Floyd-Warshall detectou o ciclo pela
-diagonal negativa e parou). No \W{2}, a matriz vem do Floyd-Warshall (Figura~\ref{fig:matrizes}). Do \W{3}
-ao \W{5}, ele não cabe na memória (Tabela~\ref{tab:grafos}); as matrizes desses grafos vêm do
-Bellman-Ford, um por destino, e não do Floyd-Warshall.
-
-\begin{figure}[!htb]
-\centering\small\setlength{\tabcolsep}{4.5pt}
-\begin{minipage}[t]{0.48\linewidth}\centering
-\matriz{W_2}\\[1pt]\W{2}, \dado{W_2.matsrc}
-\end{minipage}\hfill
-\begin{minipage}[t]{0.48\linewidth}\centering
-\matriz{W_3}\\[1pt]\W{3}, \dado{W_3.matsrc}
-\end{minipage}\\[5pt]
-\begin{minipage}[t]{0.48\linewidth}\centering
-\matriz{W_4}\\[1pt]\W{4}, \dado{W_4.matsrc}
-\end{minipage}\hfill
-\begin{minipage}[t]{0.48\linewidth}\centering
-\matriz{W_5}\\[1pt]\W{5}, \dado{W_5.matsrc}
-\end{minipage}
-\caption{Distância da origem (linha) ao destino (coluna) entre os vértices 10, 20, 30, 40 e 50.
-Os grafos são direcionados e a matriz não é simétrica.}
-\label{fig:matrizes}
-\end{figure}
-
-\subsection{Tempo médio de cada algoritmo}
-\label{sec:q3}
-
-\begin{table}[!htb]
-\centering\small
-\caption{Tempo médio $\pm$ desvio-padrão de 10 execuções, sem leitura do arquivo. Bellman-Ford até o
-vértice 100: uma thread; rodadas executadas. Floyd-Warshall e todos-pares por Bellman-Ford (BF):
-\dado{threads} threads, exceto os valores em itálico, que são estimados com $K$ destinos em uma
-thread. ``memória'': não cabe em \dado{limit}. $^\dagger$: o \W{1} tem ciclo negativo e o
-algoritmo para ao detectá-lo; o tempo é de detecção, não de uma execução completa.}
+\caption{Tempos médios $\pm$ desvio-padrão de dez execuções (segundos). O Bellman-Ford até 100 usa uma thread; o Floyd-Warshall e o Bellman-Ford entre todos os pares (medidos) usam \dado{threads} threads. Itálico: estimado (Seção~\ref{sec:metodo}). $^\dagger$Em \W{1}, tempo até acusar ciclo negativo.}
 \label{tab:tempos}
 \setlength{\tabcolsep}{6pt}
 \begin{tabular}{@{}lrrrr@{}}
 \toprule
-grafo & rodadas & BF até o vértice 100 & Floyd-Warshall & BF todos-pares \\
+grafo & rodadas até 100 & Bellman-Ford $\to$ 100 & Floyd-Warshall & Bellman-Ford, todos os pares \\
 \midrule
 \tabelaTempos
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{\W{1}.} Os três tempos são de detecção do ciclo negativo: o Bellman-Ford para depois de
-\dado{W_1.bf.rounds} rodadas, em \dado{W_1.bf}, e o Floyd-Warshall, ao achar uma diagonal
-negativa, em \dado{W_1.fw}. O todos-pares para na primeira
-busca por destino que acha o ciclo (\dado{W_1.ap}). Não são comparáveis aos tempos dos outros grafos, nem
-entre si, pois cada algoritmo interrompe em um ponto diferente.
+\begin{table}[!htb]
+\centering\small
+\caption{Distâncias validadas. (a)~Origens $\{10,20,30\}$ até o vértice 100 por Bellman-Ford. (b)~Matrizes $5\times 5$ entre $\{10,20,30,40,50\}$, da linha à coluna: \W{2} por Floyd-Warshall (idêntica ao Bellman-Ford) e \W{3}--\W{5} por Bellman-Ford.}
+\label{tab:dist}
+\setlength{\tabcolsep}{2.8pt}
+\begin{minipage}[t]{0.34\linewidth}\centering
+{\small (a)}\\[3pt]
+\begin{tabular}[t]{@{}r*{5}{r}@{}}
+\toprule
+origem & \W{1} & \W{2} & \W{3} & \W{4} & \W{5} \\
+\midrule
+\tabelaDistancias
+\bottomrule
+\end{tabular}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.64\linewidth}\centering
+{\small (b)}\\[3pt]\scriptsize\renewcommand{\arraystretch}{1.04}
+\begin{minipage}[t]{0.48\linewidth}\centering \textbf{\W{2}}\\[1pt]\matriz{W_2}\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}\centering \textbf{\W{3}}\\[1pt]\matriz{W_3}\end{minipage}\\[4pt]
+\begin{minipage}[t]{0.48\linewidth}\centering \textbf{\W{4}}\\[1pt]\matriz{W_4}\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}\centering \textbf{\W{5}}\\[1pt]\matriz{W_5}\end{minipage}
+\end{minipage}
+\end{table}
 
-\textbf{Bellman-Ford até um destino.} Num grafo sem ciclo negativo, o custo é o das arestas que chegam
-nos vértices ativos, no máximo $R\cdot E$ para $R$ rodadas. No \W{3}, \dado{W_3.bf.rounds} rodadas sobre
-\dado{W_3.E} arestas levam \dado{W_3.bf}, no máximo \dado{W_3.bf.nsedge}\,ns por aresta examinada (limite
-superior: nem toda aresta é examinada em toda rodada). O \W{2} leva \dado{W_2.bf} em \dado{W_2.bf.rounds}
-rodadas; o \W{4}, \dado{W_4.bf} em \dado{W_4.bf.rounds}; o \W{5}, \dado{W_5.bf} em \dado{W_5.bf.rounds}.
+\subsection{Desempenho em todos os pares e efeito da hierarquia de cache}
 
-\textbf{Floyd-Warshall.} O \W{2} levou \dado{W_2.fw} por execução em \dado{threads} threads, ou
-\dado{W_2.fw.ps}\,ps por relaxação de $V^3$. Do \W{3} em diante, ele não roda; a Seção~\ref{sec:q4} estima o tempo.
+Ao combinar blocos na cache L1, inversão de laços na Fase~3, vetorização NEON sem desvios e \dado{threads} threads, o Floyd-Warshall atinge um ritmo muito alto: em \W{2}, executa $V^3 = {}$\dado{V3} relaxações em \dado{W_2.fw} — mais de \textbf{\dado{fw.gops} bilhões de relaxações por segundo} (\dado{fw.ps}\,ps por relaxação no tempo total, ou \dado{ns.fw11}\,ns somando o tempo dos \dado{threads} núcleos).
 
-\subsection{Todos os pares: Bellman-Ford contra Floyd-Warshall}
-\label{sec:q4}
+Mesmo diante de um Floyd-Warshall próximo do limite da CPU, o Bellman-Ford paralelo resolve os 25.000 destinos em \dado{W_2.ap}, superando-o por \textbf{\dado{W_2.ratio}} (Tabela~\ref{tab:tempos} e Figura~\ref{fig:tempos}) — e mesmo em uma única thread (\dado{W_2.ap1t}) já supera o Floyd-Warshall paralelo. Comparando o mesmo número de threads de \W{3} a \W{5}, a vantagem projetada sobe para \dado{W_3.ratio}, \dado{W_4.ratio} e \dado{W_5.ratio}.
+
+\begin{figure}[!htb]
+\centering
+\begin{tikzpicture}
+\begin{axis}[xbar, bar width=4.8pt, xmode=log, log origin=infty, y dir=reverse, clip=false,
+  width=\linewidth-1.0cm, height=3.55cm, xmin=10, xmax=2e12, ymin=0.45, ymax=4.55,
+  xtick={10,60,3600,86400,31536000,3.15e10},
+  xticklabels={10\,s,1\,min,1\,h,1\,dia,1\,ano,1.000\,anos},
+  ytick={1,2,3,4}, yticklabels={\W{2},\W{3},\W{4},\W{5}},
+  yticklabel style={font=\small\bfseries},
+  tick label style={font=\scriptsize}, y tick style={draw=none},
+  axis line style={hair}, xmajorgrids, grid style={gray!16},
+  nodes near coords, point meta=explicit symbolic,
+  nodes near coords style={font=\scriptsize, anchor=west, inner sep=2.2pt}]
+\addplot[fill=bfc, draw=none, bar shift=0pt] coordinates {\serap};
+\addplot[pattern=north east lines, pattern color=bfc, draw=bfc, bar shift=0pt] coordinates {\serape};
+\addplot[fill=fwc, draw=none, bar shift=0pt] coordinates {\serfw};
+\addplot[pattern=north east lines, pattern color=fwc, draw=fwc, bar shift=0pt] coordinates {\serfwe};
+\begin{scope}[font=\scriptsize, anchor=west]
+\node[fill=bfc, minimum width=0.26cm, minimum height=0.15cm, inner sep=0, anchor=west] at (rel axis cs:0,1.12) {};
+\node[text=bfc, font=\scriptsize\bfseries] at ([xshift=0.31cm]rel axis cs:0,1.12) {Bellman-Ford (todos os pares)};
+\node[fill=fwc, minimum width=0.26cm, minimum height=0.15cm, inner sep=0, anchor=west] at (rel axis cs:0.37,1.12) {};
+\node[text=fwc, font=\scriptsize\bfseries] at ([xshift=0.31cm]rel axis cs:0.37,1.12) {Floyd-Warshall};
+\node[font=\scriptsize, anchor=east, slate] at (rel axis cs:1,1.12) {cheio = medido $\cdot$ hachurado = estimado};
+\end{scope}
+\end{axis}
+\end{tikzpicture}
+\caption{Tempo total para todos os pares em escala logarítmica (\W{2}--\W{5}). Nas estimativas (\W{3}--\W{5}), o Bellman-Ford usa amostra em uma thread e o Floyd-Warshall projeta $V^3$ em 11 threads.}
+\label{fig:tempos}
+\end{figure}
+
+Essa vantagem decorre do balanço entre volume de trabalho e custo por operação. Em \W{2}, o pior caso $(V-1)E \approx{}$\dado{noearly} relaxações por destino seria \dado{f.pred} vezes maior que o $V^2$ do Floyd-Warshall. As árvores de caminhos mínimos, porém, têm baixa profundidade (de \dado{prof.min} a \dado{prof.max} arestas entre \W{2} e \W{5}; em \W{2}, todo vértice alcança o 100 em $\le\dado{W_2.saltos}$ saltos, mas os caminhos mínimos encadeiam arestas leves até \dado{prof.w2} passos), de modo que a parada antecipada encerra o laço em média em \dado{W_2.rmed1} rodadas. Somada à lista de ativos — cuja fronteira atinge \dado{w2.pico.pct} dos vértices na rodada~\dado{w2.pico.rod} e examina cada aresta apenas \dado{W_2.pass} vezes —, essa otimização reduz o Bellman-Ford a \dado{W_2.exdest} de relaxações por destino: \textbf{211 vezes menos operações} que o Floyd-Warshall (fator que chega a $859.000\times$ em \W{5}). Em contrapartida, o acesso aleatório ao vetor $\dist$ no CSR custa \dado{ns.bf11}\,ns por relaxação, \textbf{\dado{f.custo} vezes mais} que o acesso contíguo vetorizado em NEON (\dado{ns.fw11}\,ns; razão confirmada em uma thread por \dado{ns.bf1} contra \dado{ns.fw1}\,ns no grafo de \dado{fw5k.V} vértices, $\approx\dado{ns.mem}\times$). A razão entre o corte de operações ($211\times$) e o custo maior por acesso ($\dado{f.custo}\times$) explica diretamente o ganho medido de \dado{W_2.ratio}.
+
+Ao passar o Bellman-Ford de \W{2} para \W{5} (uma thread, destino 100), os vetores de trabalho ($\dist$ e $\nxt$, $12V$ bytes) crescem de $0{,}3\,\text{MB}$ para $120\,\text{MB}$ e ultrapassam os \dado{l2} da cache L2 compartilhada (Figura~\ref{fig:cache}). Como consequência, o custo por aresta relaxada sobe \textbf{\dado{nsa.ratio}} (de \dado{nsa.W_2} para \dado{nsa.W_5}\,ns) e o percurso de ponteiros em \cod{has\_cycle}, que representa apenas \dado{busca.w24.min}--\dado{busca.w24.max} em \W{2}--\W{4}, passa a responder por \textbf{\dado{busca.w5.pct}} do tempo total em \W{5} (\dado{busca.w5.s} de \dado{busca.w5.tot}).
+
+\begin{figure}[!htb]
+\centering
+\begin{minipage}[t]{0.48\linewidth}\centering
+\begin{tikzpicture}
+\begin{axis}[ybar, bar width=18pt, width=\linewidth, height=4.0cm,
+  ymin=0, ymax=47, xmin=0.45, xmax=4.55,
+  xtick={1,2,3,4}, xticklabels={\W{2},\W{3},\W{4},\W{5}},
+  xtick pos=bottom, ytick pos=left,
+  ylabel={ns / aresta}, ylabel style={font=\scriptsize, yshift=-3pt},
+  tick label style={font=\scriptsize}, axis line style={hair},
+  ymajorgrids, grid style={gray!16},
+  nodes near coords,
+  nodes near coords style={font=\scriptsize\bfseries, ink, yshift=1.5pt, /pgf/number format/use comma, /pgf/number format/fixed, /pgf/number format/precision=2},
+  title={(a) Custo por aresta relaxada (sem \cod{has\_cycle})},
+  title style={font=\scriptsize\bfseries, navy, yshift=-2pt}]
+\addplot[fill=navy!14, draw=navy, thick] coordinates {\serCacheNs};
+\draw[ochre, dashed, thick] (axis cs:3.5,0) -- (axis cs:3.5,45);
+\node[font=\tiny\bfseries, ochre, anchor=east] at (axis cs:3.42,41.5) {L2 = \dado{l2}};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}\centering
+\begin{tikzpicture}
+\begin{axis}[ybar, bar width=18pt, width=\linewidth, height=4.0cm,
+  ymin=0, ymax=47, xmin=0.45, xmax=4.55,
+  xtick={1,2,3,4}, xticklabels={\W{2},\W{3},\W{4},\W{5}},
+  xtick pos=bottom, ytick pos=left,
+  ylabel={\% do tempo}, ylabel style={font=\scriptsize, yshift=-3pt},
+  tick label style={font=\scriptsize}, axis line style={hair},
+  ymajorgrids, grid style={gray!16},
+  nodes near coords,
+  nodes near coords style={font=\scriptsize\bfseries, ink, yshift=1.5pt, /pgf/number format/use comma, /pgf/number format/fixed, /pgf/number format/precision=1},
+  title={(b) Fração do tempo em \cod{has\_cycle}},
+  title style={font=\scriptsize\bfseries, ruim, yshift=-2pt}]
+\addplot[fill=ruim!14, draw=ruim, thick] coordinates {\serCacheBusca};
+\draw[ochre, dashed, thick] (axis cs:3.5,0) -- (axis cs:3.5,45);
+\node[font=\tiny\bfseries, ochre, anchor=east] at (axis cs:3.42,41.5) {L2 = \dado{l2}};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+\caption{Efeito do estouro da cache L2 (\dado{l2}) no Bellman-Ford até o vértice 100 (uma thread). Os vetores de trabalho ($12V$ bytes) crescem de $0{,}3\,\text{MB}$ (\W{2}) e $12\,\text{MB}$ (\W{4}) para $120\,\text{MB}$ (\W{5}).}
+\label{fig:cache}
+\end{figure}
+
+\subsection{Extensão: algoritmo de Johnson com fila radix}
+\label{sec:johnson}
+
+Como o Bellman-Ford otimizado ainda examina cada aresta \dado{jo.pas} vezes em \W{2}, implementamos o \textbf{algoritmo de Johnson} para reduzir as relaxações a $1{,}0\times E$ por origem via Dijkstra. Reaproveitamos nosso Bellman-Ford reverso até um vértice virtual $q$, ligado a todos com peso zero, para calcular os potenciais $h(u)$ e interromper a execução sem alocar matrizes caso haja ciclos negativos. Cada aresta recebe o peso reponderado $w'(u,v) = \max(0,\, w(u,v) + h(v) - h(u))$, expressão em que o truncamento em zero absorve eventuais resíduos de até $-\text{tol}$ nos potenciais; ao longo de qualquer caminho $P=(s\to\dots\to t)$, os potenciais intermediários se cancelam telescopicamente, deslocando todos os caminhos por $h(t)-h(s)$ e preservando o ótimo. Quando não há arestas negativas na entrada (caso de \W{2}--\W{5}), temos $h \equiv 0$ e dispensamos o Bellman-Ford inicial.
+
+Para reduzir o custo da fila de prioridade do Dijkstra diante de um Bellman-Ford já muito enxuto, implementamos — além do heap binário — uma fila radix monótona de 65 baldes (\cod{RadixFrontier}). Ao converter cada \cod{double} não negativo para inteiro de 64 bits via \cod{std::bit\_cast<uint64\_t>} (normalizando $-0{,}0$ para $+0{,}0$), preservamos a ordem numérica e obtemos o balde em uma única instrução por \cod{std::bit\_width(key \textasciicircum{} last)}, com inserção $O(1)$ e movimentação dos elementos apenas quando o balde~0 esvazia ($\le 64$ passos no pior caso).
 
 \begin{table}[!htb]
 \centering\small
-\caption{Floyd-Warshall (FW) contra Bellman-Ford de todos os pares (BF). Operações: FW faz $V^3$
-relaxações; BF faz, no máximo, $V\cdot R\cdot E$ exames de aresta, com $R$ as rodadas até o vértice
-100 (limite superior). Em itálico, estimativas: o FW do \W{3} em diante é a média do \W{2} vezes
-$(V/V_{\W{2}})^3$; o BF vem de $K$ destinos em uma thread. A razão FW/BF divide o tempo do BF pelo
-número de threads do FW (escalonamento linear, nas estimativas); acima de 1, o BF é mais rápido.}
-\label{tab:q4}
-\setlength{\tabcolsep}{5pt}
-\begin{tabular}{@{}lrrrrr@{}}
+\caption{Comparativo completo de todos os pares em \W{2} (\dado{threads} threads). $R$: rodadas por destino; $\log C \le 64$: bits da chave. $^\dagger$Medido na suíte principal (Tabela~\ref{tab:tempos}); os demais algoritmos foram avaliados lado a lado na mesma sessão dedicada (\dado{jo.nexec} execuções).}
+\label{tab:johnson}
+\setlength{\tabcolsep}{5.5pt}
+\begin{tabular}{@{}llrrr@{}}
 \toprule
-grafo & operações do FW & operações do BF (limite) & tempo do FW & tempo do BF & FW/BF \\
+algoritmo & complexidade & relaxações totais & tempo medido & ns por relaxação \\
 \midrule
-\tabelaQuatro
+\tabelaComplex
 \bottomrule
 \end{tabular}
 \end{table}
 
-\textbf{Operações.} O Floyd-Warshall faz $V^3$ relaxações, qualquer que seja a densidade:
-\dado{W_2.ops.fw} no \W{2}. O Bellman-Ford faz $V$ execuções, e cada uma examina só as arestas que
-chegam nos vértices ativos, no máximo $R\cdot E$; com as $R=\dado{W_2.bf.rounds}$ rodadas do destino 100, são
-no máximo \dado{W_2.ops.bf} exames, \dado{cmp.ops} menos. Esse limite é folgado (um vértice só fica ativo
-quando sua distância muda), então a diferença real de operações é maior que essa. O custo por operação
-compensa só em parte: a relaxação do Floyd-Warshall é sequencial e vetorizada (\dado{cmp.fw.ps}\,ps de
-tempo de parede, com \dado{threads} threads), e o Bellman-Ford gasta \dado{cmp.bf.ns}\,ns por aresta do
-limite, \dado{cmp.cost} por operação. A diferença de operações supera a de custo, e o Bellman-Ford foi
-\dado{W_2.q4.ratio} mais rápido no \W{2}: \dado{W_2.ap} contra \dado{W_2.fw}. Com a estimativa por $V^3$, a vantagem
-cresce com $V$ (\dado{W_3.q4.ratio} no \W{3}, \dado{W_4.q4.ratio} no \W{4}, \dado{W_5.q4.ratio} no \W{5}),
-porque $V^3$ cresce mais depressa que $V\cdot R\cdot E$; a estimativa ignora efeitos de cache.
+Na mesma sessão dedicada em \W{2} (Tabela~\ref{tab:johnson}), o heap binário encarece cada relaxação em $\dado{jns.hb}\times$ em relação ao Bellman-Ford sem fila, o que limita o ganho a \dado{jo.gheap}. A fila radix reduz esse custo adicional para $\dado{jns.rb}\times$, alcançando aceleração de \textbf{\dado{jo.gradix}} sobre o Bellman-Ford (\dado{jo.pas} $\div$ \dado{jns.rb} $\approx$ \dado{jo.gradix}) e de cerca de \dado{jo.fwratio} sobre o Floyd-Warshall.
 
-\textbf{Memória.} O Floyd-Warshall precisa da matriz inteira ($12V^2$ bytes): \dado{W_3.fwmem} no \W{3},
-\dado{W_4.fwmem} no \W{4} e \dado{W_5.fwmem} no \W{5}. Esse limite pesa mais que o tempo. A
-biblioteca também guarda a matriz de resultado no todos-pares por Bellman-Ford, mas o algoritmo
-só precisa de $O(V)$ por execução: se cada linha for consumida ao ser calculada, ele roda em
-qualquer um dos grafos, e a medição por amostragem de destinos é a de uma implementação assim.
-Com a estimativa por $V^3$, o Floyd-Warshall levaria \dado{W_3.fwest} no \W{3},
-\dado{W_4.fwest} no \W{4} e \dado{W_5.fwest} no \W{5}; o Bellman-Ford, em uma thread,
-\dado{W_3.ap} no \W{3}, \dado{W_4.ap} no \W{4} e \dado{W_5.ap} no \W{5}.
-No \W{1} não há comparação: os dois param ao detectar o ciclo negativo.
+\subsection{Paralelismo e escalabilidade em núcleos heterogêneos}
+\label{sec:paralelo}
+
+Particionar os vértices entre threads não escala em grafos aleatórios: dividir \W{2} em 11 faixas corta \dado{corte} das arestas, como esperado ao acaso (\dado{corte.acaso}). No Bellman-Ford e no Johnson, mantemos o CSR somente para leitura e distribuímos lotes dinâmicos de 16 destinos (ou origens) por um contador atômico (\cod{fetch\_add(16)}). Cada thread grava apenas sua linha na matriz de saída, sem travas nem barreiras por rodada, o que distribui automaticamente a carga entre núcleos rápidos e lentos. No Floyd-Warshall, a blocagem reduz o sincronismo de \dado{W_2.V} para apenas \dado{fw.bar.W_2} barreiras em \W{2}.
+
+\begin{table}[!htb]
+\centering\small
+\caption{Escalabilidade (ganho sobre uma thread). (a)~Grafo aleatório de \dado{fw5k.V} vértices, que cabe integralmente em cache. (b)~Bellman-Ford em $K$ destinos nos grafos do estudo (melhor de \dado{esc.nruns} execuções; vetores de trabalho de $12V$ bytes por thread).}
+\label{tab:threads}
+\setlength{\tabcolsep}{4.5pt}
+\begin{minipage}[t]{0.45\linewidth}\centering
+\begin{tabular}[t]{@{}lrrrr@{}}
+\toprule
+(a) algoritmo & \threadsCab \\
+\midrule
+\tabelaThreads
+\bottomrule
+\end{tabular}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.53\linewidth}\centering
+\begin{tabular}[t]{@{}lrrrrrr@{}}
+\toprule
+(b) grafo & memória/thr & $K$ & \threadsCab \\
+\midrule
+\tabelaThreadsW
+\bottomrule
+\end{tabular}
+\end{minipage}
+\end{table}
+
+Em medições isoladas com uma thread (\cod{taskpolicy -c background}), cada um dos \dado{ne} núcleos de eficiência do \dado{cpu} rende $r = \dado{nuc.r}$ de um dos \dado{np} núcleos de desempenho, o que impõe um limite de ganho de $\dado{np} + \dado{ne}\,r \approx \dado{nuc.cap}\times$ em \dado{threads} threads. Quando o grafo cabe em cache (Tabela~\ref{tab:threads}a), os três algoritmos escalam juntos até $5{,}9$--$6{,}4\times$. Nos grafos reais (Tabela~\ref{tab:threads}b), \W{2} ($0{,}3\,\text{MB}$/thread) atinge \dado{esc.W_2.11}. Em \W{4} ($12\,\text{MB}$/thread), os dados ativos por thread ultrapassam a cache L2 de \dado{l2} já com duas threads (\dado{l2.np.W_4} em \dado{np} threads), reduzindo o ganho para \dado{esc.W_4.11}. Por fim, em \W{5} ($120\,\text{MB}$/thread), a largura de banda da DRAM domina a execução e limita a escalabilidade a \dado{esc.W_5.11}.
 
 \section{Conclusão}
 
-No \W{1}, o ciclo negativo torna todas as distâncias indefinidas, e os dois algoritmos o detectam
-rapidamente. Nos grafos sem pesos negativos, o Floyd-Warshall só foi possível até o \W{2}; do \W{3}
-em diante, sua matriz de $12V^2$ bytes não cabe na memória. No \W{2}, o \dado{W_2.q4.winner} foi
-\dado{W_2.q4.ratio} mais rápido que o \dado{W_2.q4.loser} para todos os pares: o Floyd-Warshall faz
-$V^3$ relaxações e o Bellman-Ford, no máximo \dado{cmp.ops} menos exames de aresta, e o menor custo
-por operação do primeiro não cobre essa diferença. A vantagem estimada cresce com $V$.
+Em grafos esparsos de grande porte, a combinação entre esparsidade algorítmica e hierarquia de memória determina o desempenho real muito além da cota assintótica de pior caso. Mesmo quando o Floyd-Warshall trabalha próximo do limite do hardware — com blocos na L1, vetorização NEON sem desvios e 11 núcleos —, o volume cúbico fixo e o espaço de $12V^2$ bytes restringem sua vantagem a grafos densos e pequenos. Para grafos esparsos que admitem pesos negativos, o Bellman-Ford em CSR reverso com lista de ativos, detecção linear de ciclos e tolerância numérica escala com folga até dez milhões de vértices. Já para todos os pares sem ciclos negativos, o algoritmo de Johnson com fila radix consegue um ganho adicional sem pagar o custo logarítmico do heap binário, e a distribuição dinâmica por destinos encontra seu limite físico apenas na saturação da cache L2 e da banda de memória.
 
 \end{document}

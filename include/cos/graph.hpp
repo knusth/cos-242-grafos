@@ -13,8 +13,8 @@
 #include <memory>
 #include <numeric>
 #include <span>
-#include <string>
 #include <stdexcept>
+#include <string>
 #include <thread>
 #include <tuple>
 #include <type_traits>
@@ -62,10 +62,7 @@ struct AllPairsPaths {
     // vértices inalcançáveis.
     Vertex parent(Vertex from, Vertex to) const { return parents[cell(from, to)]; }
 
-    std::size_t cell(Vertex from, Vertex to) const
-    {
-        return std::size_t{from} * vertex_count + to;
-    }
+    std::size_t cell(Vertex from, Vertex to) const { return std::size_t{from} * vertex_count + to; }
 };
 
 // Resultado de Bellman-Ford para todos os destinos: uma linha por destino.
@@ -89,10 +86,7 @@ struct AllPairsToTargets {
     Vertex next(Vertex from, Vertex to) const { return nexts[cell(from, to)]; }
 
     // Linha do destino `to`, contígua: índice da origem dentro da linha.
-    std::size_t cell(Vertex from, Vertex to) const
-    {
-        return std::size_t{to} * vertex_count + from;
-    }
+    std::size_t cell(Vertex from, Vertex to) const { return std::size_t{to} * vertex_count + from; }
 };
 
 // Memória de trabalho de uma execução de Bellman-Ford (listas de ativos, marcas e selos).
@@ -345,8 +339,7 @@ class Graph {
     bool directed;
 
     // Tempo esperado: CSR O(V + E); matriz O(V² + E).
-    Graph(Vertex vertices, std::span<const Edge> edges,
-          Direction direction = Direction::undirected)
+    Graph(Vertex vertices, std::span<const Edge> edges, Direction direction = Direction::undirected)
         : vertex_count{vertices}, edge_count{edges.size()},
           directed{direction == Direction::directed}
     {
@@ -644,8 +637,8 @@ class Graph {
     {
         require_weights();
 
-        auto result = PathsToTarget{std::vector<Weight>(vertex_count),
-                                    std::vector<Vertex>(vertex_count)};
+        auto result =
+            PathsToTarget{std::vector<Weight>(vertex_count), std::vector<Vertex>(vertex_count)};
         auto work = BellmanFordWorkspace{vertex_count};
         const auto summary = relax_rounds(target, result.distance, result.next, work);
         result.rounds = summary.rounds;
@@ -994,8 +987,8 @@ class Graph {
             return result;
         }
 
-        threads = std::max(1u, std::min<unsigned>(threads, unsigned(std::min<std::size_t>(
-                                                              count, 1024))));
+        threads =
+            std::max(1u, std::min<unsigned>(threads, unsigned(std::min<std::size_t>(count, 1024))));
         // Blocos pequenos balanceiam destinos de custo desigual sem disputar o contador.
         const auto chunk = std::clamp<std::size_t>(count / (std::size_t{threads} * 16), 1, 16);
         auto ticket = std::atomic<std::size_t>{0};
@@ -1074,8 +1067,8 @@ class Graph {
         result.distances = std::make_unique_for_overwrite<Weight[]>(count * count);
         result.parents = std::make_unique_for_overwrite<Vertex[]>(count * count);
 
-        threads = std::max(1u, std::min<unsigned>(threads, unsigned(std::min<std::size_t>(
-                                                              count, 1024))));
+        threads =
+            std::max(1u, std::min<unsigned>(threads, unsigned(std::min<std::size_t>(count, 1024))));
         const auto chunk = std::clamp<std::size_t>(count / (std::size_t{threads} * 16), 1, 16);
         auto ticket = std::atomic<std::size_t>{0};
 

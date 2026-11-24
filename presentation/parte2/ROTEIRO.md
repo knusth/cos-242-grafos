@@ -2,7 +2,7 @@
 
 Tempo total: 7min30 (limite de 8). O slide mostra a evidência (código, tabela ou figura); o que antes estava escrito
 nele agora está aqui, para a fala. Para cada slide: a mensagem (o título diz só o assunto), o que dizer, os números de apoio e a frase que liga ao
-próximo. O porquê de cada slide está em `EXPLICACAO.md`.
+próximo.
 
 | # | Slide | Tempo | Acumulado |
 |---|---|---|---|

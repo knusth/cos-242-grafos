@@ -31,6 +31,5 @@ São 12 slides (cerca de 7min30), sem apêndice.
 | `pesos_w.py` | peso de cada aresta dos caminhos e peso médio de um grafo W |
 | `../comum/estilo.css` | layout de seminário no estilo Metropolis (slide de 1280 × 720 px) |
 | `../comum/fonts/` | Fira Sans (texto) e Inconsolata (código) |
-| `EXPLICACAO.md` | o que cada slide mostra, por quê, ligação com o projeto e com a posição na sequência |
 | `ROTEIRO.md` | fala por slide, ganchos para improviso, perguntas prováveis, tempo |
 | `index.html`, `apresentacao.pdf` | gerados |

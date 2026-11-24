@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 386" width="1040" height="386">
+<style>
+  text { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+  .mono { font-family: Menlo, monospace; }
+</style>
+<defs>
+  <marker id="arr-ink" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#475569"/></marker>
+  <marker id="arr-navy" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#1b365d"/></marker>
+  <marker id="arr-teal" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#0f6260"/></marker>
+  <marker id="arr-crim" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#9f1239"/></marker>
+  <marker id="arr-ochre" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#b45309"/></marker>
+  <marker id="arr-rule" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#64748b"/></marker>
+  <pattern id="hatch-teal" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#e6f2f1"/><line x1="0" y1="0" x2="0" y2="7" stroke="#0f6260" stroke-width="1.4" stroke-opacity="0.35"/></pattern>
+  <pattern id="hatch-navy" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#eaf0f7"/><line x1="0" y1="0" x2="0" y2="7" stroke="#1b365d" stroke-width="1.4" stroke-opacity="0.35"/></pattern>
+  <pattern id="hatch-gray" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#f8fafc"/><line x1="0" y1="0" x2="0" y2="6" stroke="#cbd5e1" stroke-width="1.4"/></pattern>
+</defs>
+<rect x="0.0" y="0.0" width="1040.0" height="386.0" fill="#ffffff" stroke="none" stroke-width="1.0"/>
+<rect x="0.0" y="0.0" width="480.0" height="386.0" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.0" rx="4"/>
+<rect x="0.0" y="0.0" width="480.0" height="4.0" fill="#1b365d" stroke="none" stroke-width="1.0"/>
+<rect x="502.0" y="0.0" width="538.0" height="386.0" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.0" rx="4"/>
+<rect x="502.0" y="0.0" width="538.0" height="4.0" fill="#b45309" stroke="none" stroke-width="1.0"/>
+<text x="18.0" y="28.0" font-size="13.2" fill="#1b365d" text-anchor="start" font-weight="700">A. Fila Radix (65 baldes · O(1) push)</text>
+<text x="18.0" y="47.0" font-size="10.6" fill="#475569" text-anchor="start" font-weight="400">bit_cast&lt;uint64_t&gt;(dist) preserva ordem; balde = bit_width(key ^ last)</text>
+<rect x="18.0" y="66.0" width="141.3" height="212.0" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.0" rx="4"/>
+<rect x="18.0" y="66.0" width="141.3" height="24.0" fill="#eaf0f7" stroke="none" stroke-width="1.0"/>
+<text x="26.0" y="82.0" font-size="10.4" fill="#1b365d" text-anchor="start" font-weight="700">1. Push O(1)</text>
+<text x="26.0" y="104.0" font-size="9.5" fill="#b45309" text-anchor="start" font-weight="700" class="mono">last=0101 (5)</text>
+<line x1="24.0" y1="140.0" x2="153.3" y2="140.0" stroke="#e2e8f0" stroke-width="0.8"/>
+<text x="26.0" y="131.0" font-size="9.6" fill="#64748b" text-anchor="start" font-weight="700">B0</text>
+<rect x="48.0" y="115.0" width="30.0" height="20.0" fill="#e6f2f1" stroke="#0f6260" stroke-width="1.0" rx="3"/>
+<text x="63.0" y="129.0" font-size="9.6" fill="#0f172a" text-anchor="middle" font-weight="700" class="mono">5</text>
+<line x1="24.0" y1="172.0" x2="153.3" y2="172.0" stroke="#e2e8f0" stroke-width="0.8"/>
+<text x="26.0" y="163.0" font-size="9.6" fill="#64748b" text-anchor="start" font-weight="700">B1</text>
+<line x1="24.0" y1="204.0" x2="153.3" y2="204.0" stroke="#e2e8f0" stroke-width="0.8"/>
+<text x="26.0" y="195.0" font-size="9.6" fill="#64748b" text-anchor="start" font-weight="700">B2</text>
+<rect x="48.0" y="179.0" width="30.0" height="20.0" fill="#fef3e2" stroke="#b45309" stroke-width="1.0" rx="3"/>
+<text x="63.0" y="193.0" font-size="9.6" fill="#0f172a" text-anchor="middle" font-weight="700" class="mono">6</text>
+<rect x="82.0" y="179.0" width="30.0" height="20.0" fill="#fef3e2" stroke="#b45309" stroke-width="1.0" rx="3"/>
+<text x="97.0" y="193.0" font-size="9.6" fill="#0f172a" text-anchor="middle" font-weight="700" class="mono">7</text>
+<line x1="24.0" y1="236.0" x2="153.3" y2="236.0" stroke="#e2e8f0" stroke-width="0.8"/>
+<text x="26.0" y="227.0" font-size="9.6" fill="#64748b" text-anchor="start" font-weight="700">B3</text>
+<line x1="24.0" y1="268.0" x2="153.3" y2="268.0" stroke="#e2e8f0" stroke-width="0.8"/>
+<text x="26.0" y="259.0" font-size="9.6" fill="#64748b" text-anchor="start" font-weight="700">B4</text>
+<rect x="48.0" y="243.0" width="30.0" height="20.0" fill="#fef3e2" stroke="#b45309" stroke-width="1.0" rx="3"/>
+<text x="63.0" y="257.0" font-size="9.6" fill="#0f172a" text-anchor="middle" font-weight="700" class="mono">12</text>
+<rect x="169.3" y="66.0" width="141.3" height="212.0" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.0" rx="4"/>
+<rect x="169.3" y="66.0" width="141.3" height="24.0" fill="#eaf0f7" stroke="none" stroke-width="1.0"/>
+<text x="177.3" y="82.0" font-size="10.4" fill="#1b365d" text-anchor="start" font-weight="700">2. Pop B₀</text>
+<text x="177.3" y="104.0" font-size="9.5" fill="#b45309" text-anchor="start" font-weight="700" class="mono">last=0101 (5)</text>
+<line x1="175.3" y1="140.0" x2="304.7" y2="140.0" stroke="#e2e8f0" stroke-width="0.8"/>
+<text x="177.3" y="131.0" font-size="9.6" fill="#64748b" text-anchor="start" font-weight="700">B0</text>
+<text x="303.7" y="129.0" font-size="9.4" fill="#9f1239" text-anchor="end" font-weight="700">sai 5</text>
+<line x1="175.3" y1="172.0" x2="304.7" y2="172.0" stroke="#e2e8f0" stroke-width="0.8"/>
+<text x="177.3" y="163.0" font-size="9.6" fill="#64748b" text-anchor="start" font-weight="700">B1</text>
+<line x1="175.3" y1="204.0" x2="304.7" y2="204.0" stroke="#e2e8f0" stroke-width="0.8"/>
+<text x="177.3" y="195.0" font-size="9.6" fill="#64748b" text-anchor="start" font-weight="700">B2</text>
+<rect x="199.3" y="179.0" width="30.0" height="20.0" fill="#fef3e2" stroke="#b45309" stroke-width="1.0" rx="3"/>
+<text x="214.3" y="193.0" font-size="9.6" fill="#0f172a" text-anchor="middle" font-weight="700" class="mono">6</text>
+<rect x="233.3" y="179.0" width="30.0" height="20.0" fill="#fef3e2" stroke="#b45309" stroke-width="1.0" rx="3"/>
+<text x="248.3" y="193.0" font-size="9.6" fill="#0f172a" text-anchor="middle" font-weight="700" class="mono">7</text>
+<line x1="175.3" y1="236.0" x2="304.7" y2="236.0" stroke="#e2e8f0" stroke-width="0.8"/>
+<text x="177.3" y="227.0" font-size="9.6" fill="#64748b" text-anchor="start" font-weight="700">B3</text>
+<line x1="175.3" y1="268.0" x2="304.7" y2="268.0" stroke="#e2e8f0" stroke-width="0.8"/>
+<text x="177.3" y="259.0" font-size="9.6" fill="#64748b" text-anchor="start" font-weight="700">B4</text>
+<rect x="199.3" y="243.0" width="30.0" height="20.0" fill="#fef3e2" stroke="#b45309" stroke-width="1.0" rx="3"/>
+<text x="214.3" y="257.0" font-size="9.6" fill="#0f172a" text-anchor="middle" font-weight="700" class="mono">12</text>
+<rect x="320.7" y="66.0" width="141.3" height="212.0" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.0" rx="4"/>
+<rect x="320.7" y="66.0" width="141.3" height="24.0" fill="#eaf0f7" stroke="none" stroke-width="1.0"/>
+<text x="328.7" y="82.0" font-size="10.4" fill="#1b365d" text-anchor="start" font-weight="700">3. Redistrib.</text>
+<text x="328.7" y="104.0" font-size="9.5" fill="#b45309" text-anchor="start" font-weight="700" class="mono">last=0110 (6)</text>
+<line x1="326.7" y1="140.0" x2="456.0" y2="140.0" stroke="#e2e8f0" stroke-width="0.8"/>
+<text x="328.7" y="131.0" font-size="9.6" fill="#64748b" text-anchor="start" font-weight="700">B0</text>
+<rect x="350.7" y="115.0" width="30.0" height="20.0" fill="#e6f2f1" stroke="#0f6260" stroke-width="1.0" rx="3"/>
+<text x="365.7" y="129.0" font-size="9.6" fill="#0f172a" text-anchor="middle" font-weight="700" class="mono">6</text>
+<text x="455.0" y="129.0" font-size="9.4" fill="#9f1239" text-anchor="end" font-weight="700">sai 6</text>
+<line x1="326.7" y1="172.0" x2="456.0" y2="172.0" stroke="#e2e8f0" stroke-width="0.8"/>
+<text x="328.7" y="163.0" font-size="9.6" fill="#64748b" text-anchor="start" font-weight="700">B1</text>
+<rect x="350.7" y="147.0" width="30.0" height="20.0" fill="#fef3e2" stroke="#b45309" stroke-width="1.0" rx="3"/>
+<text x="365.7" y="161.0" font-size="9.6" fill="#0f172a" text-anchor="middle" font-weight="700" class="mono">7</text>
+<line x1="326.7" y1="204.0" x2="456.0" y2="204.0" stroke="#e2e8f0" stroke-width="0.8"/>
+<text x="328.7" y="195.0" font-size="9.6" fill="#64748b" text-anchor="start" font-weight="700">B2</text>
+<line x1="326.7" y1="236.0" x2="456.0" y2="236.0" stroke="#e2e8f0" stroke-width="0.8"/>
+<text x="328.7" y="227.0" font-size="9.6" fill="#64748b" text-anchor="start" font-weight="700">B3</text>
+<line x1="326.7" y1="268.0" x2="456.0" y2="268.0" stroke="#e2e8f0" stroke-width="0.8"/>
+<text x="328.7" y="259.0" font-size="9.6" fill="#64748b" text-anchor="start" font-weight="700">B4</text>
+<rect x="350.7" y="243.0" width="30.0" height="20.0" fill="#fef3e2" stroke="#b45309" stroke-width="1.0" rx="3"/>
+<text x="365.7" y="257.0" font-size="9.6" fill="#0f172a" text-anchor="middle" font-weight="700" class="mono">12</text>
+<rect x="18.0" y="290.0" width="444.0" height="80.0" fill="#ffffff" stroke="#1b365d" stroke-width="1.0" rx="4"/>
+<text x="28.0" y="311.0" font-size="10.5" fill="#0f172a" text-anchor="start" font-weight="400">• Como Dijkstra extrai distâncias em ordem crescente (≥ last),</text>
+<text x="36.0" y="327.0" font-size="10.5" fill="#475569" text-anchor="start" font-weight="400">um elemento só desce para baldes menores (≤ 64 movimentos).</text>
+<text x="28.0" y="346.0" font-size="10.5" fill="#475569" text-anchor="start" font-weight="400">• Trocar heap binário pela fila radix derruba o custo por</text>
+<text x="36.0" y="362.0" font-size="10.5" fill="#0f6260" text-anchor="start" font-weight="700">relaxação de 10,4 ns para 6,6 ns (quase sem fila!).</text>
+<text x="520.0" y="28.0" font-size="13.2" fill="#b45309" text-anchor="start" font-weight="700">B. Tempo no W₂ (11 threads · sessão ociosa)</text>
+<text x="520.0" y="47.0" font-size="10.6" fill="#475569" text-anchor="start" font-weight="400">Média ± dp (3 execuções) — por que o ganho é 2,4× e não 10×</text>
+<line x1="632.0" y1="84.0" x2="632.0" y2="272.0" stroke="#cbd5e1" stroke-width="1.0"/>
+<text x="632.0" y="288.0" font-size="10" fill="#64748b" text-anchor="middle" font-weight="400">0 s</text>
+<line x1="715.0" y1="84.0" x2="715.0" y2="272.0" stroke="#e2e8f0" stroke-width="1.0"/>
+<text x="715.0" y="288.0" font-size="10" fill="#64748b" text-anchor="middle" font-weight="400">10 s</text>
+<line x1="798.1" y1="84.0" x2="798.1" y2="272.0" stroke="#e2e8f0" stroke-width="1.0"/>
+<text x="798.1" y="288.0" font-size="10" fill="#64748b" text-anchor="middle" font-weight="400">20 s</text>
+<line x1="881.1" y1="84.0" x2="881.1" y2="272.0" stroke="#e2e8f0" stroke-width="1.0"/>
+<text x="881.1" y="288.0" font-size="10" fill="#64748b" text-anchor="middle" font-weight="400">30 s</text>
+<line x1="701.3" y1="76.0" x2="701.3" y2="272.0" stroke="#475569" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="706.3" y="73.0" font-size="9.8" fill="#475569" text-anchor="start" font-weight="700">teto sem fila ≈ 8,4 s</text>
+<text x="622.0" y="111.0" font-size="11.4" fill="#0f172a" text-anchor="end" font-weight="700">BF (ativos)</text>
+<text x="622.0" y="126.0" font-size="9.4" fill="#475569" text-anchor="end" font-weight="400">3,6×E · 4,5 ns</text>
+<rect x="632.0" y="96.0" width="249.2" height="34.0" fill="#e6f2f1" stroke="#0f6260" stroke-width="1.7" rx="3"/>
+<line x1="878.4" y1="113.0" x2="884.1" y2="113.0" stroke="#0f172a" stroke-width="1.5"/>
+<text x="892.1" y="111.0" font-size="11.8" fill="#0f6260" text-anchor="start" font-weight="700">30,0 s</text>
+<text x="892.1" y="126.0" font-size="9.8" fill="#475569" text-anchor="start" font-weight="400">(base)</text>
+<text x="622.0" y="173.7" font-size="11.4" fill="#0f172a" text-anchor="end" font-weight="700">Johnson Heap</text>
+<text x="622.0" y="188.7" font-size="9.4" fill="#475569" text-anchor="end" font-weight="400">1,0×E · 10,4 ns</text>
+<rect x="632.0" y="158.7" width="161.9" height="34.0" fill="#ffffff" stroke="#b45309" stroke-width="1.7" rx="3"/>
+<line x1="781.3" y1="175.7" x2="806.4" y2="175.7" stroke="#0f172a" stroke-width="1.5"/>
+<text x="814.4" y="173.7" font-size="11.8" fill="#b45309" text-anchor="start" font-weight="700">19,5 s</text>
+<text x="814.4" y="188.7" font-size="9.8" fill="#b45309" text-anchor="start" font-weight="700">(1,5× mais rápido)</text>
+<text x="622.0" y="236.3" font-size="11.4" fill="#0f172a" text-anchor="end" font-weight="700">Johnson Radix</text>
+<text x="622.0" y="251.3" font-size="9.4" fill="#475569" text-anchor="end" font-weight="400">1,0×E · 6,6 ns</text>
+<rect x="632.0" y="221.3" width="102.4" height="34.0" fill="#fef3e2" stroke="#b45309" stroke-width="1.7" rx="3"/>
+<line x1="734.2" y1="238.3" x2="734.6" y2="238.3" stroke="#0f172a" stroke-width="1.5"/>
+<text x="742.6" y="236.3" font-size="11.8" fill="#b45309" text-anchor="start" font-weight="700">12,33 s</text>
+<text x="742.6" y="251.3" font-size="9.8" fill="#b45309" text-anchor="start" font-weight="700">(2,4× mais rápido)</text>
+<rect x="520.0" y="296.0" width="502.0" height="74.0" fill="#ffffff" stroke="#b45309" stroke-width="1.0" rx="4"/>
+<text x="530.0" y="317.0" font-size="10.8" fill="#b45309" text-anchor="start" font-weight="700">Por que 2,4× e não 10×?</text>
+<text x="530.0" y="335.0" font-size="10.2" fill="#475569" text-anchor="start" font-weight="400">BF otimizado já relaxa só 3,6×E sem fila (4,5 ns/op); Dijkstra reduz p/</text>
+<text x="530.0" y="351.0" font-size="10.2" fill="#475569" text-anchor="start" font-weight="400">1,0×E mas paga 6,6 ns/op. (Sessão ociosa: BF 30,0 s vs 38,1 s sob carga.)</text>
+</svg>

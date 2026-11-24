@@ -346,7 +346,6 @@ void test_random_graphs()
     }
 }
 
-
 // RadixFrontier isolada: cada extração devolve um vértice de chave mínima entre os vivos,
 // com -0.0, reduções de chave, magnitudes muito diferentes, infinito e reutilização.
 void test_radix_frontier()
@@ -554,8 +553,8 @@ void check_next_walks(const cos_graph::PathsToTarget & paths, std::span<const We
 }
 
 // Segue os pais da árvore de cada origem de volta até ela e confere a soma dos pesos.
-void check_parent_walks(const cos_graph::AllPairsPaths & paths,
-                        std::span<const WeightedEdge> edges, Direction direction)
+void check_parent_walks(const cos_graph::AllPairsPaths & paths, std::span<const WeightedEdge> edges,
+                        Direction direction)
 {
     const auto count = paths.vertex_count;
     for (auto from = Vertex{0}; from < count; ++from) {
@@ -589,15 +588,18 @@ void check_parent_walks(const cos_graph::AllPairsPaths & paths,
 void test_directed_semantics()
 {
     constexpr auto pairs = std::array{
-        cos_graph::Edge{0, 1}, cos_graph::Edge{1, 2}, cos_graph::Edge{2, 0}, cos_graph::Edge{3, 0},
+        cos_graph::Edge{0, 1},
+        cos_graph::Edge{1, 2},
+        cos_graph::Edge{2, 0},
+        cos_graph::Edge{3, 0},
     };
     const cos_graph::Graph directed{4, pairs, Direction::directed};
     const cos_graph::Graph undirected{4, pairs};
     CHECK(directed.directed && !undirected.directed);
 
     // BFS e DFS só seguem as arestas no sentido da entrada.
-    CHECK(std::ranges::equal(directed.distances(0), std::array{Vertex{0}, Vertex{1}, Vertex{2},
-                                                               cos_graph::no_vertex}));
+    CHECK(std::ranges::equal(directed.distances(0),
+                             std::array{Vertex{0}, Vertex{1}, Vertex{2}, cos_graph::no_vertex}));
     CHECK(std::ranges::equal(directed.distances(3),
                              std::array{Vertex{1}, Vertex{2}, Vertex{3}, Vertex{0}}));
     CHECK(std::ranges::equal(undirected.distances(0),
@@ -605,15 +607,18 @@ void test_directed_semantics()
 
     auto parent = std::vector<Vertex>(4, cos_graph::no_vertex);
     directed.dfs(3, [&](Vertex vertex, Vertex from, Vertex) { parent[vertex] = from; });
-    CHECK(std::ranges::equal(parent, std::array{Vertex{3}, Vertex{0}, Vertex{1},
-                                                cos_graph::no_vertex}));
+    CHECK(std::ranges::equal(parent,
+                             std::array{Vertex{3}, Vertex{0}, Vertex{1}, cos_graph::no_vertex}));
     auto reached = 0;
     directed.dfs(0, [&](Vertex, Vertex, Vertex) { ++reached; });
     CHECK(reached == 3);
 
     // Dijkstra: 2 -> 0 custa 0,5 no grafo direcionado e vale nos dois sentidos no outro.
     const auto weighted = std::vector<WeightedEdge>{
-        {0, 1, 1.0}, {1, 2, 1.0}, {2, 0, 0.5}, {3, 0, 1.0},
+        {0, 1, 1.0},
+        {1, 2, 1.0},
+        {2, 0, 0.5},
+        {3, 0, 1.0},
     };
     const cos_graph::Graph weighted_directed{4, weighted, Direction::directed};
     const cos_graph::Graph weighted_undirected{4, weighted};
@@ -645,8 +650,8 @@ void test_directed_semantics()
 
 // Grafo de 7 vértices com pesos negativos e sem ciclo negativo; o vértice 6 só é alcançado.
 const std::vector<WeightedEdge> hand_edges = {
-    {0, 1, 4.0}, {0, 2, 2.0}, {2, 1, -1.0}, {1, 3, 3.0},
-    {2, 3, 6.0}, {3, 4, -2.0}, {5, 0, 1.0}, {4, 6, 1.0},
+    {0, 1, 4.0}, {0, 2, 2.0},  {2, 1, -1.0}, {1, 3, 3.0},
+    {2, 3, 6.0}, {3, 4, -2.0}, {5, 0, 1.0},  {4, 6, 1.0},
 };
 
 void test_bellman_ford_hand()
@@ -669,8 +674,8 @@ void test_bellman_ford_hand()
 void test_negative_cycles()
 {
     // Ciclo 1 <-> 2 de peso -4 que alcança o destino 3.
-    const auto reachable = std::vector<WeightedEdge>{
-        {0, 1, 1.0}, {1, 2, 1.0}, {2, 1, -5.0}, {2, 3, 1.0}};
+    const auto reachable =
+        std::vector<WeightedEdge>{{0, 1, 1.0}, {1, 2, 1.0}, {2, 1, -5.0}, {2, 3, 1.0}};
     const cos_graph::Graph graph{4, reachable, Direction::directed};
     CHECK(graph.bellman_ford(3).negative_cycle);
     CHECK(graph.floyd_warshall().negative_cycle);
@@ -678,8 +683,8 @@ void test_negative_cycles()
 
     // Ciclo 2 <-> 3 negativo, mas que não alcança o destino 1: as distâncias seguem corretas.
     // O vértice 1 alcança o ciclo, o que não importa para as distâncias até 1.
-    const auto unreachable = std::vector<WeightedEdge>{
-        {0, 1, 1.0}, {1, 2, 1.0}, {2, 3, -1.0}, {3, 2, -1.0}};
+    const auto unreachable =
+        std::vector<WeightedEdge>{{0, 1, 1.0}, {1, 2, 1.0}, {2, 3, -1.0}, {3, 2, -1.0}};
     const cos_graph::Graph other{4, unreachable, Direction::directed};
     const auto paths = other.bellman_ford(1);
     CHECK(!paths.negative_cycle);
@@ -886,8 +891,8 @@ void check_johnson(const cos_graph::Graph & graph, std::span<const WeightedEdge>
             const auto total = std::size_t{count} * count;
             CHECK(std::equal(first.distances.get(), first.distances.get() + total,
                              paths.distances.get()));
-            CHECK(std::equal(first.parents.get(), first.parents.get() + total,
-                             paths.parents.get()));
+            CHECK(
+                std::equal(first.parents.get(), first.parents.get() + total, paths.parents.get()));
         }
     }
 }
@@ -1071,9 +1076,10 @@ void test_random_potentials()
         for (auto source = Vertex{0}; source < vertices; ++source) {
             const auto dijkstra = run_dijkstra<cos_graph::HeapFrontier>(base, source);
             for (auto to = Vertex{0}; to < vertices; ++to) {
-                const auto expected = dijkstra.distance[to] == inf
-                                          ? inf
-                                          : dijkstra.distance[to] + potential[source] - potential[to];
+                const auto expected =
+                    dijkstra.distance[to] == inf
+                        ? inf
+                        : dijkstra.distance[to] + potential[source] - potential[to];
                 CHECK(all.distance(source, to) == expected);
             }
         }
@@ -1115,7 +1121,8 @@ void test_random_negative_cycles()
             }
 
             const auto target = std::uniform_int_distribution<Vertex>{0, vertices - 1}(random);
-            const auto expected = reference_bellman_ford(vertices, weighted, direction, target, true);
+            const auto expected =
+                reference_bellman_ford(vertices, weighted, direction, target, true);
             const auto paths = graph.bellman_ford(target);
             CHECK(paths.negative_cycle == expected.negative_cycle);
             found += paths.negative_cycle;
@@ -1159,8 +1166,14 @@ void test_decimal_zero_cycles()
     check_no_negative_cycle(3, {{0, 1, 0.1}, {1, 2, 0.2}, {2, 0, -0.3}});
     check_no_negative_cycle(3, {{0, 1, 0.2}, {1, 2, -0.3}, {2, 0, 0.1}});
     check_no_negative_cycle(3, {{0, 1, -0.3}, {1, 2, 0.1}, {2, 0, 0.2}});
-    check_no_negative_cycle(4, {{0, 1, 3.07}, {1, 0, -3.07}, {1, 2, 0.1}, {2, 1, -0.1},
-                                {2, 3, 0.2}, {3, 2, -0.2}, {3, 0, -3.37}, {0, 3, 3.37}});
+    check_no_negative_cycle(4, {{0, 1, 3.07},
+                                {1, 0, -3.07},
+                                {1, 2, 0.1},
+                                {2, 1, -0.1},
+                                {2, 3, 0.2},
+                                {3, 2, -0.2},
+                                {3, 0, -3.37},
+                                {0, 3, 3.37}});
 
     // Grafos de 2 casas decimais com potenciais: pesos não negativos reduzidos, com ciclos
     // longos e curtos de peso reduzido 0, que viram ciclos de soma decimal 0 e pesos negativos.
@@ -1251,7 +1264,8 @@ void test_path_edge_cases()
     const auto negative_loop = std::vector<WeightedEdge>{{0, 0, -2.0}};
     for (const auto direction : {Direction::directed, Direction::undirected}) {
         const cos_graph::Graph harmless{1, positive_loop, direction};
-        CHECK(!harmless.bellman_ford(0).negative_cycle && !harmless.floyd_warshall().negative_cycle);
+        CHECK(!harmless.bellman_ford(0).negative_cycle &&
+              !harmless.floyd_warshall().negative_cycle);
         const cos_graph::Graph harmful{1, negative_loop, direction};
         CHECK(harmful.bellman_ford(0).negative_cycle && harmful.floyd_warshall().negative_cycle);
         CHECK(harmful.has_negative_cycle() && !harmless.has_negative_cycle());

@@ -2,4 +2,29 @@
 /compile_commands.json
 /CMakeUserPresets.json
 /data/
+
+# macOS e Python
 .DS_Store
+__pycache__/
+*.py[cod]
+
+# Intermediários LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg
+*.nav
+*.snm
+*.vrb
+
+# Binários soltos compilados manualmente em bench/
+bench/parte2/contagem_heap
+bench/parte3/fw_variants
+bench/parte3/contagem_bf
+bench/parte3/tempo_busca_ciclo
+bench/**/a.out

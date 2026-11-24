@@ -53,22 +53,25 @@ Internamente, a biblioteca usa índices consecutivos de 32 bits, de `0` a
 ## Organização
 
 ```text
-include/cos/       biblioteca e leitor de pares e triplas numéricas
-part1/             programa da Parte 1
-part2/             programa da Parte 2
-part3/             programa da Parte 3
-bench/             medições, estudos de caso e gerador de grafos de teste
-bench/results/     resultados medidos: parte2/ e parte3/
+include/cos/       biblioteca header-only (graph.hpp, file_reader.hpp)
+part1/             programa da Parte 1 (cos_part1)
+part2/             programa da Parte 2 (cos_part2)
+part3/             programa da Parte 3 (cos_part3)
+tests/             testes unitários e de integração (cos_tests) e fixtures
+bench/             benchmarks isolados: CMakeLists.txt, parte2/, parte3/ e results/
 report/            relatórios em LaTeX: comum/, parte2/ e parte3/
-presentation/      apresentações: comum/ (estilo e fontes), parte2/ e parte3/
-data/              grafos de entrada (veja "Dados da Parte 3")
-tests/             testes e grafos pequenos de exemplo
+presentation/      apresentações: comum/, parte2/ (HTML) e parte3/ (Typst)
+data/              grafos de entrada (não versionado; veja "Dados da Parte 3")
 docs/              requisitos e decisões de projeto
 ```
 
+`include/cos/` e `part1..3/` contêm apenas a biblioteca e os programas exigidos
+pela disciplina; testes ficam isolados em `tests/` e toda a infraestrutura de
+benchmarks fica isolada em `bench/`.
+
 `graph.hpp` contém a representação e os algoritmos. `file_reader.hpp` limita-se
 a ler um cabeçalho seguido de pares ou triplas de números. A conversão da
-numeração dos vértices e a produção dos relatórios ficam em `part1/main.cpp` e
+numeração dos vértices e a produção dos relatórios ficam em `part1/main.cpp`,
 `part2/main.cpp` e `part3/main.cpp`.
 
 ## Compilação
@@ -92,9 +95,21 @@ cmake --build --preset matrix
 ctest --preset matrix
 ```
 
-Cada perfil gera `cos_part1`, `cos_part2`, `cos_part3`, `cos_bench2`,
-`cos_bench3`, `cos_lowlevel`, `cos_busy` e `cos_tests` em `build/csr/` ou
-`build/matrix/`. No macOS, também gera `cos_counters`.
+O build padrão compila apenas a biblioteca `cos`, os programas `cos_part1`,
+`cos_part2` e `cos_part3` e, com `BUILD_TESTING=ON`, os testes `cos_tests` em
+`build/csr/` ou `build/matrix/`.
+
+Os executáveis auxiliares de benchmark ficam isolados em `bench/CMakeLists.txt`
+atrás da opção `COS_BUILD_BENCHMARKS` (desligada por padrão). Para compilá-los
+(exige compilador com suporte a C++23 para `cos_lowlevel`/`cos_busy`):
+
+```sh
+cmake --preset csr -DCOS_BUILD_BENCHMARKS=ON
+cmake --build --preset csr
+```
+
+Isso gera `cos_bench2`, `cos_bench3`, `cos_lowlevel`, `cos_busy` (e
+`cos_counters` no macOS) em `build/csr/bench/`.
 
 `COS_MATRIX` é resolvida durante o build. Cada executável contém apenas a
 representação escolhida; não há seleção em runtime.
@@ -206,8 +221,10 @@ grafo.
 
 ### Medição de Dijkstra
 
+Compile antes com `-DCOS_BUILD_BENCHMARKS=ON`:
+
 ```sh
-./build/csr/cos_bench2 GRAFO.txt K SEMENTE EXECUCOES_VETOR
+./build/csr/bench/cos_bench2 GRAFO.txt K SEMENTE EXECUCOES_VETOR
 ```
 
 O programa mede a leitura, informa `memoria_bytes` e o pico de memória
@@ -225,19 +242,21 @@ frequência do núcleo (`clock`), a latência de leituras dependentes (`chase`),
 três versões da varredura do vetor (`scan`), o custo por extração do vetor
 dentro de Dijkstra (`pops`), o efeito da numeração dos vértices nos grafos W
 (`order`) e em dois grafos isomorfos gerados (`layout`).
-`bench/run_lowlevel.sh` roda todos e grava `bench/results/parte2/baixo_nivel.txt`.
-`bench/run_contention.sh` repete o `pops` do W_4 sozinho e com quatro vizinhos
+`bench/parte2/run_lowlevel.sh` roda todos e grava `bench/results/parte2/baixo_nivel.txt`.
+`bench/parte2/run_contention.sh` repete o `pops` do W_4 sozinho e com quatro vizinhos
 (`cos_busy registradores` e `cos_busy memoria`) e grava `bench/results/parte2/disputa.txt`.
 No macOS, `cos_counters` (o mesmo programa com `COS_COUNTERS=1`) lê os contadores
 de hardware do processador (ciclos, instruções, faltas no L1 e no TLB) pelos
 frameworks internos `kperf`/`kperfdata`, o que exige root:
-`sudo bench/run_counters.sh` grava `bench/results/parte2/contadores.txt`.
+`sudo bench/parte2/run_counters.sh` grava `bench/results/parte2/contadores.txt`.
 
 ### Medição da Parte 3
 
+Compile antes com `-DCOS_BUILD_BENCHMARKS=ON`:
+
 ```sh
-./build/csr/cos_bench3 GRAFO.txt direcionado RODADAS
-./build/csr/cos_bench3 GRAFO.txt direcionado 10 --fw --bf-todos --bf-amostra 1000
+./build/csr/bench/cos_bench3 GRAFO.txt direcionado RODADAS
+./build/csr/bench/cos_bench3 GRAFO.txt direcionado 10 --fw --bf-todos --bf-amostra 1000
 ```
 
 O programa lê o grafo e mede, em segundos e sem contar a leitura, `RODADAS`
@@ -260,7 +279,7 @@ média, desvio padrão e mínimo. As opções são:
   Bellman-Ford e de Johnson (padrão 1). Bellman-Ford de um destino e a amostra
   sempre usam uma thread.
 
-`bench/run_part3.sh [DADOS] [RESULTADOS]` roda o protocolo da Parte 3 nos grafos
+`bench/parte3/run_part3.sh [DADOS] [RESULTADOS]` roda o protocolo da Parte 3 nos grafos
 `p3_W_1` a `p3_W_5` de `DADOS` (padrão `data/`) e grava em `RESULTADOS` (padrão
 `bench/results/parte3/`): `maquina.txt`, `NOME.txt` (uma chamada de `cos_bench3`
 por grafo, 10 rodadas, `--threads` igual ao número de núcleos via `hw.ncpu` ou
@@ -291,20 +310,17 @@ done
 ### Resultados da Parte 3
 
 Em `bench/results/parte3/`: `NOME.txt` (tempos de `cos_bench3`), `NOME.relatorio.txt`
-(tabelas de `cos_part3`, com os caminhos), `maquina.txt` e `execucao.log`.
-`primeira_execucao/` guarda a primeira passada de W_3 a W_5, mantida por
-transparência: o tempo de uma thread saiu cerca de 2 vezes maior, provavelmente
-por rodar em núcleos de eficiência. O relatório usa a segunda passada, com a
-máquina ociosa. O relatório e a apresentação ficam em `report/parte3/` e
-`presentation/parte3/`; o `README.md` de cada um explica como refazê-los.
+(tabelas de `cos_part3`, com os caminhos), `maquina.txt`, escalabilidade (`escala_*.txt`)
+e medições de Johnson (`p3_W_2.johnson_*.txt`). O relatório e a apresentação ficam em
+`report/parte3/` e `presentation/parte3/`; o `README.md` de cada um explica como refazê-los.
 
-`bench/fw_variants.cpp` compara o Floyd-Warshall em blocos da biblioteca com o
+`bench/parte3/fw_variants.cpp` compara o Floyd-Warshall em blocos da biblioteca com o
 laço triplo simples (uma thread) e confere distâncias e pais. Não tem alvo no
 CMake; compile à mão, a partir da raiz do repositório:
 
 ```sh
 mkdir -p /tmp/fw
-c++ -O3 -std=c++20 -I include bench/fw_variants.cpp -o /tmp/fw/fw_variants
+c++ -O3 -std=c++20 -I include bench/parte3/fw_variants.cpp -o /tmp/fw/fw_variants
 /tmp/fw/fw_variants GRAFO.txt THREADS [direcionado|nao_direcionado] [--sem-ingenuo] [--repete N]
 ```
 
@@ -312,17 +328,58 @@ Sem `--sem-ingenuo`, o programa roda também a versão simples, compara as duas
 matrizes e termina com erro se divergirem. A compilação usa a CSR; para a matriz,
 acrescente `-DCOS_MATRIX=1`.
 
-`bench/contagem_heap.cpp` conta as operações do heap em Dijkstra e gerou
+`bench/parte2/contagem_heap.cpp` conta as operações do heap em Dijkstra e gerou
 `report/parte2/contagens.json`, usado por `report/parte2/tabelas.py`. Também não
 tem alvo no CMake e exige C++23 (`std::print`):
 
 ```sh
 mkdir -p /tmp/fw
-c++ -O3 -std=c++23 -I include bench/contagem_heap.cpp -o /tmp/fw/contagem_heap
+c++ -O3 -std=c++23 -I include bench/parte2/contagem_heap.cpp -o /tmp/fw/contagem_heap
 /tmp/fw/contagem_heap NOME ARQUIVO RODADAS
 ```
 
-`bench/gerar_grafo.py V E SEMENTE SAIDA` gera grafos sintéticos no formato de
+`bench/parte3/contagem_bf.cpp` repete o Bellman-Ford até o destino 100 da biblioteca
+(mesma lista de ativos, mesma saída antecipada, mesma contagem de rodadas) e
+registra, por rodada, os vértices ativos, as arestas de entrada examinadas e os
+vértices cuja distância mudou, mais as visitas da busca de ciclo em `next` (`visitas_busca_ciclo`).
+Para W_2 a W_5 acrescenta `todos_os_pares`: a mesma réplica para todos os 25 000
+destinos de W_2 e, em W_3, W_4 e W_5, para K = 200, 30 e 10 destinos
+`indice * V / K` (a amostra de `bench/parte3/caminhos_bench.cpp`), em threads, com somas
+determinísticas; rodadas e soma das distâncias de três destinos são conferidas
+com a biblioteca. W_2 leva cerca de 3 minutos no total. Em grafo com ciclo negativo, extrai o ciclo
+seguindo os sucessores e confere cada aresta e a soma. Compara rodadas,
+distâncias e sucessores com `Graph::bellman_ford` e termina com erro se
+divergirem; gerou `report/parte3/contagens.json`. Também sem alvo no CMake e com
+C++23:
+
+```sh
+mkdir -p /tmp/fw
+c++ -O3 -std=c++23 -I include bench/parte3/contagem_bf.cpp -o /tmp/fw/contagem_bf
+/tmp/fw/contagem_bf W_1 data/p3_W_1.txt W_2 data/p3_W_2.txt W_3 data/p3_W_3.txt \
+    W_4 data/p3_W_4.txt W_5 data/p3_W_5.txt > report/parte3/contagens.json
+```
+
+`bench/parte3/tempo_busca_ciclo.cpp` mede quanto da execução do Bellman-Ford até o destino 100
+vai para a busca de ciclo em `next`. Repete `relax_rounds` como `contagem_bf.cpp`, com uma
+chave que pula a busca, e mede em uma thread, por grafo e repetição: o tempo da réplica
+completa, da réplica sem a busca e do tempo dentro da busca (relógio `steady_clock` ao redor
+de cada chamada), além de `Graph::bellman_ford` para conferência e a profundidade da árvore
+de `next` (`profundidade_arvore`). Registra média e mínimo de 10 repetições em
+`report/parte3/tempo_busca_ciclo.json`. Rodar com a máquina ociosa: núcleos de eficiência
+podem deixar uma execução cerca de 2 vezes mais lenta.
+
+```sh
+c++ -O3 -std=c++23 -I include bench/parte3/tempo_busca_ciclo.cpp -o /tmp/fw/tempo_busca_ciclo
+/tmp/fw/tempo_busca_ciclo 10 W_2 data/p3_W_2.txt W_3 data/p3_W_3.txt W_4 data/p3_W_4.txt \
+    W_5 data/p3_W_5.txt > report/parte3/tempo_busca_ciclo.json
+```
+
+`bench/parte3/gera_aleatorio.py N GRAU SEMENTE` gera um grafo aleatório (arestas de saída sorteadas, pesos
+uniformes em [0,5; 10]) para medir o custo por relaxação do Floyd-Warshall numa thread:
+`python3 bench/parte3/gera_aleatorio.py 5000 33 1 > rnd5000.txt` (resultados em
+`bench/results/parte3/fw_aleatorio5000_*.txt`).
+
+`bench/parte2/gerar_grafo.py V E SEMENTE SAIDA` gera grafos sintéticos no formato de
 entrada. Com `--negativos`, cada peso `w(u, v)` ganha `p(u) - p(v)` para
 potenciais aleatórios `p`. Todo ciclo mantém a soma dos pesos, então o grafo
 tem arestas negativas e nenhum ciclo negativo; toda distância muda para
@@ -331,20 +388,36 @@ potenciais ficam em `SAIDA.potenciais`. Com `--ciclo-negativo`, o gerador
 acrescenta um ciclo `a -> b -> c -> a` de soma `-3.00`. Ambas as opções exigem
 grafo direcionado; `--nao-direcionado` gera o caso sem direção.
 
-### Estudos de caso, relatório e apresentação
+### Estudos de caso, relatórios e apresentações
+
+**Parte 2:**
 
 ```sh
-bench/run_case_studies.sh            # lê data/, grava bench/results/parte2/ (cerca de 2,6 h)
-bench/run_lowlevel.sh                # experimentos de baixo nível (cerca de 10 min)
-bench/run_contention.sh              # variação por disputa do processador (cerca de 40 min)
-sudo bench/run_counters.sh           # contadores de hardware, só macOS (compile antes)
-python3 -I bench/summarize.py        # gera presentation/parte2/data.js e report/parte2/data.json
-python3 -I report/parte2/tabelas.py   # gera report/parte2/tabelas.tex a partir de data.json
+bench/parte2/run_case_studies.sh        # lê data/, grava bench/results/parte2/ (cerca de 2,6 h)
+bench/parte2/run_lowlevel.sh            # experimentos de baixo nível (cerca de 10 min)
+bench/parte2/run_contention.sh          # variação por disputa do processador (cerca de 40 min)
+sudo bench/parte2/run_counters.sh       # contadores de hardware, só macOS (compile antes com -DCOS_BUILD_BENCHMARKS=ON)
+python3 -I bench/parte2/summarize.py    # gera presentation/parte2/data.js e report/parte2/data.json
+python3 -I report/parte2/tabelas.py     # gera report/parte2/tabelas.tex a partir de data.json
 (cd report/parte2 && tectonic relatorio.tex) # relatório em PDF (LaTeX)
 ```
 
-A apresentação é `presentation/parte2/index.html` (reveal.js incluído, funciona sem
+A apresentação da Parte 2 é `presentation/parte2/index.html` (funciona sem
 rede); veja [presentation/parte2/README.md](presentation/parte2/README.md).
+
+**Parte 3:**
+
+```sh
+bench/parte3/run_part3.sh                                 # lê data/, grava bench/results/parte3/ (cerca de 3 h)
+python3 -I bench/parte3/summarize_p3.py                   # bench/results/parte3/* -> report/parte3/data.json
+python3 -I report/parte3/tabelas.py                       # gera report/parte3/tabelas.tex e valida consistência
+(cd report/parte3 && tectonic relatorio.tex)              # compila report/parte3/relatorio.pdf (LaTeX)
+(cd presentation/parte3 && python3 generate_assets.py && typst compile slides.typ apresentacao.pdf) # slides (Typst)
+```
+
+Veja [report/parte3/README.md](report/parte3/README.md) e
+[presentation/parte3/README.md](presentation/parte3/README.md) para detalhes de
+todos os arquivos de dados e verificação.
 
 ## Verificação
 

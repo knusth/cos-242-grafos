@@ -1,0 +1,14 @@
+# build/csr/cos_bench3 data/p3_W_2.txt direcionado 3 --bf-todos --bf-amostra 2000 --threads 1
+# 2026-11-22, Apple M3 Pro; usado para o custo por aresta do Bellman-Ford numa thread e o ganho de 8,6x com 11 threads
+[bellman_ford_todos_pares]
+threads=1
+vertices=25000
+destinos_medidos=2000
+estimado=sim
+rodadas_medidas=3
+execucao,tempo_s,tempo_medio_por_destino_s,ciclos_negativos,soma_distancias
+1,354.887038288,0.014195482,0,304984280.880000412
+2,305.196624387,0.012207865,0,304984280.880000412
+3,322.422911375,0.012896916,0,304984280.880000412
+media_s=327.502191350
+desvio_s=25.231599676
